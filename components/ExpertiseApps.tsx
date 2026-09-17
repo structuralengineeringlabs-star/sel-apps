@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle, Award, Sparkles } from "lucide-react";
 import { getExpertiseApplications } from "@/data/applications";
+import { formatPrice } from "@/lib/utils";
 
 export default function ExpertiseApps() {
   const expertiseApps = getExpertiseApplications();
@@ -10,7 +11,7 @@ export default function ExpertiseApps() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm mb-6">
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/10 mb-6">
             <Award className="w-4 h-4 text-yellow-300" />
             <span className="text-sm font-semibold uppercase tracking-wide">
               Notre spécialité
@@ -28,19 +29,21 @@ export default function ExpertiseApps() {
         {/* Cartes */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {expertiseApps.map((app) => {
-            const price = app.priceUnit
-              ? `${new Intl.NumberFormat("fr-FR").format(app.priceUnit)} XAF`
-              : app.priceSubscription
-              ? `${new Intl.NumberFormat("fr-FR").format(
-                  app.priceSubscription
-                )} XAF / ${app.subscriptionPeriod}`
-              : "Sur devis";
+            // Prix d'affichage
+            let price = "Sur devis";
+            if (app.priceMonthly && app.priceAnnual) {
+              price = `${formatPrice(app.priceMonthly)}/mois`;
+            } else if (app.priceMonthly) {
+              price = `${formatPrice(app.priceMonthly)}/mois`;
+            } else if (app.priceAnnual) {
+              price = `${formatPrice(app.priceAnnual)}/an`;
+            }
 
             return (
               <Link
                 key={app.id}
                 href={`/applications/${app.slug}`}
-                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300"
               >
                 {/* Badge expertise */}
                 <div className="absolute -top-3 right-6">
@@ -51,7 +54,7 @@ export default function ExpertiseApps() {
                 </div>
 
                 {/* Icône */}
-                <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center mb-6">
                   {app.icon === "Bridge" && (
                     <svg
                       className="w-8 h-8"
