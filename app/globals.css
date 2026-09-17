@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+  /* Bleu S.E.L. */
+  --color-sel: #1B6FB5;
+  --color-sel-dark: #0E4C82;
+  --color-sel-light: #E8F1F9;
+
+  /* Catégories */
+  --color-cat-structure: #C0392B;
+  --color-cat-hydraulic: #2471A3;
+  --color-cat-road: #1E8449;
+  --color-cat-management: #D68910;
+  --color-cat-material: #7D3C98;
+  --color-cat-doc: #5D6D7E;
+
+  /* Statuts */
+  --color-status-free: #27AE60;
+  --color-status-paid: #F39C12;
+  --color-status-sub: #8E44AD;
+  --color-status-new: #E74C3C;
+  --color-status-hot: #E91E63;
+
+  /* Polices */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer base {
+  body {
+    background-color: #ffffff;
+    color: #111827;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    color: #111827;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #1B6FB5;
+    color: #ffffff;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .btn-primary:hover {
+    background-color: #0E4C82;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid #1B6FB5;
+    color: #1B6FB5;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background-color: #E8F1F9;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #E5E7EB;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  }
+
+  /* Badges - styles complets, sans @apply */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-free {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(39, 174, 96, 0.1);
+    color: #27AE60;
+  }
+
+  .badge-paid {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(243, 156, 18, 0.1);
+    color: #F39C12;
+  }
+
+  .badge-sub {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(142, 68, 173, 0.1);
+    color: #8E44AD;
+  }
+
+  .badge-new {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #E74C3C;
+  }
+
+  .badge-hot {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(233, 30, 99, 0.1);
+    color: #E91E63;
+  }
+}
