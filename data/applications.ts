@@ -11,6 +11,7 @@ export type Application = {
   isNew?: boolean;
   isPopular?: boolean;
   isExpertise?: boolean;
+  appUrl?: string;         // URL de l'application (si gratuite et exécutable)
   icon: string;
   tags: string[];
 };
@@ -26,6 +27,7 @@ export const applications: Application[] = [
     categorySlug: "batiments",
     isFree: true,
     isPopular: true,
+    appUrl: "/apps/calculette-aciers",
     icon: "Calculator",
     tags: ["Béton armé", "Ferraillage", "As", "Eurocode 2"],
   },
@@ -287,3 +289,6 @@ export const getFeaturedApplications = () =>
 
 export const getExpertiseApplications = () =>
   applications.filter((app) => app.isExpertise);
+
+export const getExecutableApplications = () =>
+  applications.filter((app) => app.appUrl);

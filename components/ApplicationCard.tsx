@@ -13,9 +13,17 @@ export default function ApplicationCard({ application }: Props) {
   const IconComponent = (Icons as any)[application.icon] || Icons.Box;
   const pricing = getPricing(application);
 
+  // Déterminer la destination du clic
+  // Si l'app est gratuite ET a une URL → aller directement à l'app
+  // Sinon → aller à la fiche descriptive
+  const targetUrl =
+    application.isFree && application.appUrl
+      ? application.appUrl
+      : `/applications/${application.slug}`;
+
   return (
     <Link
-      href={`/applications/${application.slug}`}
+      href={targetUrl}
       className={`card group flex flex-col h-full relative ${
         application.isExpertise ? "ring-2 ring-yellow-400 pt-8" : ""
       }`}
@@ -75,7 +83,9 @@ export default function ApplicationCard({ application }: Props) {
       {/* Prix */}
       <div className="pt-4 border-t border-gray-100">
         {pricing.type === "free" && (
-          <div className="text-sm font-bold text-status-free">Gratuit — 0 XAF</div>
+          <div className="text-sm font-bold text-status-free">
+            Gratuit — 0 XAF
+          </div>
         )}
 
         {pricing.type === "monthly" && (

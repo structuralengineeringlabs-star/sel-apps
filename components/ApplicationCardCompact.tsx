@@ -18,9 +18,17 @@ export default function ApplicationCardCompact({
   const isDark = variant === "dark";
   const pricing = getPricing(application);
 
+  // Déterminer la destination du clic
+  // Si l'app est gratuite ET a une URL → aller directement à l'app
+  // Sinon → aller à la fiche descriptive
+  const targetUrl =
+    application.isFree && application.appUrl
+      ? application.appUrl
+      : `/applications/${application.slug}`;
+
   return (
     <Link
-      href={`/applications/${application.slug}`}
+      href={targetUrl}
       className={`group flex items-center gap-4 rounded-lg border transition-all duration-200 ${
         application.isExpertise ? "p-5" : "p-4"
       } ${

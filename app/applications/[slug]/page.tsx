@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, ArrowLeft, Download, Calendar } from "lucide-react";
+import { CheckCircle, ArrowLeft, Download, Calendar, Clock } from "lucide-react";
 import { getApplicationBySlug, applications } from "@/data/applications";
 import { categories } from "@/data/categories";
 import { formatPrice } from "@/lib/utils";
@@ -36,12 +36,16 @@ export default async function ApplicationDetailPage({ params }: Props) {
   const hasAnnual = !!app.priceAnnual;
   const hasBoth = hasMonthly && hasAnnual;
 
+  // Déterminer si l'app est exécutable directement
+  const isExecutable = app.isFree && !!app.appUrl;
+
   return (
     <article className="py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
         <Link
           href="/applications"
-          className="inline-flex items-center text-sm text-sel hover:text-sel-dark mb-8"
+          className="inline-flex items-center text-sm text-sel hover:text-sel-dark mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Retour au catalogue
@@ -53,7 +57,10 @@ export default async function ApplicationDetailPage({ params }: Props) {
             className="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: `${category?.color}15` }}
           >
-            <IconComponent className="w-10 h-10" style={{ color: category?.color }} />
+            <IconComponent
+              className="w-10 h-10"
+              style={{ color: category?.color }}
+            />
           </div>
           <div className="flex-grow">
             <div className="flex flex-wrap gap-2 mb-3">
@@ -70,6 +77,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
               )}
               {app.isFree && <span className="badge-free">Gratuit</span>}
               {app.isPopular && <span className="badge-hot">Populaire</span>}
+              {app.isNew && <span className="badge-new">Nouveau</span>}
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
               {app.name}
@@ -80,14 +88,21 @@ export default async function ApplicationDetailPage({ params }: Props) {
 
         {/* Contenu principal */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Colonne gauche : description */}
           <div className="lg:col-span-2 space-y-8">
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
-              <p className="text-gray-700 leading-relaxed">{app.longDescription}</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Description
+              </h2>
+              <p className="text-gray-700 leading-relaxed">
+                {app.longDescription}
+              </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Points clés</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Points clés
+              </h2>
               <ul className="space-y-3">
                 {app.tags.map((tag) => (
                   <li key={tag} className="flex items-start space-x-3">
@@ -99,14 +114,17 @@ export default async function ApplicationDetailPage({ params }: Props) {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Public cible</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Public cible
+              </h2>
               <p className="text-gray-700">
-                Ingénieurs civils, bureaux d'études, techniciens BTP, étudiants en génie civil, collectivités.
+                Ingénieurs civils, bureaux d'études, techniciens BTP,
+                étudiants en génie civil, collectivités.
               </p>
             </section>
           </div>
 
-          {/* Panneau tarifaire */}
+          {/* Colonne droite : panneau tarifaire / action */}
           <aside className="lg:col-span-1">
             <div className="sticky top-24 card">
               <div className="text-center mb-6">
@@ -123,25 +141,29 @@ export default async function ApplicationDetailPage({ params }: Props) {
                       Choisissez votre formule
                     </div>
 
-                    {/* Mensuel */}
                     <div className="mb-4 pb-4 border-b border-gray-100">
                       <div className="text-sm font-semibold text-gray-700 mb-1">
                         Mensuel
                       </div>
                       <div className="text-2xl font-bold text-sel">
                         {formatPrice(app.priceMonthly!)}
-                        <span className="text-base font-normal text-gray-500"> / mois</span>
+                        <span className="text-base font-normal text-gray-500">
+                          {" "}
+                          / mois
+                        </span>
                       </div>
                     </div>
 
-                    {/* Annuel */}
                     <div>
                       <div className="text-sm font-semibold text-gray-700 mb-1">
                         Annuel
                       </div>
                       <div className="text-2xl font-bold text-sel">
                         {formatPrice(app.priceAnnual!)}
-                        <span className="text-base font-normal text-gray-500"> / an</span>
+                        <span className="text-base font-normal text-gray-500">
+                          {" "}
+                          / an
+                        </span>
                       </div>
                     </div>
                   </>
@@ -168,18 +190,38 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 ) : null}
               </div>
 
+              {/* Boutons d'action */}
               <div className="space-y-3">
                 {app.isFree ? (
-                  <button className="btn-primary w-full">
-                    <Download className="w-5 h-5 mr-2" />
-                    Ouvrir l'application
-                  </button>
+                  isExecutable ? (
+                    // App gratuite ET exécutable → lien vers l'app
+                    <Link
+                      href={app.appUrl!}
+                      className="btn-primary w-full"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
+                      Ouvrir l'application
+                    </Link>
+                  ) : (
+                    // App gratuite mais pas encore exécutable
+                    <button
+                      className="btn-primary w-full opacity-60 cursor-not-allowed flex items-center justify-center"
+                      disabled
+                    >
+                      <Clock className="w-5 h-5 mr-2" />
+                      Application bientôt disponible
+                    </button>
+                  )
                 ) : (
+                  // App payante
                   <>
                     <button className="btn-primary w-full">
                       S'abonner maintenant
                     </button>
-                    <Link href="/contact" className="btn-secondary w-full">
+                    <Link
+                      href="/contact"
+                      className="btn-secondary w-full"
+                    >
                       <Calendar className="w-5 h-5 mr-2" />
                       Demander une démo
                     </Link>
@@ -187,11 +229,12 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 )}
               </div>
 
+              {/* Garanties */}
               <div className="mt-6 pt-6 border-t border-gray-100 text-xs text-gray-500 space-y-2">
                 <p>✅ Paiement sécurisé (Mobile Money, CB)</p>
                 <p>✅ Support en français</p>
                 <p>✅ Mises à jour incluses</p>
-                <p>✅ Résiliable à tout moment</p>
+                {!app.isFree && <p>✅ Résiliable à tout moment</p>}
               </div>
             </div>
           </aside>
