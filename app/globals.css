@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* Bleu S.E.L. */
   --color-sel: #1B6FB5;
   --color-sel-dark: #0E4C82;
   --color-sel-light: #E8F1F9;
 
-  /* Catégories */
   --color-cat-structure: #C0392B;
   --color-cat-hydraulic: #2471A3;
   --color-cat-road: #1E8449;
@@ -14,14 +12,12 @@
   --color-cat-material: #7D3C98;
   --color-cat-doc: #5D6D7E;
 
-  /* Statuts */
   --color-status-free: #27AE60;
   --color-status-paid: #F39C12;
   --color-status-sub: #8E44AD;
   --color-status-new: #E74C3C;
   --color-status-hot: #E91E63;
 
-  /* Polices */
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
@@ -81,8 +77,7 @@
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   }
 
-  /* Badges - styles complets, sans @apply */
-  .badge {
+  .badge-free, .badge-paid, .badge-sub, .badge-new, .badge-hot {
     display: inline-flex;
     align-items: center;
     padding: 0.25rem 0.75rem;
@@ -92,69 +87,156 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
+  .badge-free { background-color: rgba(39, 174, 96, 0.1); color: #27AE60; }
+  .badge-paid { background-color: rgba(243, 156, 18, 0.1); color: #F39C12; }
+  .badge-sub { background-color: rgba(142, 68, 173, 0.1); color: #8E44AD; }
+  .badge-new { background-color: rgba(231, 76, 60, 0.1); color: #E74C3C; }
+  .badge-hot { background-color: rgba(233, 30, 99, 0.1); color: #E91E63; }
+}
 
-  .badge-free {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: rgba(39, 174, 96, 0.1);
-    color: #27AE60;
-  }
+/* ============================================================
+   STYLES APPLICATIONS (Plancher Corps Creux, etc.)
+   ============================================================ */
 
-  .badge-paid {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: rgba(243, 156, 18, 0.1);
-    color: #F39C12;
-  }
+.win-card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
 
-  .badge-sub {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: rgba(142, 68, 173, 0.1);
-    color: #8E44AD;
-  }
+.win-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
-  .badge-new {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: rgba(231, 76, 60, 0.1);
-    color: #E74C3C;
-  }
+.win-inset {
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e1e1e1;
+}
 
-  .badge-hot {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background-color: rgba(233, 30, 99, 0.1);
-    color: #E91E63;
-  }
+.win-button {
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.win-button:hover {
+  background: #106ebe;
+}
+
+.win-button:active {
+  background: #005a9e;
+  transform: scale(0.98);
+}
+
+.win-button-secondary {
+  background: #ffffff;
+  color: #323130;
+  border: 1px solid #8a8886;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.win-button-secondary:hover {
+  background: #f3f2f1;
+}
+
+.win-input {
+  background: #ffffff;
+  border: 1px solid #8a8886;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.win-input:focus {
+  border-color: #0078d4;
+  border-width: 2px;
+  padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
+}
+
+/* --------- Note de calcul (Plancher Corps Creux) --------- */
+
+.note-de-calcul {
+  background: white;
+  color: #1e293b;
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+  line-height: 1.5;
+  padding: 2rem;
+  margin: 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  width: 100%;
+}
+
+.note-de-calcul h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f3b5f;
+  border-bottom: 2px solid #2c6e9e;
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.note-de-calcul h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1e4a6e;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid #2c6e9e;
+  padding-left: 0.75rem;
+}
+
+.note-de-calcul h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3e50;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.note-de-calcul table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+
+.note-de-calcul th, .note-de-calcul td {
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.note-de-calcul th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.note-de-calcul .schema-box {
+  background: #fefce8;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Cartouche : sombre à l'écran, clair à l'impression */
+.cartouche-sel {
+  background: #0b111e;
+  color: #ffffff;
 }

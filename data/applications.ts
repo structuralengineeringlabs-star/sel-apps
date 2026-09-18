@@ -5,13 +5,13 @@ export type Application = {
   shortDescription: string;
   longDescription: string;
   categorySlug: string;
-  priceMonthly?: number;   // Prix mensuel en XAF
-  priceAnnual?: number;    // Prix annuel en XAF
+  priceMonthly?: number;
+  priceAnnual?: number;
   isFree: boolean;
   isNew?: boolean;
   isPopular?: boolean;
   isExpertise?: boolean;
-  appUrl?: string;         // URL de l'application (si gratuite et exécutable)
+  appUrl?: string;
   icon: string;
   tags: string[];
 };
@@ -35,10 +35,12 @@ export const applications: Application[] = [
     id: 2,
     slug: "plancher-corps-creux",
     name: "Dimensionnement Plancher à Corps Creux",
-    shortDescription: "Dimensionne les planchers à corps creux (poutrelles + entrevous) en béton armé selon les Eurocodes.",
-    longDescription: "Dimensionne les planchers à corps creux (poutrelles + entrevous) en béton armé selon les Eurocodes : détermination des charges (qk), calcul des poutrelles en flexion, vérification à l'ELS/ELU, ferraillage de la dalle de compression et des poutrelles.",
+    shortDescription: "Dimensionne les planchers à corps creux (poutrelles + entrevous) en béton armé selon l'Eurocode 2.",
+    longDescription: "Dimensionne les planchers à corps creux (poutrelles + entrevous) en béton armé selon l'Eurocode 2 (EN 1992-1-1) : détermination des charges (qk), calcul des poutrelles en flexion, vérification à l'ELS/ELU, ferraillage de la dalle de compression et des poutrelles, calcul de la flèche, vérifications d'usage (As,max, espacement étriers, ancrage) et note de calcul complète.",
     categorySlug: "batiments",
     isFree: true,
+    isPopular: true,
+    appUrl: "/apps/plancher-corps-creux",
     icon: "LayoutGrid",
     tags: ["Plancher", "Corps creux", "Poutrelles", "ELS", "ELU"],
   },
