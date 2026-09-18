@@ -2,7 +2,7 @@
 const nextConfig = {
   // Autorise les accès depuis ces origines en développement
   allowedDevOrigins: [
-    '10.228.176.83',   // Votre IP actuelle
+    '10.55.33.83',   // Votre IP actuelle
     'localhost',
     '127.0.0.1',
   ],

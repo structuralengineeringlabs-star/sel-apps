@@ -4,20 +4,17 @@
   --color-sel: #1B6FB5;
   --color-sel-dark: #0E4C82;
   --color-sel-light: #E8F1F9;
-
   --color-cat-structure: #C0392B;
   --color-cat-hydraulic: #2471A3;
   --color-cat-road: #1E8449;
   --color-cat-management: #D68910;
   --color-cat-material: #7D3C98;
   --color-cat-doc: #5D6D7E;
-
   --color-status-free: #27AE60;
   --color-status-paid: #F39C12;
   --color-status-sub: #8E44AD;
   --color-status-new: #E74C3C;
   --color-status-hot: #E91E63;
-
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
@@ -95,7 +92,7 @@
 }
 
 /* ============================================================
-   STYLES APPLICATIONS (Plancher Corps Creux, etc.)
+   STYLES APPLICATIONS (Plancher Corps Creux, Calculette)
    ============================================================ */
 
 .win-card {
@@ -166,8 +163,7 @@
   padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
 }
 
-/* --------- Note de calcul (Plancher Corps Creux) --------- */
-
+/* Note de calcul */
 .note-de-calcul {
   background: white;
   color: #1e293b;
@@ -235,7 +231,6 @@
   text-align: center;
 }
 
-/* Cartouche : sombre à l'écran, clair à l'impression */
 .cartouche-sel {
   background: #0b111e;
   color: #ffffff;
