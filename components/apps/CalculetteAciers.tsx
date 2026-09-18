@@ -21,7 +21,7 @@ const DIAMETERS = [6, 8, 10, 12, 14, 16, 20, 25, 32, 40];
 
 const AREA_MAP: Record<number, number> = {};
 DIAMETERS.forEach((d) => {
-  const areaCm2 = (Math.PI * d * d) / 4 / 100; // mm² → cm²
+  const areaCm2 = (Math.PI * d * d) / 4 / 100;
   AREA_MAP[d] = Math.round(areaCm2 * 1000) / 1000;
 });
 
@@ -45,14 +45,15 @@ type EvaluationResult =
   | { type: "bars"; value: number; diam: number }
   | { type: "area"; value: number };
 
+type TabId = "calc" | "combo";
+
 // ============================================================
-// MOTEUR DE CALCUL (avec mathjs au lieu de eval)
+// MOTEUR DE CALCUL
 // ============================================================
 
 function evaluateExpression(expr: string): EvaluationResult {
   let clean = expr.replace(/\s+/g, "").replace(/×/g, "*");
 
-  // Cas spécial : "6/HA12" → nombre de barres nécessaires
   const invMatch = clean.match(/^(\d+(?:\.\d+)?)\/HA(\d+)$/);
   if (invMatch) {
     const numerator = parseFloat(invMatch[1]);
@@ -62,21 +63,18 @@ function evaluateExpression(expr: string): EvaluationResult {
     return { type: "bars", value: Math.ceil(nb), diam };
   }
 
-  // Remplacement des notations HA : "3HA16" → "(3 * 2.011)"
   clean = clean.replace(/(\d+(?:\.\d+)?)HA(\d+)/g, (_, qty, d) => {
     const diam = parseInt(d);
-    if (!AREA_MAP[diam]) throw new Error(`Diamètre HA${d} inconnu`);
+    if (!AREA_MAP[diam]) throw new Error(`Diamètre HA${diam} inconnu`);
     return `(${qty} * ${AREA_MAP[diam]})`;
   });
 
-  // Remplacement des HA seuls : "HA16" → "2.011"
   clean = clean.replace(/HA(\d+)/g, (_, d) => {
     const diam = parseInt(d);
-    if (!AREA_MAP[diam]) throw new Error(`Diamètre HA${d} inconnu`);
+    if (!AREA_MAP[diam]) throw new Error(`Diamètre HA${diam} inconnu`);
     return AREA_MAP[diam].toString();
   });
 
-  // Évaluation sécurisée avec mathjs
   try {
     const total = evaluate(clean);
     if (typeof total !== "number" || isNaN(total)) {
@@ -93,24 +91,17 @@ function evaluateExpression(expr: string): EvaluationResult {
 // ============================================================
 
 export default function CalculetteAciers() {
-  // État de la calculatrice
   const [inputExpr, setInputExpr] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
-
-  // État du constructeur de combinaisons
   const [comboLines, setComboLines] = useState<ComboLine[]>([
     { id: 1, nb: 1, diam: 12 },
     { id: 2, nb: 1, diam: 14 },
   ]);
-
-  // Somme totale
   const [total, setTotal] = useState(0);
   const [expression, setExpression] = useState("");
+  const [activeTab, setActiveTab] = useState<TabId>("calc");
 
-  // ============================================================
-  // CALCUL DE LA SOMME
-  // ============================================================
-
+  // Calcul automatique de la somme
   useEffect(() => {
     let sum = 0;
     const parts: string[] = [];
@@ -128,10 +119,7 @@ export default function CalculetteAciers() {
     setExpression(parts.join(" + ") || "aucune barre");
   }, [comboLines]);
 
-  // ============================================================
-  // CALCUL DE L'EXPRESSION
-  // ============================================================
-
+  // Calcul de l'expression
   const calculate = useCallback(() => {
     const expr = inputExpr.trim();
     if (!expr) return;
@@ -143,7 +131,9 @@ export default function CalculetteAciers() {
         resultText = `${res.value} barres HA${res.diam}`;
       } else {
         const val = res.value;
-        const rounded = Number.isInteger(val) ? val : Math.round(val * 100) / 100;
+        const rounded = Number.isInteger(val)
+          ? val
+          : Math.round(val * 100) / 100;
         resultText = `${rounded} cm²`;
       }
 
@@ -164,10 +154,6 @@ export default function CalculetteAciers() {
     }
   }, [inputExpr]);
 
-  // ============================================================
-  // GESTION DU CLAVIER
-  // ============================================================
-
   const handleKey = (key: string) => {
     if (key === "CE") {
       setInputExpr("");
@@ -185,10 +171,6 @@ export default function CalculetteAciers() {
     }
   };
 
-  // ============================================================
-  // GESTION DES LIGNES DE COMBINAISON
-  // ============================================================
-
   const addComboLine = () => {
     if (comboLines.length >= 10) {
       alert("Maximum 10 lignes atteint");
@@ -202,15 +184,15 @@ export default function CalculetteAciers() {
     setComboLines(comboLines.filter((l) => l.id !== id));
   };
 
-  const updateComboLine = (id: number, field: "nb" | "diam", value: number) => {
+  const updateComboLine = (
+    id: number,
+    field: "nb" | "diam",
+    value: number
+  ) => {
     setComboLines(
       comboLines.map((l) => (l.id === id ? { ...l, [field]: value } : l))
     );
   };
-
-  // ============================================================
-  // GÉNÉRATION PDF
-  // ============================================================
 
   const handleDownloadPdf = () => {
     const details: string[] = [];
@@ -220,7 +202,9 @@ export default function CalculetteAciers() {
       const area = AREA_MAP[line.diam] || 0;
       if (nb > 0 && area > 0) {
         details.push(
-          `${nb} × HA${line.diam} = ${nb} × ${area.toFixed(3)} = ${(nb * area).toFixed(3)} cm²`
+          `${nb} × HA${line.diam} = ${nb} × ${area.toFixed(3)} = ${(
+            nb * area
+          ).toFixed(3)} cm²`
         );
       }
     });
@@ -232,9 +216,7 @@ export default function CalculetteAciers() {
         {
           expression: expression || "Aucune barre définie",
           details:
-            details.length > 0
-              ? details
-              : ["Aucune barre à calculer"],
+            details.length > 0 ? details : ["Aucune barre à calculer"],
           result: `${total.toFixed(3)} cm²`,
           resultLabel: "Section totale :",
         },
@@ -250,10 +232,6 @@ export default function CalculetteAciers() {
       ],
     });
   };
-
-  // ============================================================
-  // RESET
-  // ============================================================
 
   const handleReset = () => {
     setInputExpr("");
@@ -288,199 +266,241 @@ export default function CalculetteAciers() {
     { label: "+", value: "+" },
   ];
 
+  // ----- Section Calculatrice -----
+  const CalculatorSection = (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-5">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-base sm:text-lg font-bold text-sel-dark flex items-center gap-2">
+          <Calculator className="w-5 h-5" />
+          Calculatrice
+        </h2>
+        <button
+          onClick={handleReset}
+          className="text-xs text-gray-500 hover:text-sel flex items-center gap-1"
+          title="Réinitialiser"
+        >
+          <RotateCcw className="w-3 h-3" />
+          Réinitialiser
+        </button>
+      </div>
+
+      {/* Écran */}
+      <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-200">
+        <input
+          type="text"
+          value={inputExpr}
+          onChange={(e) => setInputExpr(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Ex : 3HA16 + 2HA12"
+          className="w-full border-none outline-none text-right text-base sm:text-lg font-semibold bg-transparent text-gray-900"
+        />
+      </div>
+
+      {/* Clavier */}
+      <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+        {keypadButtons.map((btn, i) => (
+          <button
+            key={i}
+            onClick={() => handleKey(btn.value)}
+            className={`py-2.5 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm transition-colors ${
+              btn.variant === "action"
+                ? "bg-red-100 text-red-700 hover:bg-red-200"
+                : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+            }`}
+          >
+            {btn.label}
+          </button>
+        ))}
+        <button
+          onClick={() => handleKey("=")}
+          className="col-span-4 py-2.5 sm:py-3 rounded-lg bg-sel text-white font-bold text-base sm:text-lg hover:bg-sel-dark transition-colors"
+        >
+          =
+        </button>
+      </div>
+
+      {/* Historique */}
+      {history.length > 0 && (
+        <div className="mt-3">
+          <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+            <History className="w-3 h-3" />
+            Historique
+          </div>
+          <div className="bg-gray-50 rounded-lg p-2.5 space-y-1 max-h-28 overflow-y-auto">
+            {history.map((h, i) => (
+              <div
+                key={i}
+                className={`text-xs sm:text-sm font-mono ${
+                  h.isError ? "text-red-600" : "text-gray-700"
+                }`}
+              >
+                {h.expression} = {h.result}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Aide */}
+      <div className="mt-3 text-[11px] sm:text-xs text-gray-500 space-y-0.5">
+        <p>
+          💡 <strong>Notation :</strong>
+        </p>
+        <p>
+          • <code>3HA16</code> = 3 barres de Ø16
+        </p>
+        <p>
+          • <code>6/HA12</code> = nb de barres pour 6 cm²
+        </p>
+        <p>
+          • <code>3HA16 + 2HA12</code> = combinaison
+        </p>
+      </div>
+    </div>
+  );
+
+  // ----- Section Combinaisons -----
+  const ComboSection = (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-5">
+      <h2 className="text-base sm:text-lg font-bold text-sel-dark mb-3 flex items-center gap-2">
+        <Plus className="w-5 h-5" />
+        Combinaisons de barres
+      </h2>
+
+      <div className="space-y-2 mb-3">
+        {comboLines.map((line) => (
+          <div
+            key={line.id}
+            className="flex items-center gap-2 bg-gray-50 rounded-lg p-2"
+          >
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={line.nb}
+              onChange={(e) =>
+                updateComboLine(line.id, "nb", parseInt(e.target.value) || 0)
+              }
+              className="w-14 sm:w-16 px-2 py-1 rounded border border-gray-300 text-center text-sm"
+            />
+            <span className="text-gray-500 text-sm">×</span>
+            <select
+              value={line.diam}
+              onChange={(e) =>
+                updateComboLine(line.id, "diam", parseInt(e.target.value))
+              }
+              className="flex-1 px-2 py-1 rounded border border-gray-300 text-sm bg-white"
+            >
+              {DIAMETERS.map((d) => (
+                <option key={d} value={d}>
+                  HA{d}
+                </option>
+              ))}
+            </select>
+            <span className="text-[10px] sm:text-xs text-gray-500 w-14 sm:w-20 text-right">
+              {((line.nb || 0) * (AREA_MAP[line.diam] || 0)).toFixed(2)} cm²
+            </span>
+            <button
+              onClick={() => removeComboLine(line.id)}
+              className="p-1 text-red-500 hover:text-red-700"
+              title="Supprimer"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={addComboLine}
+        disabled={comboLines.length >= 10}
+        className="w-full py-2 rounded-lg border-2 border-dashed border-sel text-sel font-semibold hover:bg-sel-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+      >
+        <Plus className="w-4 h-4" />
+        Ajouter une ligne
+      </button>
+
+      <div className="mt-4 p-3 sm:p-4 bg-sel-light rounded-lg">
+        <div className="text-[10px] sm:text-xs text-sel-dark uppercase tracking-wide mb-1">
+          Somme totale
+        </div>
+        <div className="text-xl sm:text-2xl font-bold text-sel-dark mb-1">
+          {total.toFixed(3)} cm²
+        </div>
+        <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">
+          {expression}
+        </div>
+      </div>
+
+      <button
+        onClick={handleDownloadPdf}
+        className="mt-3 w-full py-2.5 sm:py-3 rounded-lg bg-sel text-white font-semibold hover:bg-sel-dark transition-colors flex items-center justify-center gap-2 text-sm"
+      >
+        <FileDown className="w-5 h-5" />
+        Télécharger la fiche PDF
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full">
       {/* Titre */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
-          <Calculator className="w-8 h-8 text-sel" />
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2 sm:gap-3">
+          <Calculator className="w-7 h-7 sm:w-8 sm:h-8 text-sel" />
           Calculette des aciers
         </h1>
-        <p className="text-gray-600">
-          Calcul de la section d'acier (As) pour éléments en béton armé
+        <p className="text-sm sm:text-base text-gray-600">
+          Calcul de la section d&apos;acier (As) pour éléments en béton armé
         </p>
       </div>
 
-      {/* Contenu principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        {/* ============================================
-            COLONNE 1 — CALCULATRICE
-        ============================================ */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-sel-dark flex items-center gap-2">
-              <Calculator className="w-5 h-5" />
-              Calculatrice
-            </h2>
-            <button
-              onClick={handleReset}
-              className="text-xs text-gray-500 hover:text-sel flex items-center gap-1"
-              title="Réinitialiser"
-            >
-              <RotateCcw className="w-3 h-3" />
-              Réinitialiser
-            </button>
-          </div>
-
-          {/* Écran */}
-          <div className="bg-gray-50 rounded-lg p-3 mb-4 border border-gray-200">
-            <input
-              type="text"
-              value={inputExpr}
-              onChange={(e) => setInputExpr(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ex : 3HA16 + 2HA12"
-              className="w-full border-none outline-none text-right text-lg font-semibold bg-transparent text-gray-900"
-            />
-          </div>
-
-          {/* Clavier */}
-          <div className="grid grid-cols-4 gap-2">
-            {keypadButtons.map((btn, i) => (
-              <button
-                key={i}
-                onClick={() => handleKey(btn.value)}
-                className={`py-3 rounded-lg font-semibold text-sm transition-colors ${
-                  btn.variant === "action"
-                    ? "bg-red-100 text-red-700 hover:bg-red-200"
-                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                }`}
-              >
-                {btn.label}
-              </button>
-            ))}
-            <button
-              onClick={() => handleKey("=")}
-              className="col-span-4 py-3 rounded-lg bg-sel text-white font-bold text-lg hover:bg-sel-dark transition-colors"
-            >
-              =
-            </button>
-          </div>
-
-          {/* Historique */}
-          {history.length > 0 && (
-            <div className="mt-4">
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                <History className="w-3 h-3" />
-                Historique
-              </div>
-              <div className="bg-gray-50 rounded-lg p-3 space-y-1 max-h-32 overflow-y-auto">
-                {history.map((h, i) => (
-                  <div
-                    key={i}
-                    className={`text-sm font-mono ${
-                      h.isError ? "text-red-600" : "text-gray-700"
-                    }`}
-                  >
-                    {h.expression} = {h.result}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Aide */}
-          <div className="mt-4 text-xs text-gray-500 space-y-1">
-            <p>💡 <strong>Notation :</strong></p>
-            <p>• <code>3HA16</code> = 3 barres de Ø16</p>
-            <p>• <code>6/HA12</code> = nombre de barres nécessaires pour 6 cm²</p>
-            <p>• <code>3HA16 + 2HA12</code> = combinaison</p>
-          </div>
-        </div>
-
-        {/* ============================================
-            COLONNE 2 — CONSTRUCTEUR DE COMBINAISONS
-        ============================================ */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5">
-          <h2 className="text-lg font-bold text-sel-dark mb-4 flex items-center gap-2">
-            <Plus className="w-5 h-5" />
-            Combinaisons de barres
-          </h2>
-
-          {/* Lignes de combinaison */}
-          <div className="space-y-2 mb-4">
-            {comboLines.map((line) => (
-              <div
-                key={line.id}
-                className="flex items-center gap-2 bg-gray-50 rounded-lg p-2"
-              >
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={line.nb}
-                  onChange={(e) =>
-                    updateComboLine(line.id, "nb", parseInt(e.target.value) || 0)
-                  }
-                  className="w-16 px-2 py-1 rounded border border-gray-300 text-center text-sm"
-                />
-                <span className="text-gray-500 text-sm">×</span>
-                <select
-                  value={line.diam}
-                  onChange={(e) =>
-                    updateComboLine(line.id, "diam", parseInt(e.target.value))
-                  }
-                  className="flex-1 px-2 py-1 rounded border border-gray-300 text-sm bg-white"
-                >
-                  {DIAMETERS.map((d) => (
-                    <option key={d} value={d}>
-                      HA{d}
-                    </option>
-                  ))}
-                </select>
-                <span className="text-xs text-gray-500 w-20 text-right">
-                  {((line.nb || 0) * (AREA_MAP[line.diam] || 0)).toFixed(2)} cm²
-                </span>
-                <button
-                  onClick={() => removeComboLine(line.id)}
-                  className="p-1 text-red-500 hover:text-red-700"
-                  title="Supprimer"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Bouton ajouter */}
+      {/* MOBILE / TABLETTE (< 1024px) — ONGLETS */}
+      <div className="lg:hidden max-w-2xl mx-auto">
+        <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
           <button
-            onClick={addComboLine}
-            disabled={comboLines.length >= 10}
-            className="w-full py-2 rounded-lg border-2 border-dashed border-sel text-sel font-semibold hover:bg-sel-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            onClick={() => setActiveTab("calc")}
+            className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              activeTab === "calc"
+                ? "bg-white text-sel-dark shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            <Calculator className="w-4 h-4" />
+            Calculatrice
+          </button>
+          <button
+            onClick={() => setActiveTab("combo")}
+            className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              activeTab === "combo"
+                ? "bg-white text-sel-dark shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
           >
             <Plus className="w-4 h-4" />
-            Ajouter une ligne
-          </button>
-
-          {/* Résultat */}
-          <div className="mt-5 p-4 bg-sel-light rounded-lg">
-            <div className="text-xs text-sel-dark uppercase tracking-wide mb-1">
-              Somme totale
-            </div>
-            <div className="text-2xl font-bold text-sel-dark mb-2">
-              {total.toFixed(3)} cm²
-            </div>
-            <div className="text-xs text-gray-600 font-mono break-all">
-              {expression}
-            </div>
-          </div>
-
-          {/* Bouton PDF */}
-          <button
-            onClick={handleDownloadPdf}
-            className="mt-4 w-full py-3 rounded-lg bg-sel text-white font-semibold hover:bg-sel-dark transition-colors flex items-center justify-center gap-2"
-          >
-            <FileDown className="w-5 h-5" />
-            Télécharger la fiche PDF
+            Combinaisons
+            {total > 0 && (
+              <span className="text-[10px] bg-sel text-white px-1.5 py-0.5 rounded-full">
+                {total.toFixed(1)}
+              </span>
+            )}
           </button>
         </div>
+
+        <div>{activeTab === "calc" ? CalculatorSection : ComboSection}</div>
       </div>
 
-      {/* Note de bas de page */}
-      <div className="mt-8 text-center text-xs text-gray-500 max-w-3xl mx-auto">
+      {/* DESKTOP (≥ 1024px) — 2 COLONNES */}
+      <div className="hidden lg:grid lg:grid-cols-2 lg:gap-6 max-w-5xl mx-auto">
+        {CalculatorSection}
+        {ComboSection}
+      </div>
+
+      {/* Note */}
+      <div className="mt-6 sm:mt-8 text-center text-xs text-gray-500 max-w-3xl mx-auto">
         <p className="flex items-center justify-center gap-1">
           <CheckCircle className="w-3 h-3 text-green-500" />
-          Calculs conformes à l'Eurocode 2 (EN 1992-1-1)
+          Calculs conformes à l&apos;Eurocode 2 (EN 1992-1-1)
         </p>
       </div>
     </div>
