@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="760" height="290" fill="#ffffff"/>
+  <text x="20" y="26" font-size="16" font-weight="bold" fill="#1e3a8a">Conditions d'appui et allure du moment fléchissant</text>
+  <g transform="translate(20,50)">
+    <text x="105" y="0" text-anchor="middle" font-weight="bold">Articulé / articulé</text>
+    <line x1="10" y1="40" x2="200" y2="40" stroke="#0f172a" stroke-width="3"/>
+    <path d="M10 40 l-8 14 h16 z M200 40 l-8 14 h16 z" fill="#94a3b8"/>
+    <path d="M10 70 Q105 170 200 70" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <line x1="10" y1="70" x2="200" y2="70" stroke="#64748b"/>
+    <text x="105" y="185" text-anchor="middle" fill="#1d4ed8">M_travée = M₀ = pL²/8</text>
+  </g>
+  <g transform="translate(270,50)">
+    <text x="105" y="0" text-anchor="middle" font-weight="bold">Semi-encastré</text>
+    <line x1="10" y1="40" x2="200" y2="40" stroke="#0f172a" stroke-width="3"/>
+    <rect x="0" y="28" width="10" height="24" fill="#94a3b8"/><rect x="200" y="28" width="10" height="24" fill="#94a3b8"/>
+    <path d="M10 62 Q105 175 200 62" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <line x1="10" y1="70" x2="200" y2="70" stroke="#64748b"/>
+    <text x="105" y="185" text-anchor="middle" fill="#1d4ed8">M_appui ≈ −k·M₀ (k saisi, 0,15 par défaut)</text>
+  </g>
+  <g transform="translate(520,50)">
+    <text x="105" y="0" text-anchor="middle" font-weight="bold">Encastré / articulé</text>
+    <line x1="10" y1="40" x2="200" y2="40" stroke="#0f172a" stroke-width="3"/>
+    <rect x="0" y="28" width="10" height="24" fill="#94a3b8"/><path d="M200 40 l-8 14 h16 z" fill="#94a3b8"/>
+    <path d="M10 50 Q90 180 200 70" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <line x1="10" y1="70" x2="200" y2="70" stroke="#64748b"/>
+    <text x="105" y="185" text-anchor="middle" fill="#1d4ed8">M_appui gauche forfaitaire</text>
+  </g>
+  <text x="20" y="278" fill="#b45309">Les moments d'appui sont forfaitaires (hypothèse simplifiée) : à confirmer selon la raideur réelle des appuis.</text>
+</svg>
