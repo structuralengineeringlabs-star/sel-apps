@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Application } from "@/data/applications";
 import { categories } from "@/data/categories";
-import { formatPrice, getPricing } from "@/lib/utils";
 import * as Icons from "lucide-react";
 
 type Props = {
@@ -11,11 +10,8 @@ type Props = {
 export default function ApplicationCard({ application }: Props) {
   const category = categories.find((c) => c.slug === application.categorySlug);
   const IconComponent = (Icons as any)[application.icon] || Icons.Box;
-  const pricing = getPricing(application);
 
   // Déterminer la destination du clic
-  // Si l'app est gratuite ET a une URL → aller directement à l'app
-  // Sinon → aller à la fiche descriptive
   const targetUrl =
     application.isFree && application.appUrl
       ? application.appUrl
@@ -51,9 +47,6 @@ export default function ApplicationCard({ application }: Props) {
         </div>
         <div className="flex flex-col items-end space-y-1">
           {application.isFree && <span className="badge-free">Gratuit</span>}
-          {application.isPopular && !application.isExpertise && (
-            <span className="badge-hot">Populaire</span>
-          )}
           {application.isNew && <span className="badge-new">Nouveau</span>}
         </div>
       </div>
@@ -80,44 +73,11 @@ export default function ApplicationCard({ application }: Props) {
         </div>
       )}
 
-      {/* Prix */}
+      {/* Catégorie en pied de carte */}
       <div className="pt-4 border-t border-gray-100">
-        {pricing.type === "free" && (
-          <div className="text-sm font-bold text-status-free">
-            Gratuit — 0 XAF
-          </div>
-        )}
-
-        {pricing.type === "monthly" && (
-          <div>
-            <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-              Abonnement mensuel
-            </div>
-            <div className="text-base font-bold text-sel">{pricing.monthly}</div>
-          </div>
-        )}
-
-        {pricing.type === "annual" && (
-          <div>
-            <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
-              Abonnement annuel
-            </div>
-            <div className="text-base font-bold text-sel">{pricing.annual}</div>
-          </div>
-        )}
-
-        {pricing.type === "dual" && (
-          <div className="space-y-1.5">
-            <div className="flex items-baseline justify-between">
-              <span className="text-xs text-gray-500">Mensuel</span>
-              <span className="text-sm font-bold text-sel">{pricing.monthly}</span>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-xs text-gray-500">Annuel</span>
-              <span className="text-sm font-bold text-sel">{pricing.annual}</span>
-            </div>
-          </div>
-        )}
+        <div className="text-xs text-gray-400 uppercase tracking-wide">
+          {category?.icon} {category?.name}
+        </div>
       </div>
     </Link>
   );

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Application } from "@/data/applications";
 import { categories } from "@/data/categories";
-import { getPricing } from "@/lib/utils";
 import * as Icons from "lucide-react";
 
 type Props = {
@@ -16,11 +15,8 @@ export default function ApplicationCardCompact({
   const category = categories.find((c) => c.slug === application.categorySlug);
   const IconComponent = (Icons as any)[application.icon] || Icons.Box;
   const isDark = variant === "dark";
-  const pricing = getPricing(application);
 
   // Déterminer la destination du clic
-  // Si l'app est gratuite ET a une URL → aller directement à l'app
-  // Sinon → aller à la fiche descriptive
   const targetUrl =
     application.isFree && application.appUrl
       ? application.appUrl
@@ -87,9 +83,9 @@ export default function ApplicationCardCompact({
               Gratuit
             </span>
           )}
-          {application.isPopular && !application.isExpertise && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-status-hot/15 text-status-hot flex-shrink-0">
-              Populaire
+          {application.isNew && !application.isExpertise && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-status-new/15 text-status-new flex-shrink-0">
+              Nouveau
             </span>
           )}
         </div>
@@ -102,33 +98,13 @@ export default function ApplicationCardCompact({
         </p>
       </div>
 
-      {/* Prix */}
-      <div className={`flex-shrink-0 text-right ${isDark ? "text-yellow-300" : "text-sel"}`}>
-        {pricing.type === "free" && (
-          <span className={`font-bold ${application.isExpertise ? "text-base" : "text-xs"}`}>
-            Gratuit
-          </span>
-        )}
-        {pricing.type === "monthly" && (
-          <span className={`font-bold ${application.isExpertise ? "text-base" : "text-xs"}`}>
-            {pricing.monthly}
-          </span>
-        )}
-        {pricing.type === "annual" && (
-          <span className={`font-bold ${application.isExpertise ? "text-base" : "text-xs"}`}>
-            {pricing.annual}
-          </span>
-        )}
-        {pricing.type === "dual" && (
-          <div className="flex flex-col items-end">
-            <span className={`font-bold ${application.isExpertise ? "text-base" : "text-xs"}`}>
-              {pricing.monthly}
-            </span>
-            <span className={`text-[10px] ${isDark ? "text-white/60" : "text-gray-500"}`}>
-              ou {pricing.annual}
-            </span>
-          </div>
-        )}
+      {/* Catégorie (à droite, remplace le prix) */}
+      <div
+        className={`flex-shrink-0 text-right text-[10px] font-semibold uppercase tracking-wide ${
+          isDark ? "text-white/40" : "text-gray-400"
+        }`}
+      >
+        {category?.icon} {category?.name}
       </div>
     </Link>
   );
