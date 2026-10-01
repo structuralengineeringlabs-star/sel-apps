@@ -98,14 +98,16 @@ export default function ApplicationCardCompact({
         </p>
       </div>
 
-      {/* Catégorie (à droite, remplace le prix) */}
-      <div
-        className={`flex-shrink-0 text-right text-[10px] font-semibold uppercase tracking-wide ${
-          isDark ? "text-white/40" : "text-gray-400"
-        }`}
-      >
-        {category?.icon} {category?.name}
-      </div>
+      {/* Catégorie — masquée pour les cartes Expertise */}
+      {!application.isExpertise && (
+        <div
+          className={`flex-shrink-0 text-right text-[10px] font-semibold uppercase tracking-wide ${
+            isDark ? "text-white/40" : "text-gray-400"
+          }`}
+        >
+          {category?.icon} {category?.name}
+        </div>
+      )}
     </Link>
   );
 }

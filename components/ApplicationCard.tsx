@@ -73,12 +73,14 @@ export default function ApplicationCard({ application }: Props) {
         </div>
       )}
 
-      {/* Catégorie en pied de carte */}
-      <div className="pt-4 border-t border-gray-100">
-        <div className="text-xs text-gray-400 uppercase tracking-wide">
-          {category?.icon} {category?.name}
+      {/* Catégorie — masquée pour les cartes Expertise */}
+      {!application.isExpertise && (
+        <div className="pt-4 border-t border-gray-100">
+          <div className="text-xs text-gray-400 uppercase tracking-wide">
+            {category?.icon} {category?.name}
+          </div>
         </div>
-      </div>
+      )}
     </Link>
   );
 }
