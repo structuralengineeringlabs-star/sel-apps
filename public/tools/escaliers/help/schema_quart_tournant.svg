@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="760" height="360" fill="#ffffff"/>
+  <text x="20" y="26" font-size="16" font-weight="bold" fill="#1e3a8a">Quart tournant : modèle à deux systèmes</text>
+  <!-- plan -->
+  <g transform="translate(40,50)">
+    <rect x="0" y="200" width="80" height="90" fill="#f8fafc" stroke="#0f172a"/>
+    <g stroke="#0f172a"><line x1="0" y1="215" x2="80" y2="215"/><line x1="0" y1="230" x2="80" y2="230"/><line x1="0" y1="245" x2="80" y2="245"/><line x1="0" y1="260" x2="80" y2="260"/><line x1="0" y1="275" x2="80" y2="275"/></g>
+    <rect x="0" y="120" width="80" height="80" fill="#e2e8f0" stroke="#0f172a"/>
+    <rect x="80" y="120" width="120" height="80" fill="#f8fafc" stroke="#0f172a"/>
+    <g stroke="#0f172a"><line x1="100" y1="120" x2="100" y2="200"/><line x1="120" y1="120" x2="120" y2="200"/><line x1="140" y1="120" x2="140" y2="200"/><line x1="160" y1="120" x2="160" y2="200"/><line x1="180" y1="120" x2="180" y2="200"/></g>
+    <rect x="200" y="120" width="70" height="80" fill="#e2e8f0" stroke="#0f172a"/>
+    <line x1="80" y1="120" x2="80" y2="200" stroke="#dc2626" stroke-width="4"/>
+    <polyline points="40,285 40,160 260,160" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="40" y="112" text-anchor="middle">repos (c)</text>
+    <text x="90" y="250">Volée 1 (b)</text>
+    <text x="140" y="112" text-anchor="middle">Volée 2 (b₂)</text>
+    <text x="235" y="112" text-anchor="middle">c₂</text>
+    <text x="0" y="310" fill="#dc2626">Rive d'appui de la volée 2</text>
+  </g>
+  <!-- systèmes -->
+  <g transform="translate(360,70)">
+    <text x="0" y="0" font-weight="bold" fill="#0f172a">① Volée 2 seule (appui sur la rive du palier)</text>
+    <line x1="20" y1="40" x2="330" y2="40" stroke="#0f172a" stroke-width="3"/>
+    <path d="M20 40 l-8 14 h16 z M330 40 l-8 14 h16 z" fill="#94a3b8"/>
+    <line x1="20" y1="60" x2="20" y2="90" stroke="#dc2626" stroke-width="2"/><path d="M20 94 l-5 -9 h10 z" fill="#dc2626"/>
+    <text x="30" y="84" fill="#dc2626">R₂ = g + q (kN/m de rive)</text>
+    <text x="0" y="140" font-weight="bold" fill="#0f172a">② Volée 1 + palier de repos</text>
+    <line x1="20" y1="190" x2="330" y2="190" stroke="#0f172a" stroke-width="3"/>
+    <path d="M20 190 l-8 14 h16 z M330 190 l-8 14 h16 z" fill="#94a3b8"/>
+    <g stroke="#dc2626" stroke-width="2"><line x1="240" y1="155" x2="240" y2="182"/><line x1="265" y1="155" x2="265" y2="182"/><line x1="290" y1="155" x2="290" y2="182"/><line x1="315" y1="155" x2="315" y2="182"/></g>
+    <line x1="230" y1="155" x2="325" y2="155" stroke="#dc2626"/>
+    <text x="232" y="148" fill="#dc2626">+ R₂ réparti sur le palier</text>
+    <text x="20" y="235" fill="#334155">Verdict global = système ① ET système ②</text>
+    <text x="20" y="255" fill="#b45309">Effets de bord et torsion du palier négligés.</text>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="760" height="300" fill="#ffffff"/>
+  <text x="20" y="26" font-size="16" font-weight="bold" fill="#1e3a8a">Angle rentrant paillasse / palier haut : aciers inférieurs</text>
+  <g transform="translate(20,50)">
+    <text x="160" y="0" text-anchor="middle" font-weight="bold" fill="#b91c1c">À proscrire : barre continue coudée</text>
+    <path d="M20 200 L170 90 L330 90 L330 125 L195 125 L45 230 Z" fill="#f1f5f9" stroke="#0f172a" stroke-width="2"/>
+    <polyline points="45,215 180,117 320,117" fill="none" stroke="#0369a1" stroke-width="4"/>
+    <line x1="182" y1="120" x2="194" y2="158" stroke="#dc2626" stroke-width="3"/><path d="M197 166 l-9 -6 l8 -4 z" fill="#dc2626"/>
+    <text x="205" y="170" fill="#dc2626">poussée F = 2·As·fyd·sin(α/2)</text>
+    <text x="205" y="188" fill="#dc2626">→ éclatement de l'enrobage</text>
+  </g>
+  <g transform="translate(400,50)">
+    <text x="160" y="0" text-anchor="middle" font-weight="bold" fill="#15803d">Disposition retenue : barres croisées</text>
+    <path d="M20 200 L170 90 L330 90 L330 125 L195 125 L45 230 Z" fill="#f1f5f9" stroke="#0f172a" stroke-width="2"/>
+    <polyline points="45,215 180,117 220,96 260,96" fill="none" stroke="#0369a1" stroke-width="4"/>
+    <polyline points="320,108 320,118 170,118 135,143" fill="none" stroke="#0e7490" stroke-width="4"/>
+    <circle cx="182" cy="119" r="16" fill="none" stroke="#dc2626" stroke-dasharray="4 3"/>
+    <text x="225" y="88" fill="#0369a1">(02) prolongée de l_bd</text>
+    <text x="210" y="150" fill="#0e7490">(03) ancrée de l_bd</text>
+    <text x="20" y="250" fill="#334155">Ancrage de chaque barre au-delà de l'arête (EC2 §8.4).</text>
+  </g>
+</svg>

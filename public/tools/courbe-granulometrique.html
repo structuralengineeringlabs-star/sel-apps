@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GranuLab Pro — Courbe granulométrique multi-échantillons</title>
+<style>
+:root {
+  --navy:   #0f2537;
+  --navy2:  #1a3e5c;
+  --navy3:  #2c5a7a;
+  --amber:  #d4821a;
+  --amber2: #f0a030;
+  --bg:     #eef2f5;
+  --card:   #ffffff;
+  --border: #ccdde8;
+  --text:   #1a2e3e;
+  --muted:  #5a7a8a;
+  --plot:   #fafcfd;
+  --s1: #1f6392; --s2: #c0392b; --s3: #1e8449; --s4: #7d3c98;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text);
+  display: flex; flex-direction: column; }
+
+/* ── HEADER ── */
+.app-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  color: white; padding: 10px 20px; display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25); flex-shrink: 0;
+}
+.app-header h1 { font-family: Georgia, serif; font-size: 1.5rem; letter-spacing: .5px; }
+.app-header h1 span { color: var(--amber2); }
+.app-header .sub { font-size: .72rem; color: #a0bcd0; margin-top: 2px; }
+.header-right { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── LAYOUT ── */
+.main-layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.left-panel { width: 400px; min-width: 340px; background: var(--card); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden; }
+.right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+/* ── FICHE PROJET ── */
+.project-bar { background: var(--navy); padding: 8px 16px; flex-shrink: 0; }
+.project-bar summary { color: #a0bcd0; font-size: .72rem; font-weight: 700; text-transform: uppercase; cursor: pointer; letter-spacing: .5px; }
+.project-fields { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.pf { flex: 1; min-width: 120px; }
+.pf label { display: block; font-size: .62rem; font-weight: 700; color: #70a0c0; text-transform: uppercase; margin-bottom: 3px; }
+.pf input, .pf select { width: 100%; padding: 6px 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; color: white; font-size: .8rem; }
+.pf input::placeholder { color: rgba(255,255,255,.4); }
+
+/* ── ONGLETS ÉCHANTILLONS ── */
+.samples-tabs { display: flex; align-items: center; gap: 2px; padding: 8px 10px 0; background: #f4f7f9; border-bottom: 2px solid var(--border); overflow-x: auto; flex-shrink: 0; }
+.sample-tab { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px 8px 0 0; font-size: .78rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; border-bottom: none; white-space: nowrap; transition: .15s; background: #e4ecf2; color: var(--muted); }
+.sample-tab.active { background: white; border-color: var(--border); color: var(--text); margin-bottom: -2px; padding-bottom: 8px; }
+.sample-tab .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.sample-tab .vis-btn { opacity: .5; font-size: .7rem; padding: 0 2px; background: none; border: none; cursor: pointer; color: inherit; }
+.sample-tab .del-tab { opacity: .4; font-size: .68rem; padding: 0 2px; background: none; border: none; cursor: pointer; color: var(--muted); margin-left: 2px; }
+.sample-tab .del-tab:hover { opacity: 1; color: #c0392b; }
+.btn-add-tab { padding: 5px 10px; background: var(--amber); color: white; border: none; border-radius: 6px; font-size: .75rem; font-weight: 700; cursor: pointer; flex-shrink: 0; margin-left: 4px; }
+.btn-add-tab:hover { background: var(--amber2); }
+
+/* ── PANNEAU DONNÉES ── */
+.data-panel { flex: 1; overflow-y: auto; padding: 12px; }
+.sample-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.sample-name-row input { flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: .85rem; font-weight: 600; }
+.color-swatch { width: 28px; height: 28px; border-radius: 6px; border: 2px solid rgba(0,0,0,.15); cursor: pointer; flex-shrink: 0; }
+.section-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: .5px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.table-wrap { overflow-x: auto; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+th, td { border: 1px solid #dce8f0; padding: 5px 6px; text-align: center; }
+th { background: #eaf2f8; font-weight: 700; font-size: .72rem; }
+td input { width: 82px; padding: 4px 5px; border: 1px solid #c0d8e8; border-radius: 6px; text-align: center; font-size: .78rem; font-family: 'Courier New', monospace; }
+td input:focus { outline: 2px solid var(--amber); border-color: transparent; }
+.row-del { background: none; border: none; color: #c0392b; cursor: pointer; font-size: .85rem; opacity: .5; padding: 2px 4px; }
+.row-del:hover { opacity: 1; }
+.data-btns { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+
+/* ── BOUTONS GÉNÉRAUX ── */
+.btn { padding: 5px 12px; border: none; border-radius: 20px; font-size: .75rem; font-weight: 600; cursor: pointer; transition: .15s; }
+.btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+.btn-primary { background: var(--navy3); color: white; }
+.btn-accent  { background: var(--amber); color: white; }
+.btn-outline { background: white; color: var(--navy2); border: 1px solid var(--border); }
+.btn-green   { background: #1e8449; color: white; }
+.btn-sm { padding: 4px 9px; font-size: .7rem; }
+
+/* ── TOOLBAR CHART ── */
+.chart-toolbar { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f4f7f9; border-bottom: 1px solid var(--border); flex-wrap: wrap; flex-shrink: 0; }
+.chart-toolbar select { padding: 4px 10px; border: 1px solid var(--border); border-radius: 16px; font-size: .75rem; background: white; }
+.tool-sep { width: 1px; height: 22px; background: var(--border); margin: 0 2px; }
+.btn-icon { padding: 5px 10px; font-size: .75rem; border-radius: 16px; border: 1px solid var(--border); background: white; cursor: pointer; transition: .15s; color: var(--text); font-weight: 600; }
+.btn-icon:hover { background: var(--amber); color: white; border-color: var(--amber); }
+.btn-icon.active { background: var(--navy2); color: white; border-color: var(--navy2); }
+#validMsg { font-size: .72rem; margin-left: auto; }
+
+/* ── ZONE GRAPHIQUE ── */
+.chart-area { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+#granuSVG { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; cursor: crosshair; user-select: none; }
+.svg-tooltip { position: absolute; background: white; border: 1px solid var(--border); border-radius: 10px; padding: 7px 11px; font-size: .73rem; pointer-events: none; display: none; box-shadow: 0 4px 14px rgba(0,0,0,.12); z-index: 99; max-width: 200px; }
+
+/* ── RÉSULTATS ── */
+.results-area { background: var(--card); border-top: 2px solid var(--border); padding: 10px 14px; overflow-y: auto; max-height: 200px; flex-shrink: 0; }
+.results-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+.result-card { background: #f4f8fc; border-radius: 12px; padding: 10px 14px; flex: 1; min-width: 160px; border: 1px solid var(--border); }
+.result-card h3 { font-size: .7rem; text-transform: uppercase; font-weight: 700; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.params-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.param-chip { background: white; border-radius: 8px; padding: 4px 10px; text-align: center; border: 1px solid var(--border); min-width: 70px; }
+.param-chip .lbl { font-size: .58rem; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.param-chip .val { font-size: .95rem; font-weight: 700; color: var(--navy); font-family: 'Courier New', monospace; }
+.fractions-row { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.frac-badge { padding: 3px 10px; border-radius: 20px; font-size: .7rem; font-weight: 600; background: #e4ecf2; }
+.class-badge { padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 700; margin-top: 6px; display: inline-block; }
+.terzaghi-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.tz-chip { padding: 4px 10px; border-radius: 8px; font-size: .72rem; font-weight: 600; }
+.ok { background: #d4edda; color: #155724; }
+.warn { background: #fff3cd; color: #856404; }
+.fail { background: #f8d7da; color: #721c24; }
+.na { background: #e9ecef; color: #6c757d; }
+
+/* ── LÉGENDE inline ── */
+.legend-svg { font-size: .72rem; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: #b0c8d8; border-radius: 3px; }
+
+@media print {
+  @page { size: A4; margin: 1cm; }
+  html, body { height: auto; overflow: visible; }
+  body { display: block; }
+  .main-layout { display: block !important; overflow: visible; }
+  .left-panel { display: none !important; }
+  #printDataTables { display: block !important; margin-bottom: 4px; }
+  .print-cols { display: flex; flex-wrap: wrap; gap: 10px; }
+  .print-col { flex: 1 1 0; min-width: 0; }
+  .print-col-name { font-weight: 700; font-size: .78rem; margin-bottom: 2px; }
+  .print-col-title { font-size: .6rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin: 2px 0 1px; padding-bottom: 1px; border-bottom: 1px solid #ccc; }
+  .print-col table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: .58rem; margin-bottom: 2px; }
+  .print-col th:first-child, .print-col td:first-child { width: 50%; }
+  .print-col th:last-child, .print-col td:last-child { width: 50%; }
+  .print-col th, .print-col td { border: 1px solid #ccc; padding: 0px 3px; text-align: center; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+  .print-col th { background: #f0f4f7; font-weight: 700; }
+  .right-panel { display: block !important; overflow: visible; }
+  .project-bar { display: none !important; }
+  .samples-tabs { display: none !important; }
+  .data-btns { display: none !important; }
+  .color-swatch { display: none !important; }
+  .data-panel { overflow: visible; padding: 2px 8px; }
+  .data-panel .table-wrap { max-width: 420px; margin-bottom: 4px; }
+  .sample-name-row { margin-bottom: 4px; }
+  .sample-name-row input { border: none; background: transparent; padding: 0; font-weight: 700; font-size: .85rem; }
+  .data-panel table { font-size: .74rem; }
+  .data-panel th, .data-panel td { padding: 2px 5px; }
+  .data-panel input { border: none; background: transparent; padding: 0 2px; font-size: .74rem; }
+  .data-panel table th:nth-child(3), .data-panel table td:nth-child(3) { display: none !important; }
+  .section-title { font-size: .68rem; margin-bottom: 3px; padding-bottom: 2px; border-bottom: 1px solid #ccc; }
+  .app-header { padding: 5px 14px; }
+  .app-header h1 { font-size: 1.15rem; }
+  .app-header .sub { font-size: .68rem; }
+  .chart-toolbar { padding: 4px 12px; }
+  .chart-toolbar button, .header-right button { display: none; }
+  .chart-area { height: 200px !important; min-height: 200px !important; max-height: 200px !important; flex: none !important; position: relative; }
+  #granuSVG { position: absolute; top:0; left:0; width:100%; height:100%; }
+  .results-area { max-height: none; overflow: visible; padding: 3px 14px 10px; }
+  .result-card { padding: 2px 7px; }
+  .result-card h3 { margin-bottom: 2px; font-size: .68rem; }
+  .params-row { gap: 4px; }
+  .param-chip { padding: 2px 6px; min-width: 54px; }
+  .param-chip .val { font-size: .82rem; }
+  .param-chip .lbl { font-size: .55rem; }
+  .fractions-row, .terzaghi-row { margin-top: 4px; }
+  .frac-badge, .class-badge, .tz-chip { font-size: .7rem; padding: 3px 9px; }
+  .tz-result-card { flex: 1 1 100% !important; min-width: 0 !important; margin-top: 4px; }
+  .tz-result-card h3 { white-space: normal; }
+}
+@media (max-width: 860px) {
+  .main-layout { flex-direction: column; }
+  .left-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .chart-area { min-height: 320px; }
+}
+
+/* ================================================================
+   Cartouche SEL (en-tête de rapport) — Structural & Engineering Labs
+   ================================================================ */
+.sel-cartouche-wrap {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  flex-shrink: 0;
+  --sel-accent: #3a9bd5; --sel-bg: #0b111e; --sel-border: #1e2d45; --sel-muted: #6b8aaa;
+}
+.sel-cartouche { display: grid; grid-template-columns: 1.1fr 1.3fr 1.1fr; border-bottom: 2px solid var(--sel-border);
+  overflow: hidden; background: var(--sel-bg); color: #fff; }
+.sel-cell { padding: 6px 14px; border-right: 1px solid var(--sel-border); display: flex; flex-direction: column; justify-content: center; }
+.sel-cell:last-child { border-right: none; }
+.sel-logo { display: flex; align-items: center; gap: 8px; }
+.sel-logo-icon { position: relative; width: 30px; height: 30px; flex-shrink: 0; }
+.sel-logo-icon svg { position: absolute; width: 100%; height: 100%; }
+.sel-logo-icon span { position: relative; display:block; font-weight: 900; font-size: 7px; letter-spacing: -0.05em; margin-top: 2px; text-align:center; }
+.sel-logo-text { display: flex; flex-direction: column; margin-top: -3px; }
+.sel-logo-text b { font-weight: 700; font-size: 13px; letter-spacing: -0.03em; }
+.sel-logo-text b span { color: var(--sel-accent); }
+.sel-logo-text small { font-weight: 600; color: var(--sel-muted); font-size: 7.5px; letter-spacing: 0.22em; text-transform: uppercase; }
+.sel-info-label { font-size: 7.5px; color: var(--sel-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 2px; }
+.sel-info-value { font-size: 11.5px; font-weight: 700; text-transform: uppercase; }
+.sel-info-ref { color: var(--sel-accent); font-family: 'Consolas', 'Courier New', monospace; font-size: 11px; }
+.sel-note-title { margin-top: auto; padding-top: 5px; border-top: 1px solid rgba(30,45,69,.5); text-align: center; }
+.sel-note-main { font-size: 9.5px; font-weight: 700; color: var(--sel-accent); letter-spacing: 0.1em; }
+.sel-note-sub { font-size: 8px; font-weight: 600; color: var(--sel-muted); letter-spacing: 0.08em; }
+@media (max-width: 800px) { .sel-cartouche { grid-template-columns: 1fr; } .sel-cell { border-right:none; border-bottom:1px solid var(--sel-border); } }
+
+.sel-copyright { display: none; }
+
+/* ================================================================
+   Modale d'aide
+   ================================================================ */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1000; align-items:center; justify-content:center; padding:16px; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#fff; border-radius:14px; max-width:720px; width:100%; max-height:85vh; overflow-y:auto; padding:0; box-shadow:0 20px 50px rgba(0,0,0,.3); }
+.modal-box h2 { margin:0; padding:14px 20px; background:#f4f7f9; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:1.05rem; color:var(--navy); }
+.modal-box .modal-body { padding: 16px 20px; }
+.modal-box h3 { color:var(--navy3); font-size:.85rem; margin:14px 0 5px; border-left:3px solid var(--amber); padding-left:8px; }
+.modal-box p, .modal-box li { font-size:.8rem; line-height:1.55; color:#33475a; }
+.modal-box ul { margin:4px 0; padding-left:20px; }
+.modal-box code { background:#eaf2f8; padding:1px 6px; border-radius:6px; font-size:.76rem; color:var(--navy2); }
+.modal-close { background:#eaf2f8; color:var(--navy2); border:1px solid var(--border); border-radius:50%; width:30px; height:30px; font-size:1rem; cursor:pointer; }
+@media print { .modal-overlay{ display:none !important; } }
+
+@media print {
+  .sel-cartouche { background: white; color: black; border-color: #333; grid-template-columns: 1.1fr 1.3fr 1.1fr !important; }
+  .sel-cell { padding: 4px 12px !important; border-color: #333 !important; }
+  .sel-logo-text b, .sel-logo-icon span { color: black; }
+  .sel-note-title { padding-top: 4px !important; }
+  .sel-copyright {
+    display: block !important; position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; background: white; font-size: .68rem; color: #444;
+    padding-top: 3px; border-top: 1px solid #ccc;
+  }
+  .results-area { padding-bottom: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CARTOUCHE SEL -->
+<div class="sel-cartouche-wrap">
+  <div class="sel-cartouche">
+    <div class="sel-cell" style="background:rgba(58,155,213,.06);">
+      <div class="sel-logo">
+        <div class="sel-logo-icon">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4 L44 14 L44 34 L24 44 L4 34 L4 14 Z" fill="rgba(58,155,213,0.08)"></path>
+            <path d="M24 4 L44 14 L44 34 L24 44 L4 34 L4 14 Z" fill="none" stroke="#3a9bd5" stroke-width="2.5"></path>
+            <path d="M4 14 L44 34 M4 34 L44 14 M24 4 L24 44" stroke="rgba(58,155,213,0.4)" stroke-width="0.5"></path>
+            <rect x="16" y="18" width="16" height="12" rx="2" fill="#3a9bd5"></rect>
+          </svg>
+          <span>S.E.L.</span>
+        </div>
+        <div class="sel-logo-text">
+          <b>STRUCTURAL <span>&amp;</span></b>
+          <small>ENGINEERING LABS</small>
+        </div>
+      </div>
+    </div>
+    <div class="sel-cell">
+      <div style="margin-bottom:8px;">
+        <div class="sel-info-label">Projet / Affaire</div>
+        <div class="sel-info-value" id="cartoucheProjet">Étude géotechnique</div>
+      </div>
+      <div>
+        <div class="sel-info-label">Référence Dossier</div>
+        <div class="sel-info-ref" id="cartoucheRef">GEO-2026-001</div>
+      </div>
+    </div>
+    <div class="sel-cell">
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+        <div>
+          <div class="sel-info-label">Rédacteur</div>
+          <div style="font-size:11.5px;" id="cartoucheRedacteur">OWONO Jacob</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="sel-info-label">Date d'édition</div>
+          <div style="font-size:11.5px;" id="cartoucheDate">21/03/2026</div>
+        </div>
+      </div>
+      <div class="sel-note-title">
+        <div class="sel-note-main">RAPPORT D'ESSAI</div>
+        <div class="sel-note-sub">ANALYSE GRANULOMÉTRIQUE</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div>
+    <h1>📊 <span>GranuLab</span> Pro</h1>
+    <div class="sub">Courbe granulométrique multi-échantillons | Tamisage + Sédimentométrie | Fuseaux GTR | NF P 94-056/057</div>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-outline btn-sm" id="btnHelp">❓ Aide</button>
+    <button class="btn btn-outline btn-sm" id="btnOpenFile">📂 Ouvrir</button>
+    <button class="btn btn-outline btn-sm" id="btnSaveFile">💾 Enregistrer</button>
+    <button class="btn btn-outline btn-sm" id="btnExportSVG">🖼️ Export SVG</button>
+    <button class="btn btn-outline btn-sm" id="btnExportCSV">📎 CSV</button>
+    <button class="btn btn-outline btn-sm" id="btnPrint">🖨️ Imprimer</button>
+  </div>
+</div>
+
+<!-- FICHE PROJET -->
+<details class="project-bar" open>
+  <summary>▸ Informations projet</summary>
+  <div class="project-fields">
+    <div class="pf"><label>Projet / Affaire</label><input id="pName" placeholder="Étude géotechnique" value="Étude géotechnique"></div>
+    <div class="pf"><label>Référence dossier</label><input id="pRef" placeholder="GEO-2026-001" value="GEO-2026-001"></div>
+    <div class="pf"><label>Client</label><input id="pClient" placeholder="Client" value="Structural &amp; Engineering Labs"></div>
+    <div class="pf"><label>Chantier / Site</label><input id="pSite" placeholder="Site" value="Bastos - Yaoundé"></div>
+    <div class="pf"><label>Date</label><input id="pDate" placeholder="JJ/MM/AAAA" value=""></div>
+    <div class="pf"><label>Opérateur</label><input id="pOp" placeholder="Nom" value="OWONO Jacob"></div>
+    <div class="pf"><label>Sondage / Prélèvement</label><input id="pSondage" placeholder="S1-3 (1.5–2.0m)" value="S1"></div>
+  </div>
+</details>
+
+<!-- LAYOUT PRINCIPAL -->
+<div class="main-layout">
+
+  <!-- Tableaux multi-échantillons en colonnes, visibles uniquement à l'impression -->
+  <div id="printDataTables" style="display:none;"></div>
+
+  <!-- PANNEAU GAUCHE -->
+  <div class="left-panel">
+    <div class="samples-tabs" id="samplesTabs"></div>
+
+    <div class="data-panel" id="dataPanel">
+      <!-- Contenu dynamique -->
+    </div>
+  </div>
+
+  <!-- PANNEAU DROIT -->
+  <div class="right-panel">
+    <!-- TOOLBAR CHART -->
+    <div class="chart-toolbar">
+      <label style="font-size:.73rem;font-weight:700;color:var(--muted);">Fuseau :</label>
+      <select id="envelopeSelect">
+        <option value="none">Aucun</option>
+        <option value="gtrA">GTR A – Sols fins de qualité</option>
+        <option value="gtrB">GTR B – Remblais courants</option>
+        <option value="gtrC">GTR C – Matériaux médiocres</option>
+        <option value="gtrD">GTR D – Argiles / limons</option>
+        <option value="filter_up">Filtre amont</option>
+        <option value="filter_dn">Filtre aval</option>
+      </select>
+      <div class="tool-sep"></div>
+      <button class="btn-icon" id="btnZoomReset" title="Réinitialiser zoom">🔍 Zoom ×1</button>
+      <button class="btn-icon" id="btnReadMode" title="Mode lecture (cliquer sur la courbe)">📏 Lecture</button>
+      <button class="btn-icon" id="btnValidate">✔️ Valider</button>
+      <div id="validMsg"></div>
+    </div>
+
+    <!-- SVG CHART -->
+    <div class="chart-area" id="chartArea">
+      <svg id="granuSVG" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="svg-tooltip" id="svgTooltip"></div>
+    </div>
+
+    <!-- RÉSULTATS -->
+    <div class="results-area" id="resultsArea"></div>
+  </div>
+</div>
+
+<!-- Fichiers cachés -->
+<input type="file" id="fileOpenInput" accept=".json" style="display:none">
+<input type="file" id="fileCsvInput" accept=".csv" style="display:none">
+
+<!-- Copyright (visible uniquement à l'impression, en pied de page fixe) -->
+<div class="sel-copyright">© Structural &amp; Engineering Labs — structuralengineeringlabs@gmail.com — +237 651 13 56 05</div>
+
+<!-- Modale d'aide -->
+<div id="helpModal" class="modal-overlay">
+  <div class="modal-box">
+    <h2>📘 Manuel d'utilisation — GranuLab Pro <button id="helpCloseBtn" class="modal-close">✕</button></h2>
+    <div class="modal-body">
+      <h3>1. Présentation</h3>
+      <p>GranuLab Pro trace et compare jusqu'à 4 courbes granulométriques cumulées (tamisage + sédimentométrie) sur une échelle semi-logarithmique, entièrement dans le navigateur, sans dépendance externe.</p>
+
+      <h3>2. Échantillons multiples</h3>
+      <ul>
+        <li>Onglet <strong>+ Échantillon</strong> pour ajouter un échantillon (4 maximum), chacun avec sa propre couleur.</li>
+        <li>👁️ / 🚫 sur un onglet : afficher/masquer cet échantillon sur le graphique sans le supprimer.</li>
+        <li>× sur un onglet : supprimer l'échantillon (au moins un doit rester).</li>
+      </ul>
+
+      <h3>3. Graphique</h3>
+      <ul>
+        <li><strong>Molette</strong> : zoomer/dézoomer autour du curseur. <strong>Cliquer-glisser</strong> : déplacer la vue. <strong>🔍 Zoom ×1</strong> : réinitialiser.</li>
+        <li><strong>📏 Mode lecture</strong> : cliquez sur le graphique pour afficher le passant de chaque échantillon visible à un diamètre donné.</li>
+      </ul>
+
+      <h3>4. Fuseaux et classification</h3>
+      <p>Les fuseaux GTR/filtres affichés sont <strong>indicatifs</strong>. La classification GTR calculée (badge coloré) est basée uniquement sur la granulométrie (fines/sables/graviers) — la classification officielle NF P11-300 nécessite en plus la valeur au bleu (VBS) ou l'indice de plasticité (Ip), et l'état hydrique (w/wOPN).</p>
+
+      <h3>5. Critères de Terzaghi</h3>
+      <p>Dès que 2 échantillons sont visibles, les critères de filtre de Terzaghi sont calculés automatiquement entre le premier (considéré comme le sol) et le second (considéré comme le filtre) : D15filtre/D85sol (&lt; 4), D15filtre/D15sol (&gt; 4), D50filtre/D50sol (&lt; 25).</p>
+
+      <h3>6. Enregistrer / Ouvrir / Exporter</h3>
+      <ul>
+        <li><strong>💾 Enregistrer</strong> / <strong>📂 Ouvrir</strong> : sauvegarde et rechargement complets au format JSON.</li>
+        <li><strong>📎 CSV</strong> : export des tableaux de données. <strong>🖼️ Export SVG</strong> : image vectorielle du graphique actuel.</li>
+      </ul>
+
+      <h3>7. Impression</h3>
+      <p>Le bouton 🖨️ Imprimer ouvre la boîte d'impression du navigateur (choisissez « Enregistrer au format PDF » pour obtenir un fichier). La mise en page imprimée est en A4 paysage et inclut le cartouche et le copyright en pied de page.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ÉTAT GLOBAL
+   ================================================================ */
+const SAMPLE_COLORS = ['#1f6392','#c0392b','#1e8449','#7d3c98'];
+const DEFAULT_SIEVE = [
+  {d:50,p:100},{d:20,p:92},{d:10,p:80},{d:5,p:68},
+  {d:2,p:55},{d:1,p:45},{d:0.5,p:32},{d:0.2,p:21},{d:0.08,p:14}
+];
+const DEFAULT_HYDRO = [
+  {d:0.06,p:12.5},{d:0.04,p:9.8},{d:0.02,p:6.2},
+  {d:0.01,p:4.5},{d:0.005,p:3.0},{d:0.002,p:1.8},{d:0.001,p:0.9}
+];
+
+let nextId = 1;
+function newSample(name, color) {
+  return { id: nextId++, name, color,
+    sieve: DEFAULT_SIEVE.map(r=>({...r})),
+    hydro: DEFAULT_HYDRO.map(r=>({...r})),
+    visible: true };
+}
+
+let samples = [ newSample('Échantillon 1', SAMPLE_COLORS[0]) ];
+let activeId = samples[0].id;
+
+const envelopes = {
+  gtrA:{ lo:[[0.08,10],[0.2,15],[0.5,25],[2,40],[5,55],[20,75],[50,85],[80,100]], hi:[[0.08,35],[0.2,45],[0.5,60],[2,80],[5,90],[20,98],[50,100],[80,100]] },
+  gtrB:{ lo:[[0.08,5],[0.2,10],[0.5,20],[2,35],[5,50],[20,70],[50,80],[80,90]],   hi:[[0.08,30],[0.2,45],[0.5,65],[2,85],[5,95],[20,100],[50,100],[80,100]] },
+  gtrC:{ lo:[[0.08,20],[0.2,30],[0.5,45],[2,60],[5,70],[20,85],[50,95],[80,100]], hi:[[0.08,50],[0.2,70],[0.5,85],[2,95],[5,100],[20,100],[50,100],[80,100]] },
+  gtrD:{ lo:[[0.002,15],[0.02,30],[0.08,50],[0.2,70],[2,90],[20,100]],            hi:[[0.002,45],[0.02,70],[0.08,95],[0.2,100],[2,100],[20,100]] },
+  filter_up:{ lo:[[0.08,0],[0.2,15],[0.5,30],[2,60],[5,85],[10,95],[20,100]],     hi:[[0.08,15],[0.2,35],[0.5,60],[2,85],[5,98],[10,100],[20,100]] },
+  filter_dn:{ lo:[[0.2,0],[0.5,10],[2,30],[5,55],[10,80],[20,95],[50,100]],       hi:[[0.2,20],[0.5,45],[2,75],[5,95],[10,100],[20,100],[50,100]] }
+};
+
+/* ================================================================
+   VUE (ZOOM) – coordonnées en espace log
+   ================================================================ */
+let view = { logMin:-3, logMax:2.2, pMin:0, pMax:100 };
+let readMode = false;
+
+/* ================================================================
+   MOTEUR SVG
+   ================================================================ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+let SVG_W, SVG_H, MARGIN, PW, PH;
+let printMode = false;
+
+function computeDims() {
+  if (printMode) {
+    // Dimensions fixes pour l'impression A4 portrait : évite toute dépendance à un
+    // redimensionnement asynchrone (ResizeObserver/beforeprint) qui s'est révélé
+    // non fiable (déclenchement parfois trop tardif par rapport à la capture d'impression).
+    // Graphique plus grand pour 1 échantillon ; réduit si Terzaghi s'affiche (2+ échantillons visibles).
+    const nbVisible = samples.filter(s => s.visible).length;
+    if (nbVisible >= 2) { SVG_W = 720; SVG_H = 220; MARGIN = {top:30, right:24, bottom:32, left:58}; }
+    else { SVG_W = 720; SVG_H = 250; MARGIN = {top:26, right:24, bottom:42, left:58}; }
+  } else {
+    const area = document.getElementById('chartArea');
+    const rect = area.getBoundingClientRect();
+    SVG_W = Math.max(rect.width,  400);
+    SVG_H = Math.max(rect.height, 300);
+    MARGIN = {top:38, right:24, bottom:58, left:62};
+  }
+  PW = SVG_W - MARGIN.left - MARGIN.right;
+  PH = SVG_H - MARGIN.top  - MARGIN.bottom;
+}
+
+function xLog(d) { return MARGIN.left + (Math.log10(d) - view.logMin)/(view.logMax - view.logMin)*PW; }
+function yPct(p) { return MARGIN.top  + (1 - (p - view.pMin)/(view.pMax - view.pMin))*PH; }
+function xToLog(px){ return view.logMin + (px - MARGIN.left)/PW*(view.logMax - view.logMin); }
+function yToPct(py){ return view.pMax - (py - MARGIN.top)/PH*(view.pMax - view.pMin); }
+
+function svgEl(tag, a={}, txt=''){
+  const el=document.createElementNS(SVG_NS,tag);
+  for(const[k,v] of Object.entries(a)) el.setAttribute(k,v);
+  if(txt) el.textContent=txt;
+  return el;
+}
+
+function drawChart() {
+  computeDims();
+  buildPrintDataTables();
+  const svg = document.getElementById('granuSVG');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox',`0 0 ${SVG_W} ${SVG_H}`);
+
+  // Clip
+  const defs = svgEl('defs');
+  const cp = svgEl('clipPath',{id:'plotClip'});
+  cp.appendChild(svgEl('rect',{x:MARGIN.left,y:MARGIN.top,width:PW,height:PH}));
+  defs.appendChild(cp);
+  svg.appendChild(defs);
+
+  const gAll = svgEl('g');
+
+  // ── Fond ──
+  gAll.appendChild(svgEl('rect',{x:MARGIN.left,y:MARGIN.top,width:PW,height:PH,fill:'var(--plot)',stroke:'#8aaabb','stroke-width':'1'}));
+
+  // ── Grilles Y ──
+  for(let p=10; p<100; p+=10){
+    if(p < view.pMin || p > view.pMax) continue;
+    const y = yPct(p);
+    gAll.appendChild(svgEl('line',{x1:MARGIN.left,y1:y,x2:MARGIN.left+PW,y2:y,stroke:'#b0c4d8','stroke-width':(p%50===0?'1':'0.7')}));
+    gAll.appendChild(svgEl('text',{x:MARGIN.left-5,y:y+3.5,'text-anchor':'end','font-size':'10','fill':'#445','font-family':'Courier New,monospace'},String(p)));
+  }
+  // Axe 0 et 100
+  [0,100].forEach(p=>{
+    const y=yPct(p);
+    if(p>=view.pMin && p<=view.pMax){
+      gAll.appendChild(svgEl('text',{x:MARGIN.left-5,y:y+3.5,'text-anchor':'end','font-size':'10','fill':'#445','font-family':'Courier New,monospace'},String(p)));
+    }
+  });
+  // Label Y
+  const yLbl = svgEl('text',{'text-anchor':'middle','font-size':'11','fill':'var(--navy)','font-weight':'700',
+    transform:`translate(12,${MARGIN.top+PH/2}) rotate(-90)`});
+  yLbl.textContent='Passants cumulés (%)'; gAll.appendChild(yLbl);
+
+  // ── Grilles X (log) ──
+  const decades = [];
+  for(let d=Math.floor(view.logMin); d<=Math.ceil(view.logMax); d++) decades.push(d);
+  const xLabels = {'-3':'0.001','-2':'0.01','-1':'0.1','0':'1','1':'10','2':'100'};
+  decades.forEach(d=>{
+    const x=xLog(Math.pow(10,d));
+    if(x>=MARGIN.left && x<=MARGIN.left+PW){
+      gAll.appendChild(svgEl('line',{x1:x,y1:MARGIN.top,x2:x,y2:MARGIN.top+PH,stroke:'#a0bcd0','stroke-width':'1'}));
+      if(xLabels[d])
+        gAll.appendChild(svgEl('text',{x,y:MARGIN.top+PH+13,'text-anchor':'middle','font-size':'10','fill':'#445','font-family':'Courier New,monospace'},xLabels[d]));
+      // Sous-divisions
+      for(let sub=2;sub<=9;sub++){
+        const xs=xLog(Math.pow(10,d)*sub);
+        if(xs>=MARGIN.left && xs<=MARGIN.left+PW)
+          gAll.appendChild(svgEl('line',{x1:xs,y1:MARGIN.top,x2:xs,y2:MARGIN.top+PH,stroke:'#ccdde8','stroke-width':'0.5'}));
+      }
+    }
+  });
+  // Label X
+  const xLbl = svgEl('text',{x:MARGIN.left+PW/2,y:SVG_H-6,'text-anchor':'middle','font-size':'11','fill':'var(--navy)','font-weight':'700'});
+  xLbl.textContent='Diamètre équivalent / Ouverture des mailles (mm)'; gAll.appendChild(xLbl);
+
+  // ── Titre ──
+  const proj = document.getElementById('pName').value || 'GranuLab Pro';
+  const ech  = document.getElementById('pSondage').value;
+  gAll.appendChild(svgEl('text',{x:MARGIN.left+PW/2,y:22,'text-anchor':'middle','font-size':'13','fill':'var(--navy)','font-weight':'700','font-family':'Georgia,serif'},
+    `Courbe granulométrique — ${proj}${ech?' | '+ech:''}`));
+
+  // ── Fuseau ──
+  const envType = document.getElementById('envelopeSelect').value;
+  if(envType!=='none' && envelopes[envType]){
+    const env=envelopes[envType];
+    const lo=[...env.lo].filter(([d])=>Math.log10(d)>=view.logMin-0.1 && Math.log10(d)<=view.logMax+0.1);
+    const hi=[...env.hi].filter(([d])=>Math.log10(d)>=view.logMin-0.1 && Math.log10(d)<=view.logMax+0.1);
+    const clipG = svgEl('g',{'clip-path':'url(#plotClip)'});
+    if(lo.length>1 && hi.length>1){
+      const fill=[...env.lo,...env.hi.slice().reverse()];
+      clipG.appendChild(svgEl('polygon',{
+        points:fill.map(([d,p])=>`${xLog(d).toFixed(1)},${yPct(p).toFixed(1)}`).join(' '),
+        fill:'rgba(100,160,210,0.15)',stroke:'none'
+      }));
+      clipG.appendChild(svgEl('polyline',{points:env.lo.map(([d,p])=>`${xLog(d).toFixed(1)},${yPct(p).toFixed(1)}`).join(' '),fill:'none',stroke:'#6c8faa','stroke-width':'1.2','stroke-dasharray':'5,3'}));
+      clipG.appendChild(svgEl('polyline',{points:env.hi.map(([d,p])=>`${xLog(d).toFixed(1)},${yPct(p).toFixed(1)}`).join(' '),fill:'none',stroke:'#6c8faa','stroke-width':'1.2','stroke-dasharray':'5,3'}));
+    }
+    gAll.appendChild(clipG);
+  }
+
+  // ── Courbes échantillons ──
+  samples.forEach(s=>{
+    if(!s.visible) return;
+    const pts = getMerged(s);
+    if(pts.length<2) return;
+    const clipG = svgEl('g',{'clip-path':'url(#plotClip)'});
+
+    // Ligne
+    const lineStr = pts.map(p=>`${xLog(p.d).toFixed(1)},${yPct(p.p).toFixed(1)}`).join(' L ');
+    clipG.appendChild(svgEl('path',{d:`M ${lineStr}`,fill:'none',stroke:s.color,'stroke-width':'2.5','stroke-linejoin':'round','stroke-linecap':'round'}));
+
+    // Marqueurs
+    pts.forEach(pt=>{
+      const cx=xLog(pt.d), cy=yPct(pt.p);
+      if(cx<MARGIN.left-5 || cx>MARGIN.left+PW+5 || cy<MARGIN.top-5 || cy>MARGIN.top+PH+5) return;
+      let mk;
+      if(pt.t==='sieve'){
+        mk=svgEl('circle',{cx,cy,r:'5',fill:s.color,stroke:'white','stroke-width':'1.5'});
+      } else {
+        const sz=5.5;
+        mk=svgEl('polygon',{points:`${cx},${cy-sz} ${cx+sz*.9},${cy+sz*.5} ${cx-sz*.9},${cy+sz*.5}`,fill:s.color,stroke:'white','stroke-width':'1.5'});
+      }
+      clipG.appendChild(mk);
+    });
+    gAll.appendChild(clipG);
+  });
+
+  // ── Légende ──
+  const visibles = samples.filter(s=>s.visible);
+  if(visibles.length>0){
+    const legRow = printMode ? 13 : 18;
+    const legFont = printMode ? 8 : 10;
+    const legFontSm = printMode ? 7 : 9;
+    const LW=printMode?150:180, LH=12+visibles.length*legRow+(envType!=='none'?legRow:0)+legRow;
+    const LX=MARGIN.left+PW-LW-6, LY=Math.max(MARGIN.top+PH-LH-6, MARGIN.top+2);
+    gAll.appendChild(svgEl('rect',{x:LX,y:LY,width:LW,height:LH,rx:'8',fill:'rgba(255,255,255,.92)',stroke:'#c0d4e0','stroke-width':'1'}));
+    let ly=LY+12;
+    visibles.forEach(s=>{
+      gAll.appendChild(svgEl('line',{x1:LX+8,y1:ly,x2:LX+22,y2:ly,stroke:s.color,'stroke-width':'2.5'}));
+      gAll.appendChild(svgEl('circle',{cx:LX+15,cy:ly,r:printMode?3:4,fill:s.color,stroke:'white','stroke-width':'1.2'}));
+      const t=svgEl('text',{x:LX+26,y:ly+3,'font-size':String(legFont),'fill':'#222'});
+      t.textContent=s.name.substring(0,20); gAll.appendChild(t); ly+=legRow;
+    });
+    if(envType!=='none'){
+      gAll.appendChild(svgEl('line',{x1:LX+8,y1:ly,x2:LX+22,y2:ly,stroke:'#6c8faa','stroke-width':'1.2','stroke-dasharray':'5,3'}));
+      const t2=svgEl('text',{x:LX+26,y:ly+3,'font-size':String(legFont),'fill':'#6c8faa'});
+      const envLabels={'gtrA':'GTR A','gtrB':'GTR B','gtrC':'GTR C','gtrD':'GTR D','filter_up':'Filtre amont','filter_dn':'Filtre aval'};
+      t2.textContent='Fuseau '+envLabels[envType]; gAll.appendChild(t2); ly+=legRow;
+    }
+    // Légende marqueurs
+    gAll.appendChild(svgEl('circle',{cx:LX+9,cy:ly,r:printMode?3:4,fill:'#555',stroke:'white','stroke-width':'1.2'}));
+    const t3=svgEl('text',{x:LX+16,y:ly+3,'font-size':String(legFontSm),'fill':'#666'});
+    t3.textContent='● Tamisage'; gAll.appendChild(t3);
+    gAll.appendChild(svgEl('polygon',{points:`${LX+62},${ly-3.5} ${LX+67},${ly+3.5} ${LX+57},${ly+3.5}`,fill:'#555',stroke:'white','stroke-width':'1.2'}));
+    const t4=svgEl('text',{x:LX+71,y:ly+3,'font-size':String(legFontSm),'fill':'#666'});
+    t4.textContent='▲ Sédiment.'; gAll.appendChild(t4);
+  }
+
+  // Bordure
+  gAll.appendChild(svgEl('rect',{x:MARGIN.left,y:MARGIN.top,width:PW,height:PH,fill:'none',stroke:'#6a8fa8','stroke-width':'1.2'}));
+
+  svg.appendChild(gAll);
+  renderResults();
+}
+
+/* ================================================================
+   CALCULS
+   ================================================================ */
+function getMerged(s){
+  let pts=[];
+  (s.sieve||[]).forEach(r=>{ if(r.d>0&&!isNaN(r.p)) pts.push({d:r.d,p:r.p,t:'sieve'}); });
+  (s.hydro||[]).forEach(r=>{ if(r.d>0&&!isNaN(r.p)) pts.push({d:r.d,p:r.p,t:'hydro'}); });
+  pts.sort((a,b)=>a.d-b.d);
+  const seen=new Set(), uniq=[];
+  for(const pt of pts) if(!seen.has(pt.d)){seen.add(pt.d);uniq.push(pt);}
+  return uniq;
+}
+function getDx(pts, pct){
+  if(pts.length<2) return NaN;
+  for(let i=0;i<pts.length-1;i++){
+    const a=pts[i],b=pts[i+1];
+    if((a.p<=pct&&b.p>=pct)||(a.p>=pct&&b.p<=pct)){
+      const r=(pct-a.p)/(b.p-a.p);
+      return Math.pow(10, Math.log10(a.d)+r*(Math.log10(b.d)-Math.log10(a.d)));
+    }
+  }
+  if(pct<=pts[0].p) return pts[0].d;
+  if(pct>=pts[pts.length-1].p) return pts[pts.length-1].d;
+  return NaN;
+}
+function getPassAt(pts, diam){
+  if(diam<=pts[0].d) return pts[0].p;
+  if(diam>=pts[pts.length-1].d) return pts[pts.length-1].p;
+  for(let i=0;i<pts.length-1;i++){
+    const a=pts[i],b=pts[i+1];
+    if(diam>=a.d&&diam<=b.d){
+      const r=(Math.log10(diam)-Math.log10(a.d))/(Math.log10(b.d)-Math.log10(a.d));
+      return a.p+r*(b.p-a.p);
+    }
+  }
+  return NaN;
+}
+function computeParams(s){
+  const pts=getMerged(s);
+  if(pts.length<2) return null;
+  const D10=getDx(pts,10),D30=getDx(pts,30),D50=getDx(pts,50),D60=getDx(pts,60),D15=getDx(pts,15),D85=getDx(pts,85);
+  const Cu=(D10>0&&D60>0)?D60/D10:NaN;
+  const Cc=(D10>0&&D60>0&&D30>0)?(D30*D30)/(D10*D60):NaN;
+  const p2=getPassAt(pts,2), p063=getPassAt(pts,0.08);
+  const gravel=!isNaN(p2)?100-p2:NaN;
+  const sand=(!isNaN(p2)&&!isNaN(p063))?p2-p063:NaN;
+  const fines=!isNaN(p063)?p063:NaN;
+  const gtr=classifyGTR(fines,sand,gravel);
+  return {D10,D15,D30,D50,D60,D85,Cu,Cc,gravel,sand,fines,gtr};
+}
+function classifyGTR(fines,sand,gravel){
+  if(isNaN(fines)) return {cls:'N/D',note:'Données insuffisantes',color:'#e9ecef'};
+  if(fines>35) return {cls:'A',note:'Sols fins — IP requis pour sous-classe A1/A2/A3',color:'#fce8d3'};
+  if(fines>12){
+    if(!isNaN(sand)&&sand>=(gravel||0)) return {cls:'B5/B6',note:'Sable limoneux/argileux',color:'#fff3cd'};
+    return {cls:'B3/B4',note:'Grave limoneuse/argileuse',color:'#fff3cd'};
+  }
+  if(!isNaN(gravel)&&gravel>=(sand||0)&&gravel>=50) return {cls:'B1/B2',note:'Grave propre/peu fine',color:'#d4edda'};
+  if(!isNaN(sand)&&sand>=50) return {cls:'B1/B2',note:'Sable propre/peu fin',color:'#d4edda'};
+  return {cls:'B',note:'Sol granulaire mixte',color:'#d4edda'};
+}
+function terzaghiCheck(sol, filtre){
+  const ptsSol=getMerged(sol), ptsFil=getMerged(filtre);
+  if(ptsSol.length<2||ptsFil.length<2) return null;
+  const D15f=getDx(ptsFil,15), D85s=getDx(ptsSol,85);
+  const D15s=getDx(ptsSol,15), D15f2=getDx(ptsFil,15);
+  const D50f=getDx(ptsFil,50), D50s=getDx(ptsSol,50);
+  const r1=(D15f>0&&D85s>0)?D15f/D85s:NaN;
+  const r2=(D15s>0&&D15f2>0)?D15f2/D15s:NaN;
+  const r3=(D50s>0&&D50f>0)?D50f/D50s:NaN;
+  return {r1,r2,r3,
+    ok1:!isNaN(r1)&&r1<4, ok2:!isNaN(r2)&&r2>4, ok3:!isNaN(r3)&&r3<25};
+}
+
+/* ================================================================
+   RENDU RÉSULTATS
+   ================================================================ */
+function fmtD(v){ return (v&&!isNaN(v)&&v>0)?v.toFixed(4):'—'; }
+function fmtN(v){ return !isNaN(v)?v.toFixed(2):'—'; }
+function fmtP(v){ return !isNaN(v)?(Math.round(v*10)/10)+' %':'—'; }
+
+function renderResults(){
+  const div=document.getElementById('resultsArea');
+  let html='<div class="results-grid">';
+  samples.filter(s=>s.visible).forEach(s=>{
+    const p=computeParams(s);
+    if(!p){html+=`<div class="result-card"><h3 style="color:${s.color}">◉ ${s.name}</h3><p style="font-size:.75rem;color:var(--muted)">Données insuffisantes</p></div>`;return;}
+    html+=`<div class="result-card">
+      <h3 style="color:${s.color}">◉ ${s.name}</h3>
+      <div class="params-row">
+        ${[['D₁₀',p.D10],['D₁₅',p.D15],['D₃₀',p.D30],['D₅₀',p.D50],['D₆₀',p.D60],['D₈₅',p.D85]].map(([l,v])=>
+          `<div class="param-chip"><div class="lbl">${l} mm</div><div class="val">${fmtD(v)}</div></div>`).join('')}
+        <div class="param-chip"><div class="lbl">Cu</div><div class="val">${fmtN(p.Cu)}</div></div>
+        <div class="param-chip"><div class="lbl">Cc</div><div class="val">${fmtN(p.Cc)}</div></div>
+      </div>
+      <div class="fractions-row">
+        <span class="frac-badge">🪨 Graviers : ${fmtP(p.gravel)}</span>
+        <span class="frac-badge">🏖️ Sables : ${fmtP(p.sand)}</span>
+        <span class="frac-badge">🌾 Fines : ${fmtP(p.fines)}</span>
+      </div>
+      <div>
+        <span class="class-badge" style="background:${p.gtr.color};">📐 GTR ${p.gtr.cls} — ${p.gtr.note}</span>
+        ${!isNaN(p.Cu)&&p.Cu>6&&!isNaN(p.Cc)&&p.Cc>1&&p.Cc<3?'<span class="class-badge ok" style="margin-left:4px;">✅ Bien gradué</span>':''}
+        ${!isNaN(p.fines)&&p.fines>25?'<span class="class-badge warn" style="margin-left:4px;">⚠️ Fines >25%</span>':''}
+        <div style="font-size:.62rem;color:var(--muted);margin-top:4px;">⚠️ Classification indicative (granulométrie seule) — la classification GTR officielle (NF P11-300) nécessite en plus la VBS ou l'Ip, et l'état hydrique (w/wOPN).</div>
+      </div>
+    </div>`;
+  });
+
+  // Critères Terzaghi si ≥ 2 échantillons visibles
+  const vis=samples.filter(s=>s.visible);
+  if(vis.length>=2){
+    const tz=terzaghiCheck(vis[0],vis[1]);
+    if(tz){
+      const chip=(ok,lbl,val,unit)=>`<div class="tz-chip ${ok?'ok':'fail'}">
+        ${ok?'✅':'❌'} ${lbl} = <b>${isNaN(val)?'N/D':val.toFixed(2)}</b> ${unit}
+        <span style="font-size:.65rem;opacity:.8;">${ok?'OK':'NON CONFORME'}</span></div>`;
+      html+=`<div class="result-card tz-result-card" style="flex:2;min-width:300px">
+        <h3>🔬 Critères Terzaghi — Sol : <b>${vis[0].name}</b> | Filtre : <b>${vis[1].name}</b></h3>
+        <div class="terzaghi-row">
+          ${chip(tz.ok1,'D15f/D85s',tz.r1,'&lt; 4')}
+          ${chip(tz.ok2,'D15f/D15s',tz.r2,'&gt; 4')}
+          ${chip(tz.ok3,'D50f/D50s',tz.r3,'&lt; 25')}
+        </div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:5px;">Critères de filtre selon Terzaghi — ${tz.ok1&&tz.ok2&&tz.ok3?'<span style="color:#155724;font-weight:700">✅ Filtre conforme</span>':'<span style="color:#721c24;font-weight:700">❌ Filtre non conforme</span>'}</div>
+      </div>`;
+    }
+  }
+  html+='</div>';
+  div.innerHTML=html;
+}
+
+/* ================================================================
+   RENDU ONGLETS ET TABLEAUX
+   ================================================================ */
+function renderTabs(){
+  const bar=document.getElementById('samplesTabs'); bar.innerHTML='';
+  samples.forEach(s=>{
+    const tab=document.createElement('div');
+    tab.className='sample-tab'+(s.id===activeId?' active':'');
+    tab.innerHTML=`<span class="dot" style="background:${s.color}"></span>
+      <span>${s.name}</span>
+      <button class="vis-btn" title="${s.visible?'Masquer':'Afficher'}">${s.visible?'👁️':'🚫'}</button>
+      ${samples.length>1?`<button class="del-tab" title="Supprimer">×</button>`:''}`;
+    tab.querySelector('.vis-btn').onclick=e=>{e.stopPropagation();s.visible=!s.visible;renderTabs();drawChart();};
+    const delBtn=tab.querySelector('.del-tab');
+    if(delBtn) delBtn.onclick=e=>{e.stopPropagation();deleteSample(s.id);};
+    tab.onclick=()=>{activeId=s.id;renderTabs();renderPanel();};
+    bar.appendChild(tab);
+  });
+  const addBtn=document.createElement('button');
+  addBtn.className='btn-add-tab'; addBtn.textContent='+ Échantillon';
+  addBtn.onclick=addSample; bar.appendChild(addBtn);
+}
+function addSample(){
+  if(samples.length>=4){alert('Maximum 4 échantillons');return;}
+  const s=newSample('Échantillon '+(samples.length+1),SAMPLE_COLORS[samples.length]);
+  s.sieve=[{d:20,p:100},{d:10,p:90},{d:5,p:70},{d:2,p:45},{d:1,p:28},{d:0.5,p:15},{d:0.2,p:6},{d:0.08,p:2}];
+  s.hydro=[{d:0.05,p:1.5},{d:0.01,p:0.8},{d:0.002,p:0.3}];
+  samples.push(s); activeId=s.id; renderTabs(); renderPanel(); drawChart();
+}
+function deleteSample(id){
+  if(samples.length<=1) return;
+  samples=samples.filter(s=>s.id!==id);
+  if(activeId===id) activeId=samples[0].id;
+  renderTabs(); renderPanel(); drawChart();
+}
+function getActive(){ return samples.find(s=>s.id===activeId); }
+
+// Tableaux de données en colonnes (un par échantillon visible), pour l'impression uniquement.
+// Remplace le panneau à onglets (qui n'affiche qu'un échantillon à la fois) par une vue
+// simultanée de tous les échantillons visibles, côte à côte, pour garder la même hauteur
+// de page quel que soit le nombre d'échantillons comparés.
+function buildPrintDataTables(){
+  const holder = document.getElementById('printDataTables');
+  const visibles = samples.filter(s=>s.visible);
+  if(visibles.length===0){ holder.innerHTML=''; return; }
+  const rowsHtml = (rows, unitLabel) => {
+    if(!rows.length) return `<tr><td colspan="2" style="color:#999;">—</td></tr>`;
+    return rows.map(r=>`<tr><td>${r.d}</td><td>${r.p}</td></tr>`).join('');
+  };
+  holder.innerHTML = `<div class="print-cols">` + visibles.map(s=>`
+    <div class="print-col">
+      <div class="print-col-name"><span style="color:${s.color};">●</span> ${s.name}</div>
+      <div class="print-col-title">Tamisage (≥ 80 µm)</div>
+      <table><thead><tr><th>Ouv. (mm)</th><th>Passants (%)</th></tr></thead>
+        <tbody>${rowsHtml(s.sieve)}</tbody></table>
+      <div class="print-col-title">Sédimentométrie (&lt; 80 µm)</div>
+      <table><thead><tr><th>Ø (mm)</th><th>Passants (%)</th></tr></thead>
+        <tbody>${rowsHtml(s.hydro)}</tbody></table>
+    </div>`).join('') + `</div>`;
+}
+
+function renderPanel(){
+  const s=getActive(); if(!s) return;
+  const div=document.getElementById('dataPanel');
+  div.innerHTML=`
+    <div class="sample-name-row">
+      <input type="color" class="color-swatch" id="colorPicker" value="${s.color}">
+      <input type="text" id="sampleNameInput" value="${s.name}" placeholder="Nom de l'échantillon">
+    </div>
+    <div class="section-title">🔸 Tamisage (ouvertures ≥ 80 µm)</div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Ouv. (mm)</th><th>Passants (%)</th><th></th></tr></thead>
+      <tbody id="sieveTbody"></tbody></table>
+    </div>
+    <div class="data-btns">
+      <button class="btn btn-primary btn-sm" id="btnAddSieve">+ Tamis</button>
+      <button class="btn btn-outline btn-sm" id="btnResetSieve">📋 Exemple</button>
+      <button class="btn btn-outline btn-sm" id="btnSortSieve">↕ Trier</button>
+    </div>
+    <div class="section-title">🧪 Sédimentométrie (diamètres &lt; 80 µm)</div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Ø (mm)</th><th>Passants (%)</th><th></th></tr></thead>
+      <tbody id="hydroTbody"></tbody></table>
+    </div>
+    <div class="data-btns">
+      <button class="btn btn-primary btn-sm" id="btnAddHydro">+ Point</button>
+      <button class="btn btn-outline btn-sm" id="btnResetHydro">💧 Exemple</button>
+      <button class="btn btn-outline btn-sm" id="btnSortHydro">↕ Trier</button>
+    </div>`;
+
+  document.getElementById('colorPicker').oninput=e=>{s.color=e.target.value;renderTabs();drawChart();};
+  document.getElementById('sampleNameInput').oninput=e=>{s.name=e.target.value;renderTabs();drawChart();};
+  document.getElementById('btnAddSieve').onclick=()=>{s.sieve.push({d:1,p:50});renderTableRows('sieve');};
+  document.getElementById('btnAddHydro').onclick=()=>{s.hydro.push({d:0.03,p:7});renderTableRows('hydro');};
+  document.getElementById('btnResetSieve').onclick=()=>{s.sieve=DEFAULT_SIEVE.map(r=>({...r}));renderTableRows('sieve');drawChart();};
+  document.getElementById('btnResetHydro').onclick=()=>{s.hydro=DEFAULT_HYDRO.map(r=>({...r}));renderTableRows('hydro');drawChart();};
+  document.getElementById('btnSortSieve').onclick=()=>{s.sieve.sort((a,b)=>b.d-a.d);renderTableRows('sieve');drawChart();};
+  document.getElementById('btnSortHydro').onclick=()=>{s.hydro.sort((a,b)=>b.d-a.d);renderTableRows('hydro');drawChart();};
+
+  renderTableRows('sieve');
+  renderTableRows('hydro');
+}
+
+let debounceTimer=null;
+function debounceDraw(){ clearTimeout(debounceTimer); debounceTimer=setTimeout(drawChart,300); }
+
+function renderTableRows(type){
+  const s=getActive(); if(!s) return;
+  const data=type==='sieve'?s.sieve:s.hydro;
+  const tbody=document.getElementById(type==='sieve'?'sieveTbody':'hydroTbody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  data.forEach((row,idx)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><input type="number" step="any" value="${row.d}" data-t="${type}" data-i="${idx}" data-f="d"></td>
+      <td><input type="number" step="any" min="0" max="100" value="${row.p}" data-t="${type}" data-i="${idx}" data-f="p"></td>
+      <td><button class="row-del" data-t="${type}" data-i="${idx}">🗑</button></td>`;
+    tbody.appendChild(tr);
+  });
+  tbody.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',e=>{
+    const s2=getActive(),t=e.target.dataset.t,i=parseInt(e.target.dataset.i),f=e.target.dataset.f;
+    let v=parseFloat(e.target.value);
+    if(isNaN(v)) return;
+    if(f==='p') v=Math.min(100,Math.max(0,v));
+    (t==='sieve'?s2.sieve:s2.hydro)[i][f]=v;
+    debounceDraw();
+  }));
+  tbody.querySelectorAll('.row-del').forEach(btn=>btn.addEventListener('click',e=>{
+    const s2=getActive(),t=e.target.dataset.t,i=parseInt(e.target.dataset.i);
+    (t==='sieve'?s2.sieve:s2.hydro).splice(i,1);
+    renderTableRows(t); drawChart();
+  }));
+}
+
+/* ================================================================
+   ZOOM + PAN
+   ================================================================ */
+const DEFAULT_VIEW={logMin:-3,logMax:2.2,pMin:0,pMax:100};
+let isPanning=false, panStart=null;
+
+function resetZoom(){ view={...DEFAULT_VIEW}; drawChart(); }
+
+document.getElementById('btnZoomReset').onclick=resetZoom;
+
+document.getElementById('granuSVG').addEventListener('wheel',e=>{
+  e.preventDefault();
+  computeDims();
+  const rect=document.getElementById('granuSVG').getBoundingClientRect();
+  const mx=((e.clientX-rect.left)/rect.width)*SVG_W;
+  const logC=xToLog(mx);
+  const factor=e.deltaY>0?1.2:1/1.2;
+  const range=view.logMax-view.logMin;
+  const newRange=Math.min(Math.max(range*factor, 0.5), 6);
+  const ratio=(logC-view.logMin)/range;
+  view.logMin=logC-ratio*newRange;
+  view.logMax=view.logMin+newRange;
+  drawChart();
+},{passive:false});
+
+document.getElementById('granuSVG').addEventListener('mousedown',e=>{
+  if(readMode) return;
+  isPanning=true;
+  panStart={x:e.clientX, logMin:view.logMin, logMax:view.logMax};
+  document.getElementById('granuSVG').style.cursor='grabbing';
+});
+document.addEventListener('mousemove',e=>{
+  if(!isPanning||readMode) return;
+  computeDims();
+  const rect=document.getElementById('granuSVG').getBoundingClientRect();
+  const dx=(e.clientX-panStart.x)/rect.width*SVG_W;
+  const dLog=dx/PW*(panStart.logMax-panStart.logMin);
+  view.logMin=panStart.logMin-dLog;
+  view.logMax=panStart.logMax-dLog;
+  drawChart();
+});
+document.addEventListener('mouseup',()=>{
+  isPanning=false;
+  document.getElementById('granuSVG').style.cursor=readMode?'crosshair':'crosshair';
+});
+
+/* ================================================================
+   MODE LECTURE
+   ================================================================ */
+document.getElementById('btnReadMode').onclick=function(){
+  readMode=!readMode;
+  this.classList.toggle('active',readMode);
+  this.textContent=readMode?'📏 Lecture ON':'📏 Lecture';
+};
+
+document.getElementById('granuSVG').addEventListener('mousemove',e=>{
+  if(!readMode) return;
+  computeDims();
+  const rect=document.getElementById('granuSVG').getBoundingClientRect();
+  const sx=((e.clientX-rect.left)/rect.width)*SVG_W;
+  const sy=((e.clientY-rect.top)/rect.height)*SVG_H;
+  if(sx<MARGIN.left||sx>MARGIN.left+PW||sy<MARGIN.top||sy>MARGIN.top+PH) return;
+  const diam=Math.pow(10,xToLog(sx));
+  const tip=document.getElementById('svgTooltip');
+  let html=`<b>Ø = ${diam<0.01?diam.toExponential(2):diam.toFixed(diam<1?4:2)} mm</b><hr style="margin:3px 0;border-color:#e0e8f0">`;
+  samples.filter(s=>s.visible).forEach(s=>{
+    const pts=getMerged(s);
+    if(pts.length<2) return;
+    const pass=getPassAt(pts,diam);
+    if(!isNaN(pass)) html+=`<span style="color:${s.color};font-weight:700;">◉</span> ${s.name} : <b>${pass.toFixed(1)} %</b><br>`;
+  });
+  tip.style.display='block';
+  tip.style.left=(e.clientX-rect.left+12)+'px';
+  tip.style.top=(e.clientY-rect.top-10)+'px';
+  tip.innerHTML=html;
+});
+document.getElementById('granuSVG').addEventListener('mouseleave',()=>{
+  document.getElementById('svgTooltip').style.display='none';
+});
+
+/* ================================================================
+   VALIDATION
+   ================================================================ */
+function flashMsg(html, dur=3000){
+  const el=document.getElementById('validMsg');
+  el.innerHTML=html;
+  if(dur) setTimeout(()=>{if(el.innerHTML===html)el.innerHTML='';},dur);
+}
+document.getElementById('btnValidate').onclick=()=>{
+  const errors=[];
+  samples.forEach(s=>{
+    const pts=getMerged(s);
+    pts.forEach(p=>{if(isNaN(p.d)||p.d<=0) errors.push(`[${s.name}] Ø invalide`);});
+    for(let i=1;i<pts.length;i++)
+      if(pts[i].p<pts[i-1].p-0.01) errors.push(`[${s.name}] Passant diminue à ${pts[i].d} mm (physiquement impossible)`);
+  });
+  if(errors.length===0) flashMsg('<span style="color:#155724;background:#d4edda;padding:2px 8px;border-radius:10px;">✅ Données valides</span>');
+  else flashMsg(`<span style="color:#721c24;background:#f8d7da;padding:2px 8px;border-radius:10px;">⚠️ ${errors[0]}${errors.length>1?' (+'+( errors.length-1)+'...':''}</span>`,0);
+};
+
+/* ================================================================
+   EXPORT SVG
+   ================================================================ */
+document.getElementById('btnExportSVG').onclick=()=>{
+  const svg=document.getElementById('granuSVG');
+  const serial=new XMLSerializer().serializeToString(svg);
+  const blob=new Blob([serial],{type:'image/svg+xml;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`granulometrie_${document.getElementById('pSondage').value||'export'}.svg`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  flashMsg('<span style="color:#155724;background:#d4edda;padding:2px 8px;border-radius:10px;">🖼️ SVG exporté</span>');
+};
+
+/* ================================================================
+   EXPORT CSV
+   ================================================================ */
+document.getElementById('btnExportCSV').onclick=()=>{
+  const sid=document.getElementById('pSondage').value||'export';
+  samples.forEach(s=>{
+    const dl=(data,label,name)=>{
+      const csv=label+'\n'+data.map(r=>`${r.d};${r.p}`).join('\n');
+      const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+      a.download=`${name}_${s.name.replace(/ /g,'_')}_${sid}.csv`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    };
+    dl(s.sieve,'Ouverture (mm);Passants (%)','tamisage');
+    dl(s.hydro,'Diamètre (mm);Passants (%)','sédimentométrie');
+  });
+  flashMsg('<span style="color:#155724;background:#d4edda;padding:2px 8px;border-radius:10px;">📎 CSV exporté</span>');
+};
+
+/* ================================================================
+   SAUVEGARDE / CHARGEMENT JSON
+   ================================================================ */
+document.getElementById('btnSaveFile').onclick=()=>{
+  const proj={name:document.getElementById('pName').value,ref:document.getElementById('pRef').value,client:document.getElementById('pClient').value,
+    site:document.getElementById('pSite').value,date:document.getElementById('pDate').value,
+    op:document.getElementById('pOp').value,sondage:document.getElementById('pSondage').value};
+  const data={version:'2.0',project:proj,samples,envelope:document.getElementById('envelopeSelect').value};
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=`granulometrie_${proj.sondage||'export'}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  flashMsg('<span style="color:#155724;background:#d4edda;padding:2px 8px;border-radius:10px;">💾 Enregistré</span>');
+};
+document.getElementById('btnOpenFile').onclick=()=>document.getElementById('fileOpenInput').click();
+document.getElementById('fileOpenInput').addEventListener('change',e=>{
+  if(!e.target.files.length) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!data.samples) throw new Error();
+      samples=data.samples; nextId=Math.max(...samples.map(s=>s.id))+1;
+      activeId=samples[0].id;
+      if(data.project){
+        const p=data.project;
+        document.getElementById('pName').value=p.name||p.projectName||'';
+        document.getElementById('pRef').value=p.ref||p.reference||'';
+        document.getElementById('pClient').value=p.client||'';
+        document.getElementById('pSite').value=p.site||'';
+        document.getElementById('pDate').value=p.date||'';
+        document.getElementById('pOp').value=p.op||p.operator||'';
+        document.getElementById('pSondage').value=p.sondage||p.sampleId||'';
+      }
+      if(data.envelope) document.getElementById('envelopeSelect').value=data.envelope;
+      renderTabs(); renderPanel(); drawChart(); updateCartouche();
+      flashMsg('<span style="color:#155724;background:#d4edda;padding:2px 8px;border-radius:10px;">📂 Fichier ouvert</span>');
+    }catch{flashMsg('<span style="color:#721c24;background:#f8d7da;padding:2px 8px;border-radius:10px;">❌ Format invalide</span>',0);}
+  };
+  reader.readAsText(e.target.files[0]);
+  e.target.value='';
+});
+
+function applyPrintChartHeight() {
+  document.getElementById('chartArea').style.setProperty('height', SVG_H + 'px', 'important');
+  document.getElementById('chartArea').style.setProperty('min-height', SVG_H + 'px', 'important');
+  document.getElementById('chartArea').style.setProperty('max-height', SVG_H + 'px', 'important');
+}
+document.getElementById('btnPrint').onclick=()=>{
+  printMode = true;
+  computeDims();
+  applyPrintChartHeight();
+  drawChart();
+  window.print();
+};
+document.getElementById('envelopeSelect').addEventListener('change',drawChart);
+
+/* ================================================================
+   RESPONSIVE RESIZE
+   ================================================================ */
+let roTimer=null;
+const ro=new ResizeObserver(()=>{ clearTimeout(roTimer); roTimer=setTimeout(()=>{ computeDims(); drawChart(); },80); });
+ro.observe(document.getElementById('chartArea'));
+
+// Redessin forcé pour l'impression : le ResizeObserver est asynchrone et n'a pas toujours
+// le temps de se déclencher avant la capture d'impression (constaté avec certains pipelines).
+// Filet de sécurité pour Ctrl+P (impression hors bouton dédié) : fiable maintenant
+// car computeDims() n'a plus besoin de mesurer le DOM en mode impression (valeurs fixes).
+window.addEventListener('beforeprint', () => { printMode = true; computeDims(); applyPrintChartHeight(); drawChart(); });
+window.addEventListener('afterprint', () => {
+  printMode = false;
+  const ca = document.getElementById('chartArea');
+  ca.style.removeProperty('height'); ca.style.removeProperty('min-height'); ca.style.removeProperty('max-height');
+  computeDims(); drawChart();
+});
+
+/* ================================================================
+   CARTOUCHE SEL — synchronisation + date du jour + modale d'aide
+   ================================================================ */
+function todayFR(){
+  const d=new Date();
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
+function updateCartouche(){
+  document.getElementById('cartoucheProjet').textContent=document.getElementById('pName').value||'—';
+  document.getElementById('cartoucheRef').textContent=document.getElementById('pRef').value||'—';
+  document.getElementById('cartoucheRedacteur').textContent=document.getElementById('pOp').value||'—';
+  document.getElementById('cartoucheDate').textContent=document.getElementById('pDate').value||'—';
+}
+['pName','pRef','pClient','pSite','pDate','pOp','pSondage'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input', updateCartouche);
+});
+document.getElementById('pDate').value=todayFR();
+updateCartouche();
+
+document.getElementById('btnHelp').onclick=()=>document.getElementById('helpModal').classList.add('open');
+document.getElementById('helpCloseBtn').onclick=()=>document.getElementById('helpModal').classList.remove('open');
+document.getElementById('helpModal').addEventListener('click',e=>{ if(e.target.id==='helpModal') document.getElementById('helpModal').classList.remove('open'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.getElementById('helpModal').classList.remove('open'); });
+
+/* ================================================================
+   INIT
+   ================================================================ */
+renderTabs();
+renderPanel();
+drawChart();
+</script>
+</body>
+</html>
