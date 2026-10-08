@@ -23,7 +23,7 @@ déploiement automatique à chaque push sur `main`).
 | `/apps/dalle-pleine` | Composant React (`components/apps/dalle-pleine/`) |
 | `/apps/calcul-poteaux` | Application compilée `public/tools/poteaux/` (béton armé, acier, bois) |
 | `/apps/calcul-poutres` | Application compilée `public/tools/poutres/` (béton armé, acier, bois) |
-| `/apps/escaliers` | Application compilée `public/tools/escaliers/` |
+| `/apps/escaliers` | Application compilée `public/tools/escaliers/` (béton armé, acier, bois) |
 | `/apps/courbe-granulometrique` | Page autonome `public/tools/courbe-granulometrique.html` |
 
 Les autres fiches du catalogue (`data/applications.ts`) sans `appUrl` sont annoncées sans application en ligne.

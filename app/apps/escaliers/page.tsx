@@ -28,6 +28,7 @@ export default function EscaliersPage() {
           src="/tools/escaliers/index.html"
           title="Dimensionnement des escaliers — Eurocodes"
           className="w-full h-full border-0"
+          allow="clipboard-write"
         />
       </div>
     </div>
