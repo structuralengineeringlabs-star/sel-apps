@@ -18,14 +18,14 @@ export const guides: Guide[] = [
     appSlug: "escaliers",
     title: "Dimensionnement des escaliers — Guide d'utilisation",
     description:
-      "Prise en main complète : saisie de la géométrie, matériaux et paramètres de calcul, escaliers béton, acier et bois, quart tournant, lecture des vérifications, optimiseur, plans DXF, note de calcul, métrés et gestion des projets. Illustré de schémas et de captures d'écran.",
+      "Prise en main complète du parcours en 4 étapes : géométrie et charges, matériaux et armatures, résultats et documents. Escaliers béton, acier et bois, quart tournant, projets à plusieurs escaliers, lecture des vérifications et du verdict, optimiseur, aperçu et export des plans DXF/SVG, note de calcul, métrés et gestion des projets. Illustré de schémas et de captures d'écran.",
     pdfUrl: "/docs/guides/Guide_utilisateur_Escaliers_Eurocodes.pdf",
     sizeLabel: "1,8 Mo",
-    pages: 21,
-    version: "0.9.0",
+    pages: 20,
+    version: "1.0.0",
     updated: "octobre 2026",
     appUrl: "/apps/escaliers",
-    topics: ["EC2", "EC3", "EC5", "Quart tournant", "Optimiseur", "DXF", "Note PDF"],
+    topics: ["EC2", "EC3", "EC5", "Quart tournant", "Multi-escaliers", "Optimiseur", "DXF", "Note PDF"],
   },
   {
     slug: "calcul-poutres",
