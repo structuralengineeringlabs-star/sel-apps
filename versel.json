@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/poteaux/:path*",
-      "destination": "https://sel-apps-c9c7x772g-structuralengineeringlabs-3269.vercel.app/:path*"
-    }
-  ]
-}

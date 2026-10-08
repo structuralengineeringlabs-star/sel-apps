@@ -1,65 +1,37 @@
-# Déploiement de l'application Escaliers (v0.7.1) et de son guide sur sel-apps
+# Déploiement
 
-Ces fichiers s'ajoutent au dépôt GitHub `structuralengineeringlabs-star/sel-apps`
-(projet Vercel `sel-apps`, déployé automatiquement à chaque push sur `main`).
+Le projet Vercel `sel-apps` est relié à ce dépôt : chaque push sur `main` déclenche un déploiement de production ;
+une autre branche produit un déploiement de prévisualisation (URL propre, production inchangée).
 
-## Contenu
+## Mettre à jour une application compilée (`public/tools/…`)
 
-| Chemin | Rôle |
-|---|---|
-| `public/tools/escaliers/` | Application compilée (Vite, base `/tools/escaliers/`) : aide intégrée, schémas, captures, polices PDF |
-| `app/apps/escaliers/page.tsx` | Page `/apps/escaliers` (iframe, même modèle que GranuLab Pro) + lien vers le guide |
-| `data/applications.ts` | Fiche « Dimensionnement des escaliers » : `appUrl`, description EC2/EC3/EC5, badge Nouveau |
-| `data/guides.ts` | Liste des guides d'utilisation (extensible aux autres applications) |
-| `app/documentation/page.tsx` | Section « Guides d'utilisation » (`/documentation#guides`) : télécharger, consulter, ouvrir l'application |
-| `public/docs/guides/Guide_utilisateur_Escaliers_Eurocodes.pdf` | Guide PDF (20 pages) |
+Les applications Vite sont construites avec la base de leur dossier, puis copiées telles quelles :
 
-## Option 1 : appliquer le patch (recommandé)
+| Application | Dans son projet | Dossier à remplacer ici |
+|---|---|---|
+| Poteaux (béton armé, acier, bois) | `npx vite build --base /tools/poteaux/ --outDir dist-sel` | `public/tools/poteaux/` |
+| Escaliers | `npx vite build --base /tools/escaliers/ --outDir dist-sel` | `public/tools/escaliers/` |
+
+Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
+`assets/*` changent à chaque construction), mettre à jour si besoin la fiche dans `data/applications.ts`, puis :
 
 ```bash
-cd sel-apps
-git checkout main && git pull
-git am --3way 0001-feat-application-Escaliers-Eurocodes-EC2-EC3-EC5-et-.patch
-git push origin main        # Vercel déploie automatiquement
+npm run build          # contrôle local
+git add -A && git commit -m "feat(<application>): vX.Y.Z" && git push origin main
 ```
 
-## Option 2 : copier les fichiers
-
-Copier le contenu de ce dossier à la racine du dépôt (en écrasant `data/applications.ts`
-et `app/documentation/page.tsx`), puis `git add . && git commit -m "feat: escaliers + guide" && git push`.
+Ne déposer aucun fichier de construction à la racine du dépôt : seul `public/` est servi tel quel.
 
 ## Vérifications après déploiement
 
-- https://sel-apps-six.vercel.app/applications/escaliers : bouton « Ouvrir l'application » actif
-- https://sel-apps-six.vercel.app/apps/escaliers : application, bouton « Aide », note PDF, DXF
-- https://sel-apps-six.vercel.app/documentation#guides : guide téléchargeable
-- https://sel-apps-six.vercel.app/docs/guides/Guide_utilisateur_Escaliers_Eurocodes.pdf
+- page de l'application (`/apps/…`) : chargement, numéro de version affiché, pas d'erreur dans la console ;
+- fiche du catalogue (`/applications/…`) ;
+- guides (`/documentation#guides`) le cas échéant.
 
-## Mise à jour ultérieure de l'application
+En cas de problème : Vercel → projet `sel-apps` → Deployments → déploiement précédent → « Promote to Production ».
 
-Dans le projet escalier : `npx vite build --base /tools/escaliers/ --outDir dist-sel`,
-puis remplacer `public/tools/escaliers/` par le contenu de `dist-sel/`.
+## Données des utilisateurs
 
----
-
-# Application Poteaux (v4.7.1) — béton armé, acier, bois
-
-L'application poteaux est hébergée dans ce dépôt, comme les escaliers (elle ne dépend plus du projet Vercel séparé
-`poteaux-app`).
-
-| Chemin | Rôle |
-|---|---|
-| `public/tools/poteaux/` | Application compilée (Vite, base `/tools/poteaux/`), manuel illustré compris |
-| `app/apps/calcul-poteaux/page.tsx` | Page `/apps/calcul-poteaux` (iframe `/tools/poteaux/index.html`) |
-| `data/applications.ts` | Fiche « Calcul des Poteaux » : description EC2 / EC3 / EC5 |
-
-## Mise à jour ultérieure
-
-Dans le projet poteaux : `npx vite build --base /tools/poteaux/ --outDir dist-sel`, puis remplacer
-`public/tools/poteaux/` par le contenu de `dist-sel/`.
-
-## Vérifications après déploiement
-
-- https://sel-apps-six.vercel.app/apps/calcul-poteaux : application v4.7.1 (pied de la barre latérale)
-- matériaux béton armé, acier, bois ; manuel d'utilisation (images) ; note de calcul ; plan DXF
-- https://sel-apps-six.vercel.app/applications/calcul-poteaux : fiche mise à jour
+Les applications enregistrent les projets dans le navigateur, par adresse de site. Les projets créés avec l'ancienne
+application poteaux (`poteaux-app.vercel.app`) se récupèrent par « Enregistrer » (fichier `.json`) dans l'ancienne
+application puis « Ouvrir… » dans la nouvelle.
