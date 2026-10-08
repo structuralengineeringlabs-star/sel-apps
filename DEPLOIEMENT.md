@@ -10,6 +10,7 @@ Les applications Vite sont construites avec la base de leur dossier, puis copié
 | Application | Dans son projet | Dossier à remplacer ici |
 |---|---|---|
 | Poteaux (béton armé, acier, bois) | `npx vite build --base /tools/poteaux/ --outDir dist-sel` | `public/tools/poteaux/` |
+| Poutres (béton armé, acier, bois) | `npx vite build --base /tools/poutres/ --outDir dist-sel` | `public/tools/poutres/` |
 | Escaliers | `npx vite build --base /tools/escaliers/ --outDir dist-sel` | `public/tools/escaliers/` |
 
 Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
@@ -27,6 +28,10 @@ Ne déposer aucun fichier de construction à la racine du dépôt : seul `public
 - page de l'application (`/apps/…`) : chargement, numéro de version affiché, pas d'erreur dans la console ;
 - fiche du catalogue (`/applications/…`) ;
 - guides (`/documentation#guides`) le cas échéant.
+
+Guide PDF des poutres : `npm run guide` dans le projet poutres, puis copier
+`docs/manuel/Guide_utilisateur_Poutres_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
+(version, taille, pages).
 
 En cas de problème : Vercel → projet `sel-apps` → Deployments → déploiement précédent → « Promote to Production ».
 

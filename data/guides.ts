@@ -27,4 +27,18 @@ export const guides: Guide[] = [
     appUrl: "/apps/escaliers",
     topics: ["EC2", "EC3", "EC5", "Quart tournant", "Optimiseur", "DXF", "Note PDF"],
   },
+  {
+    slug: "calcul-poutres",
+    appSlug: "calcul-poutres",
+    title: "Poutres continues aux Eurocodes — Guide d'utilisation",
+    description:
+      "Prise en main complète : géométrie et charges, éditeur de section, sections en T et en I, béton armé, profilés acier (catalogue IPE, HEA, HEB, IPN, tubes, PRS) et déversement, bois (classes C et GL, fluage, feu), lecture des vérifications, note de calcul, plans DXF, nomenclature et métrés. Illustré de captures d'écran.",
+    pdfUrl: "/docs/guides/Guide_utilisateur_Poutres_Eurocodes.pdf",
+    sizeLabel: "2,6 Mo",
+    pages: 23,
+    version: "6.7.1",
+    updated: "octobre 2026",
+    appUrl: "/apps/calcul-poutres",
+    topics: ["EC2", "EC3", "EC5", "Sections en T et en I", "Déversement", "DXF", "Note PDF"],
+  },
 ];
