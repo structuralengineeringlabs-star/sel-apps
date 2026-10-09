@@ -22,7 +22,7 @@ export const guides: Guide[] = [
     pdfUrl: "/docs/guides/Guide_utilisateur_Escaliers_Eurocodes.pdf",
     sizeLabel: "1,8 Mo",
     pages: 20,
-    version: "1.0.0",
+    version: "1.0.1",
     updated: "octobre 2026",
     appUrl: "/apps/escaliers",
     topics: ["EC2", "EC3", "EC5", "Quart tournant", "Multi-escaliers", "Optimiseur", "DXF", "Note PDF"],
