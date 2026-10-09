@@ -52,4 +52,4 @@ la nouvelle.
 | Application | Dépôt des sources |
 |---|---|
 | Poteaux | `structuralengineeringlabs-star/Calcul-Poteaux` |
-| Poutres | sources v6.7.1 hors GitHub (dépôt à créer) |
+| Poutres | `structuralengineeringlabs-star/Calculs-Poutres` (privé) |
