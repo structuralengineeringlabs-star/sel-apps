@@ -11,6 +11,7 @@ Les applications Vite sont construites avec la base de leur dossier, puis copié
 |---|---|---|
 | Poteaux (béton armé, acier, bois) | `npx vite build --base /tools/poteaux/ --outDir dist-sel` | `public/tools/poteaux/` |
 | Poutres (béton armé, acier, bois) | `npx vite build --base /tools/poutres/ --outDir dist-sel` | `public/tools/poutres/` |
+| Dalle pleine (béton armé) | `npx vite build --base /tools/dalle-pleine/ --outDir dist-sel` | `public/tools/dalle-pleine/` |
 | Escaliers (béton armé, acier, bois) | `npx vite build --base /tools/escaliers/ --outDir dist-sel` | `public/tools/escaliers/` |
 
 Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
