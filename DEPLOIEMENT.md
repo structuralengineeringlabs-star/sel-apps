@@ -43,6 +43,13 @@ En cas de problème : Vercel → projet `sel-apps` → Deployments → déploiem
 
 ## Données des utilisateurs
 
-Les applications enregistrent les projets dans le navigateur, par adresse de site. Les projets créés avec l'ancienne
-application poteaux (`poteaux-app.vercel.app`) se récupèrent par « Enregistrer » (fichier `.json`) dans l'ancienne
-application puis « Ouvrir… » dans la nouvelle.
+Les applications enregistrent les projets dans le navigateur, par adresse de site : un changement de domaine les
+rend invisibles. Pour les transférer, « Enregistrer » (fichier `.json`) sur l'ancienne adresse puis « Ouvrir… » sur
+la nouvelle.
+
+## Sources
+
+| Application | Dépôt des sources |
+|---|---|
+| Poteaux | `structuralengineeringlabs-star/Calcul-Poteaux` |
+| Poutres | sources v6.7.1 hors GitHub (dépôt à créer) |
