@@ -7,7 +7,7 @@ déploiement automatique à chaque push sur `main`).
 
 | Dossier | Contenu |
 |---|---|
-| `app/` | Pages du site (App Router) : accueil, catalogue `/applications`, pages des applications `/apps/…`, documentation, tarifs, contact, pages légales ; `app/api/contact` |
+| `app/` | Pages du site (App Router) : accueil, catalogue `/applications` (avec recherche `?q=`), pages des applications `/apps/…`, documentation, tarifs, contact, pages légales, `sitemap.ts`, `robots.ts` |
 | `components/` | Composants du site et applications intégrées en React (`components/apps/…`) |
 | `data/` | Catalogue des applications (`applications.ts`) et guides d'utilisation (`guides.ts`) |
 | `lib/` | Utilitaires partagés |
@@ -33,7 +33,13 @@ Les autres fiches du catalogue (`data/applications.ts`) sans `appUrl` sont annon
 ```bash
 npm ci
 npm run dev      # http://localhost:3000
+npm run lint     # ESLint
 npm run build    # vérification avant push
 ```
+
+Chaque push sur `main` est aussi vérifié par GitHub Actions (`.github/workflows/ci.yml` : lint, types, construction).
+
+Coordonnées affichées (téléphone, WhatsApp, e-mail) : `lib/contact.ts`. Adresse publique du site (plan du site,
+image de partage) : `lib/site.ts`, ou la variable `NEXT_PUBLIC_SITE_URL` sur Vercel.
 
 Procédure de mise à jour des applications compilées : voir `DEPLOIEMENT.md`.

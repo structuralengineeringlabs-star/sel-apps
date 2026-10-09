@@ -11,14 +11,14 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="max-w-3xl">
           {/* Titre principal */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-white">
             Calculez, dimensionnez, gérez.
           </h1>
 
           {/* Sous-titre */}
           <p className="text-lg sm:text-xl text-white/90 mb-8">
-            {totalApps} applications de calcul de structures, d'hydraulique et
-            de gestion d'ouvrages, conformes aux Eurocodes.
+            {totalApps} applications de calcul de structures, d&apos;hydraulique et
+            de gestion d&apos;ouvrages, conformes aux Eurocodes.
           </p>
 
           {/* Boutons CTA */}

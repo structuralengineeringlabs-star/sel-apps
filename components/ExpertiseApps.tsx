@@ -17,8 +17,8 @@ export default function ExpertiseApps() {
               Notre spécialité
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            Ouvrages d'art : notre spécialité
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-white">
+            Ouvrages d&apos;art : notre spécialité
           </h2>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Maîtrisez vos projets complexes grâce à nos applications de
@@ -90,7 +90,7 @@ export default function ExpertiseApps() {
                 </div>
 
                 {/* Titre + description */}
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-yellow-300 transition-colors">
+                <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-yellow-300 transition-colors">
                   {app.name}
                 </h3>
                 <p className="text-white/80 mb-6 leading-relaxed">
@@ -113,7 +113,7 @@ export default function ExpertiseApps() {
                 {/* Prix + CTA */}
                 <div className="flex items-center justify-between pt-6 border-t border-white/10">
                   <div>
-                    <div className="text-xs text-white/60 uppercase tracking-wide mb-1">
+                    <div className="text-xs text-white/75 uppercase tracking-wide mb-1">
                       À partir de
                     </div>
                     <div className="text-lg font-bold text-yellow-300">

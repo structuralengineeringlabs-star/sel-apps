@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Conditions Générales de Vente",
-  description: "CGV des applications S.E.L.",
+  description: "Conditions générales de vente des applications de calcul S.E.L. : prix en francs CFA, modalités d'accès, garanties, responsabilité et règlement des litiges.",
 };
 
 export default function CGVPage() {
@@ -40,7 +40,7 @@ export default function CGVPage() {
               3. Paiement
             </h2>
             <p className="text-gray-700">
-              Le paiement s'effectue en ligne par :
+              Le paiement s&apos;effectue en ligne par :
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-1 mt-2">
               <li>Mobile Money (MTN MoMo, Orange Money)</li>
@@ -54,8 +54,8 @@ export default function CGVPage() {
               4. Livraison
             </h2>
             <p className="text-gray-700">
-              Les applications sont livrées sous forme de licence d'utilisation
-              numérique. L'accès est immédiat après confirmation du paiement.
+              Les applications sont livrées sous forme de licence d&apos;utilisation
+              numérique. L&apos;accès est immédiat après confirmation du paiement.
               Une clé de licence est envoyée par email.
             </p>
           </section>
@@ -66,8 +66,8 @@ export default function CGVPage() {
             </h2>
             <p className="text-gray-700">
               Conformément à la réglementation en vigueur, le client dispose
-              d'un délai de 14 jours pour demander un remboursement, à condition
-              que la licence n'ait pas été utilisée.
+              d&apos;un délai de 14 jours pour demander un remboursement, à condition
+              que la licence n&apos;ait pas été utilisée.
             </p>
           </section>
 
@@ -77,7 +77,7 @@ export default function CGVPage() {
             </h2>
             <p className="text-gray-700">
               S.E.L. garantit la conformité des applications à leur
-              documentation. En cas de bug bloquant, S.E.L. s'engage à corriger
+              documentation. En cas de bug bloquant, S.E.L. s&apos;engage à corriger
               dans les meilleurs délais.
             </p>
           </section>
@@ -88,7 +88,7 @@ export default function CGVPage() {
             </h2>
             <p className="text-gray-700">
               Les résultats fournis par les applications sont donnés à titre
-              indicatif. L'utilisateur reste seul responsable de la
+              indicatif. L&apos;utilisateur reste seul responsable de la
               vérification des calculs et de leur application à ses projets.
             </p>
           </section>

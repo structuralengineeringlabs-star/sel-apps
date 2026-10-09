@@ -21,7 +21,7 @@ export default function AboutPage() {
         </h1>
         <p className="text-lg text-gray-600">
           Structural & Engineering Labs — éditeur de logiciels de calcul pour
-          l'ingénierie civile, basé à Yaoundé, Cameroun.
+          l&apos;ingénierie civile, basé à Yaoundé, Cameroun.
         </p>
       </div>
 
@@ -36,10 +36,10 @@ export default function AboutPage() {
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
                 S.E.L. développe des <strong>applications de calcul</strong>{" "}
-                pour les ingénieurs civils, bureaux d'études et techniciens
+                pour les ingénieurs civils, bureaux d&apos;études et techniciens
                 BTP. Nos outils couvrent le <strong>béton armé</strong>,{" "}
-                <strong>l'hydraulique</strong>, les{" "}
-                <strong>ouvrages d'art</strong>, les <strong>routes</strong> et
+                <strong>l&apos;hydraulique</strong>, les{" "}
+                <strong>ouvrages d&apos;art</strong>, les <strong>routes</strong> et
                 la <strong>gestion de projets</strong>.
               </p>
               <p className="text-gray-700 leading-relaxed">

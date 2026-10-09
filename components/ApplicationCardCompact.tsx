@@ -13,7 +13,7 @@ export default function ApplicationCardCompact({
   variant = "light",
 }: Props) {
   const category = categories.find((c) => c.slug === application.categorySlug);
-  const IconComponent = (Icons as any)[application.icon] || Icons.Box;
+  const IconComponent = (Icons as unknown as Record<string, Icons.LucideIcon>)[application.icon] || Icons.Box;
   const isDark = variant === "dark";
 
   // Déterminer la destination du clic
@@ -92,7 +92,7 @@ export default function ApplicationCardCompact({
         <p
           className={`line-clamp-1 ${
             application.isExpertise ? "text-sm" : "text-xs"
-          } ${isDark ? "text-white/60" : "text-gray-500"}`}
+          } ${isDark ? "text-white/75" : "text-gray-500"}`}
         >
           {application.shortDescription}
         </p>
@@ -102,7 +102,7 @@ export default function ApplicationCardCompact({
       {!application.isExpertise && (
         <div
           className={`flex-shrink-0 text-right text-[10px] font-semibold uppercase tracking-wide ${
-            isDark ? "text-white/40" : "text-gray-400"
+            isDark ? "text-white/75" : "text-gray-500"
           }`}
         >
           {category?.icon} {category?.name}

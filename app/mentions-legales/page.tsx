@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Mentions légales",
-  description: "Mentions légales du site S.E.L. Applications.",
+  description: "Mentions légales du site S.E.L. Applications : éditeur, hébergement, propriété intellectuelle, responsabilité et droit applicable (Cameroun).",
 };
 
 export default function LegalPage() {
@@ -23,7 +23,7 @@ export default function LegalPage() {
               <br />
               Email : contact@sel-apps.cm
               <br />
-              Téléphone : +237 6XX XX XX XX
+              Téléphone : +237 651 13 56 05 — WhatsApp : +237 696 20 65 86
             </p>
           </section>
 
@@ -45,7 +45,7 @@ export default function LegalPage() {
               3. Propriété intellectuelle
             </h2>
             <p className="text-gray-700">
-              L'ensemble du contenu de ce site (textes, images, logos,
+              L&apos;ensemble du contenu de ce site (textes, images, logos,
               applications, code source) est la propriété exclusive de S.E.L.
               Toute reproduction, même partielle, est interdite sans
               autorisation écrite préalable.
@@ -57,9 +57,9 @@ export default function LegalPage() {
               4. Responsabilité
             </h2>
             <p className="text-gray-700">
-              S.E.L. s'efforce d'assurer l'exactitude des informations
+              S.E.L. s&apos;efforce d&apos;assurer l&apos;exactitude des informations
               diffusées sur ce site. Toutefois, elle ne peut garantir
-              l'exhaustivité ni l'absence de modification par un tiers. Les
+              l&apos;exhaustivité ni l&apos;absence de modification par un tiers. Les
               résultats fournis par les applications sont donnés à titre
               indicatif et doivent être vérifiés par un ingénieur qualifié.
             </p>

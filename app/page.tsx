@@ -74,7 +74,7 @@ export default function HomePage() {
             </h2>
             <p className="text-gray-600">
               {paidApps.length} applications avancées pour vos projets
-              d'ingénierie.
+              d&apos;ingénierie.
             </p>
           </div>
 

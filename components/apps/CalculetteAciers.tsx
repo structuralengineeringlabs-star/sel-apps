@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { evaluate } from "mathjs";
 import {
   Calculator,
@@ -97,12 +97,10 @@ export default function CalculetteAciers() {
     { id: 1, nb: 1, diam: 12 },
     { id: 2, nb: 1, diam: 14 },
   ]);
-  const [total, setTotal] = useState(0);
-  const [expression, setExpression] = useState("");
   const [activeTab, setActiveTab] = useState<TabId>("calc");
 
   // Calcul automatique de la somme
-  useEffect(() => {
+  const { total, expression } = useMemo(() => {
     let sum = 0;
     const parts: string[] = [];
 
@@ -115,8 +113,7 @@ export default function CalculetteAciers() {
       }
     });
 
-    setTotal(sum);
-    setExpression(parts.join(" + ") || "aucune barre");
+    return { total: sum, expression: parts.join(" + ") || "aucune barre" };
   }, [comboLines]);
 
   // Calcul de l'expression

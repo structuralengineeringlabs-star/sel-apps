@@ -1,19 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Autorise les accès depuis ces origines en développement
-  allowedDevOrigins: [
-    '10.55.33.83',   // Votre IP actuelle
-    'localhost',
-    '127.0.0.1',
-  ],
-
-  // Autres options utiles pour le projet S.E.L.
   reactStrictMode: true,
-  images: {
-    remotePatterns: [
-      // À compléter quand vous ajouterez des images distantes
-      // { protocol: 'https', hostname: 'votre-cdn.com' },
-    ],
+  poweredByHeader: false,
+
+  async headers() {
+    return [
+      {
+        // Toutes les réponses
+        source: "/:path*",
+        headers: [
+          // Le site peut afficher ses propres applications en iframe ; les autres sites ne peuvent pas l'afficher
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+      {
+        // Applications compilées : noms de fichiers à empreinte, changés à chaque version
+        source: "/tools/:app/assets/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
   },
 };
 

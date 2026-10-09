@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Politique de confidentialité",
-  description: "Politique de confidentialité du site S.E.L.",
+  description: "Politique de confidentialité de S.E.L. Applications : données traitées, finalités, conservation, partage et exercice de vos droits d'accès et de suppression.",
 };
 
 export default function PrivacyPage() {
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               5. Vos droits
             </h2>
             <p className="text-gray-700">
-              Vous disposez d'un droit d'accès, de rectification et de
+              Vous disposez d&apos;un droit d&apos;accès, de rectification et de
               suppression de vos données. Pour exercer ces droits, contactez
               contact@sel-apps.cm.
             </p>
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
               6. Cookies
             </h2>
             <p className="text-gray-700">
-              Le site utilise des cookies pour améliorer l'expérience
+              Le site utilise des cookies pour améliorer l&apos;expérience
               utilisateur. Vous pouvez les désactiver dans les paramètres de
               votre navigateur.
             </p>

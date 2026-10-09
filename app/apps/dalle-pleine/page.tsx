@@ -12,11 +12,12 @@ export default function DallePleinePage() {
       className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200"
       style={{ height: "calc(100vh - 140px)", minHeight: 700 }}
     >
+      <h1 className="sr-only">Dimensionnement Dalle Pleine — Eurocode 2</h1>
       <iframe
         src="/tools/dalle-pleine/index.html"
         title="Dimensionnement Dalle Pleine — Eurocode 2"
         className="w-full h-full border-0"
-        allow="clipboard-write"
+        allow="clipboard-write; fullscreen"
       />
     </div>
   );

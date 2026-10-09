@@ -10,11 +10,11 @@
   --color-cat-management: #D68910;
   --color-cat-material: #7D3C98;
   --color-cat-doc: #5D6D7E;
-  --color-status-free: #27AE60;
-  --color-status-paid: #F39C12;
+  --color-status-free: #17683A;
+  --color-status-paid: #9A5B07;
   --color-status-sub: #8E44AD;
-  --color-status-new: #E74C3C;
-  --color-status-hot: #E91E63;
+  --color-status-new: #A93226;
+  --color-status-hot: #C2185B;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
@@ -84,11 +84,11 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  .badge-free { background-color: rgba(39, 174, 96, 0.1); color: #27AE60; }
-  .badge-paid { background-color: rgba(243, 156, 18, 0.1); color: #F39C12; }
+  .badge-free { background-color: rgba(39, 174, 96, 0.1); color: #17683A; }
+  .badge-paid { background-color: rgba(243, 156, 18, 0.1); color: #9A5B07; }
   .badge-sub { background-color: rgba(142, 68, 173, 0.1); color: #8E44AD; }
-  .badge-new { background-color: rgba(231, 76, 60, 0.1); color: #E74C3C; }
-  .badge-hot { background-color: rgba(233, 30, 99, 0.1); color: #E91E63; }
+  .badge-new { background-color: rgba(231, 76, 60, 0.1); color: #A93226; }
+  .badge-hot { background-color: rgba(233, 30, 99, 0.1); color: #C2185B; }
 }
 
 /* ============================================================

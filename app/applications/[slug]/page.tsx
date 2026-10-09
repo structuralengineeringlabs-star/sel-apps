@@ -6,6 +6,14 @@ import { categories } from "@/data/categories";
 import { formatPrice } from "@/lib/utils";
 import * as Icons from "lucide-react";
 
+// Description de 160 caractères au plus, coupée sur un mot
+function resumer(long: string, court: string): string {
+  const texte = long.length > court.length ? long : court;
+  if (texte.length <= 160) return texte;
+  const coupe = texte.slice(0, 157);
+  return coupe.slice(0, coupe.lastIndexOf(" ")).replace(/[ ,;:(]+$/, "") + "…";
+}
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -20,7 +28,8 @@ export async function generateMetadata({ params }: Props) {
   if (!app) return { title: "Application introuvable" };
   return {
     title: app.name,
-    description: app.shortDescription,
+    description: resumer(app.longDescription, app.shortDescription),
+    alternates: { canonical: `/applications/${app.slug}` },
   };
 }
 
@@ -30,7 +39,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
   if (!app) notFound();
 
   const category = categories.find((c) => c.slug === app.categorySlug);
-  const IconComponent = (Icons as any)[app.icon] || Icons.Box;
+  const IconComponent = (Icons as unknown as Record<string, Icons.LucideIcon>)[app.icon] || Icons.Box;
 
   const hasMonthly = !!app.priceMonthly;
   const hasAnnual = !!app.priceAnnual;
@@ -118,7 +127,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 Public cible
               </h2>
               <p className="text-gray-700">
-                Ingénieurs civils, bureaux d'études, techniciens BTP,
+                Ingénieurs civils, bureaux d&apos;études, techniciens BTP,
                 étudiants en génie civil, collectivités.
               </p>
             </section>
@@ -200,7 +209,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                       className="btn-primary w-full"
                     >
                       <Download className="w-5 h-5 mr-2" />
-                      Ouvrir l'application
+                      Ouvrir l&apos;application
                     </Link>
                   ) : (
                     // App gratuite mais pas encore exécutable
@@ -215,11 +224,14 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 ) : (
                   // App payante
                   <>
-                    <button className="btn-primary w-full">
-                      S'abonner maintenant
-                    </button>
                     <Link
-                      href="/contact"
+                      href={`/contact?app=${app.slug}`}
+                      className="btn-primary w-full"
+                    >
+                      Demander l&apos;accès
+                    </Link>
+                    <Link
+                      href={`/contact?app=${app.slug}`}
                       className="btn-secondary w-full"
                     >
                       <Calendar className="w-5 h-5 mr-2" />
@@ -231,10 +243,13 @@ export default async function ApplicationDetailPage({ params }: Props) {
 
               {/* Garanties */}
               <div className="mt-6 pt-6 border-t border-gray-100 text-xs text-gray-500 space-y-2">
-                <p>✅ Paiement sécurisé (Mobile Money, CB)</p>
+                <p>
+                  {app.isFree
+                    ? "✅ Utilisation libre, sans inscription"
+                    : "✅ Accès ouvert sur demande"}
+                </p>
                 <p>✅ Support en français</p>
                 <p>✅ Mises à jour incluses</p>
-                {!app.isFree && <p>✅ Résiliable à tout moment</p>}
               </div>
             </div>
           </aside>

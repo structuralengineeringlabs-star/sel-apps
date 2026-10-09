@@ -49,15 +49,15 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
     icon: ShieldCheck,
     contenu: (
       <p>
-        <strong>Calculette EC2 Plancher Corps Creux</strong> traduit les algorithmes de l'<strong>Eurocode 2</strong>
-        (EN&nbsp;1992-1-1, complété par l'EN&nbsp;1991-1-1 pour les charges) en un outil d'aide à la décision, aussi
-        compact qu'une calculette : tout ce que vous saisissez recalcule instantanément les résultats affichés
-        juste en dessous, sur un seul écran, réparti en deux onglets — <strong>Synthèse</strong> (données d'entrée et
-        résultats) et <strong>Note de calcul</strong> (document formel exportable). Rien n'est jamais figé : vous
-        pouvez ajuster le ferraillage proposé à tout moment pour l'adapter à vos contraintes de chantier, et voir
-        immédiatement l'effet sur la conformité. Les réglages exceptionnels, presque toujours laissés en
+        <strong>Calculette EC2 Plancher Corps Creux</strong> traduit les algorithmes de l&apos;<strong>Eurocode 2</strong>
+        (EN&nbsp;1992-1-1, complété par l&apos;EN&nbsp;1991-1-1 pour les charges) en un outil d&apos;aide à la décision, aussi
+        compact qu&apos;une calculette : tout ce que vous saisissez recalcule instantanément les résultats affichés
+        juste en dessous, sur un seul écran, réparti en deux onglets — <strong>Synthèse</strong> (données d&apos;entrée et
+        résultats) et <strong>Note de calcul</strong> (document formel exportable). Rien n&apos;est jamais figé : vous
+        pouvez ajuster le ferraillage proposé à tout moment pour l&apos;adapter à vos contraintes de chantier, et voir
+        immédiatement l&apos;effet sur la conformité. Les réglages exceptionnels, presque toujours laissés en
         automatique, sont regroupés dans un tiroir <strong>« Options avancées »</strong> replié par défaut — rien
-        n'est caché, juste rangé.
+        n&apos;est caché, juste rangé.
       </p>
     ),
   },
@@ -81,16 +81,16 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
           </div>
         </Apercu>
         <p className="text-sm">
-          Le mode <strong>« Poutrelle continue »</strong> active le calcul d'un moment sur appui (chapeau) et majore
-          l'effort tranchant de 10&nbsp;% (redistribution forfaitaire).
+          Le mode <strong>« Poutrelle continue »</strong> active le calcul d&apos;un moment sur appui (chapeau) et majore
+          l&apos;effort tranchant de 10&nbsp;% (redistribution forfaitaire).
         </p>
         <div className="bg-white border border-gray-100 rounded-2xl p-4 flex justify-center">
           <CoupeTransversale geometrie={EXEMPLE_GEOMETRIE} choixManuel={EXEMPLE_CHOIX} enrobage_nominal={20} />
         </div>
         <ul className="list-disc pl-5 space-y-1 text-sm">
-          <li><strong>Portée (L)</strong> — distance entre nus/axes d'appuis selon le modèle retenu.</li>
-          <li><strong>Entraxe (b)</strong> — largeur d'influence de la nervure (0.60 m usuel).</li>
-          <li><strong>Âme (bw)</strong> et <strong>Corps (hw)</strong> — largeur et hauteur de la poutrelle bétonnée / du bloc d'entrevous.</li>
+          <li><strong>Portée (L)</strong> — distance entre nus/axes d&apos;appuis selon le modèle retenu.</li>
+          <li><strong>Entraxe (b)</strong> — largeur d&apos;influence de la nervure (0.60 m usuel).</li>
+          <li><strong>Âme (bw)</strong> et <strong>Corps (hw)</strong> — largeur et hauteur de la poutrelle bétonnée / du bloc d&apos;entrevous.</li>
           <li><strong>Dalle (hf)</strong> — épaisseur de la dalle de compression coulée en place.</li>
         </ul>
       </div>
@@ -119,9 +119,9 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
         </Apercu>
         <p className="text-sm">
           Classes de béton disponibles : C20/25 à C35/45 ; f<sub>yk</sub> généralement fixé à 500 MPa (aciers HA).
-          L'<strong>exposition</strong> (XC1 à XC4, XD1, XS1) et la <strong>classe structurale</strong> (S4 standard,
-          S5 +10&nbsp;%, S6 +20&nbsp;%) pilotent l'enrobage minimal. Un enrobage imposé manuellement, ainsi que le
-          nombre/diamètre du chapeau et le nombre de brins d'étrier, se règlent dans le tiroir
+          L&apos;<strong>exposition</strong> (XC1 à XC4, XD1, XS1) et la <strong>classe structurale</strong> (S4 standard,
+          S5 +10&nbsp;%, S6 +20&nbsp;%) pilotent l&apos;enrobage minimal. Un enrobage imposé manuellement, ainsi que le
+          nombre/diamètre du chapeau et le nombre de brins d&apos;étrier, se règlent dans le tiroir
           <strong> « Options avancées »</strong>, sous les quatre groupes principaux.
         </p>
         <Formule note="cmin = max(12 mm, cmin,dur, 10 mm) ; cmin,dur dépend de l'exposition et de fck (approximation), majoré de 10/20 % pour S5/S6.">
@@ -144,9 +144,9 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
         </Apercu>
         <p className="text-sm">
           <strong>G₀</strong> — poids propre (dalle + nervure en béton, et poids forfaitaire des entrevous mis à
-          l'échelle de leur hauteur, référence 0.6 kN/m² à 16 cm, ou saisi manuellement). <strong>G'</strong> — charges
-          permanentes rapportées (chape, revêtement, plafond, cloisons). <strong>Q</strong> — charge d'exploitation
-          selon la catégorie d'usage EN 1991-1-1 (A à D1).
+          l&apos;échelle de leur hauteur, référence 0.6 kN/m² à 16 cm, ou saisi manuellement). <strong>G&apos;</strong> — charges
+          permanentes rapportées (chape, revêtement, plafond, cloisons). <strong>Q</strong> — charge d&apos;exploitation
+          selon la catégorie d&apos;usage EN 1991-1-1 (A à D1).
         </p>
         <Formule>{'g = (G0 + G\') × b        q = Q × b'}</Formule>
         <Formule note="Combinaisons fondamentales EN 1990, coefficients partiels usuels bâtiment.">
@@ -175,8 +175,8 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
         </Apercu>
         <p className="text-sm">
           Nombre et diamètre des barres de travée, diamètre des étriers, et inclinaison des bielles{' '}
-          <strong>cotθ</strong> (réglable de 1.0 à 2.5, défaut 2.5 — une valeur plus faible réduit l'espacement requis
-          mais rapproche de l'écrasement de la bielle). Le nombre de brins d'étrier se règle dans les
+          <strong>cotθ</strong> (réglable de 1.0 à 2.5, défaut 2.5 — une valeur plus faible réduit l&apos;espacement requis
+          mais rapproche de l&apos;écrasement de la bielle). Le nombre de brins d&apos;étrier se règle dans les
           « Options avancées ».
         </p>
 
@@ -197,7 +197,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
     contenu: (
       <div className="space-y-4">
         <p className="text-sm">
-          Calcul en section en <strong>Té</strong> : la table de compression (dalle) est mobilisée si l'axe neutre y
+          Calcul en section en <strong>Té</strong> : la table de compression (dalle) est mobilisée si l&apos;axe neutre y
           reste ; sinon le calcul bascule sur la nervure seule (largeur bw).
         </p>
         <Formule note="fcd = fck/1.5, fyd = fyk/1.15. Si µ > 0.371, la section est jugée insuffisante.">
@@ -210,7 +210,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
 
         <p className="text-sm">
           <strong>Chapeau isostatique</strong> — un chapeau de construction forfaitaire reste proposé pour limiter la
-          fissuration au nu d'appui :
+          fissuration au nu d&apos;appui :
         </p>
         <Formule note="Règle forfaitaire usuelle, ajustable si votre bureau d'études en applique une autre.">
           As,chapeau = max(As,min ; 0.15 × As,travée)
@@ -223,7 +223,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
     icon: ArrowDown,
     contenu: (
       <div className="space-y-4">
-        <p className="text-sm">Résistance du béton seul, fonction du taux d'armature longitudinale réellement ancré à la section :</p>
+        <p className="text-sm">Résistance du béton seul, fonction du taux d&apos;armature longitudinale réellement ancré à la section :</p>
         <Formule note="CRd,c = 0.18/1.5 ; k = 1+√(200/d) ≤ 2.0 (d en mm) ; ρl = As/(bw·d) ≤ 0.02 ; vmin = 0.035·k^1.5·√fck.">
           {'VRd,c = max[ CRd,c·k·(100·ρl·fck)^(1/3)·bw·d ; vmin·bw·d ]'}
         </Formule>
@@ -241,7 +241,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
 
         <p className="text-sm">
           <strong>Façonnage</strong> — étrier <strong>triangulaire fermé</strong> : une base le long des barres de
-          travée extrêmes et deux côtés montant jusqu'à un sommet commun au niveau du lit de chapeau, fermé par un
+          travée extrêmes et deux côtés montant jusqu&apos;à un sommet commun au niveau du lit de chapeau, fermé par un
           crochet à 135° et une queue de 10 diamètres (EN&nbsp;ISO&nbsp;4066&nbsp;/&nbsp;NF&nbsp;A&nbsp;35-027).
         </p>
         <Formule note="A = base (bw − 2c), B = hauteur (h − 2c). Le crochet dépend du diamètre d'étrier réellement choisi.">
@@ -263,7 +263,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
           {'σc = M_ELS·y1 / Icr        σs = ae·M_ELS·(d − y1) / Icr'}
         </Formule>
 
-        <p className="text-sm">Flèche vérifiée par comparaison du ratio d'élancement réel à une limite réglementaire :</p>
+        <p className="text-sm">Flèche vérifiée par comparaison du ratio d&apos;élancement réel à une limite réglementaire :</p>
         <Formule note="ρ0 = 0.001·√fck ; ρ = As,requis/(bw·d) ; K = 1.0 (isostatique) ou 1.3 (continu).">
           {'ρ ≤ ρ0 :  (L/d)lim = K·[11 + 1.5·√fck·(ρ0/ρ) + 3.2·√fck·(ρ0/ρ − 1)^1.5]'}
         </Formule>
@@ -274,7 +274,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
           Si L &gt; 7 m : (L/d)lim ×= 7/L
         </Formule>
 
-        <p className="text-sm">Deux vérifications d'usage complètent le dispositif :</p>
+        <p className="text-sm">Deux vérifications d&apos;usage complètent le dispositif :</p>
         <Formule note="Ac = section brute en T (dalle + âme). EN 1992-1-1 §9.2.1.1(3).">As ≤ As,max = 0.04 · Ac</Formule>
         <Formule note="fbd = 2.25·fctd, fctd = 0.7·fctm/1.5 ; lb,min = max(0.3·lb,rqd ; 10Ø ; 100 mm). EN 1992-1-1 §8.4.">
           {'lb,rqd = (Ø/4) · (fyd/fbd)'}
@@ -288,7 +288,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
     contenu: (
       <div className="space-y-4">
         <p className="text-sm">
-          <strong>Synthèse</strong> — les quatre groupes d'entrées (Géométrie, Matériaux & Durabilité, Charges,
+          <strong>Synthèse</strong> — les quatre groupes d&apos;entrées (Géométrie, Matériaux & Durabilité, Charges,
           Armatures), les options avancées repliées, puis le bandeau de statut, les résultats clés, le ferraillage
           retenu (modifiable directement à côté de chaque résultat), les 8 vérifications réglementaires et la
           nomenclature — tout sur un seul écran, sans onglet caché. Le bouton <strong>« Voir le rapport
@@ -300,7 +300,7 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
           diagrammes des moments et efforts tranchants), vérifications ELU/ELS, tableau consolidé des vérifications
           réglementaires, et nomenclature complète avec récapitulatif par diamètre. Le bouton{' '}
           <strong>« Paramétrer le cartouche »</strong> ouvre une fenêtre dédiée pour éditer le projet, la référence,
-          le rédacteur, le bureau d'études, la date et le sous-titre.
+          le rédacteur, le bureau d&apos;études, la date et le sous-titre.
         </p>
       </div>
     ),
@@ -313,8 +313,8 @@ const SECTIONS: { titre: string; icon: typeof Ruler; contenu: React.ReactNode }[
         <p className="text-sm">
           Chaque poste (aciers de travée, chapeau, étriers) est décrit par sa désignation, sa <strong>forme de
           façonnage</strong>, son diamètre, son nombre, sa longueur développée et son poids. Les longueurs tiennent
-          compte de l'ancrage réglementaire calculé, de la forme réelle du chapeau (droit si calculé, en L avec
-          crochet plongeant si forfaitaire) et du façonnage complet de l'étrier triangulaire.
+          compte de l&apos;ancrage réglementaire calculé, de la forme réelle du chapeau (droit si calculé, en L avec
+          crochet plongeant si forfaitaire) et du façonnage complet de l&apos;étrier triangulaire.
         </p>
       </div>
     ),
@@ -335,7 +335,7 @@ export function ManuelModal({ open, onClose }: ManuelModalProps) {
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-blue-600 text-white">
               <div className="flex items-center gap-3">
                 <HelpCircle size={24} />
-                <h2 className="text-xl font-black uppercase tracking-tight">Manuel d'utilisation</h2>
+                <h2 className="text-xl font-black uppercase tracking-tight">Manuel d&apos;utilisation</h2>
               </div>
               <button onClick={onClose} className="hover:rotate-90 transition-transform p-1" aria-label="Fermer">
                 <X size={24} />
@@ -359,7 +359,7 @@ export function ManuelModal({ open, onClose }: ManuelModalProps) {
                   Avertissement légal
                 </h4>
                 <p className="text-amber-800 text-xs m-0 italic leading-snug">
-                  Ce logiciel est une aide au calcul. Bien que basé sur des algorithmes issus de l'Eurocode 2, les
+                  Ce logiciel est une aide au calcul. Bien que basé sur des algorithmes issus de l&apos;Eurocode 2, les
                   résultats doivent impérativement être validés par un ingénieur structure qualifié avant toute
                   signature ou commande de matériaux.
                 </p>

@@ -440,7 +440,7 @@ function RapportTab({
                     <tr><td>Entraxe transversal (b)</td><td>{geometrie.entraxe.toFixed(2)} m</td></tr>
                     <tr><td>Hauteur totale (h)</td><td>{(geometrie.epaisseur_dalle + geometrie.epaisseur_entrevous).toFixed(1)} cm</td></tr>
                     <tr><td>Épaisseur dalle de compression (hf)</td><td>{geometrie.epaisseur_dalle.toFixed(1)} cm</td></tr>
-                    <tr><td>Largeur de l'âme (bw)</td><td>{geometrie.largeur_ame.toFixed(1)} cm</td></tr>
+                    <tr><td>Largeur de l&apos;âme (bw)</td><td>{geometrie.largeur_ame.toFixed(1)} cm</td></tr>
                   </tbody></table>
                   <div className="mt-4 mb-6 border border-gray-200 rounded-lg p-4 bg-gray-50/50">
                     <p className="text-xs font-black uppercase text-gray-400 mb-2 text-center">Coupe transversale type de la poutrelle</p>
@@ -454,7 +454,7 @@ function RapportTab({
                     <tr><td>Résistance de calcul (fcd)</td><td>{resultats.ferraillage.fcd} MPa</td></tr>
                     <tr><td>Limite élastique acier (fyk)</td><td>{materiaux.fyk} MPa</td></tr>
                     <tr><td>Résistance de calcul acier (fyd)</td><td>{resultats.ferraillage.fyd} MPa</td></tr>
-                    <tr><td>Module d'élasticité (Es)</td><td>200 000 MPa</td></tr>
+                    <tr><td>Module d&apos;élasticité (Es)</td><td>200 000 MPa</td></tr>
                   </tbody></table>
                 </div>
               </div>
@@ -462,7 +462,7 @@ function RapportTab({
               <h4>1.3 Durabilité et Enrobage</h4>
               <table className="mt-0 w-full"><tbody>
                 <tr>
-                  <td>Classe d'exposition : <strong>{durabilite.exposition}</strong></td>
+                  <td>Classe d&apos;exposition : <strong>{durabilite.exposition}</strong></td>
                   <td>Classe structurale : <strong>{durabilite.classe_structurale}</strong></td>
                   <td>Enrobage nominal (cnom) : <strong>{enrobage_nominal} mm</strong></td>
                   <td>Hauteur utile (d) : <strong>{resultats.ferraillage.d_eff} cm</strong></td>
@@ -476,8 +476,8 @@ function RapportTab({
                   <thead><tr><th>Désignation</th><th>G (Permanent)</th><th>Q (Variable)</th></tr></thead>
                   <tbody>
                     <tr><td>Poids propre plancher (G0), dont entrevous {resultats.details_charges.poids_entrevous_surf} kN/m²</td><td className="text-center">{resultats.details_charges.G0_surf}</td><td className="text-center">-</td></tr>
-                    <tr><td>Charges permanentes additionnelles (G')</td><td className="text-center">{resultats.details_charges.G_prime_surf}</td><td className="text-center">-</td></tr>
-                    <tr><td>Charges d'exploitation (Usage {chargesDetails.type_local})</td><td className="text-center">-</td><td className="text-center">{resultats.details_charges.Q_surf}</td></tr>
+                    <tr><td>Charges permanentes additionnelles (G&apos;)</td><td className="text-center">{resultats.details_charges.G_prime_surf}</td><td className="text-center">-</td></tr>
+                    <tr><td>Charges d&apos;exploitation (Usage {chargesDetails.type_local})</td><td className="text-center">-</td><td className="text-center">{resultats.details_charges.Q_surf}</td></tr>
                     <tr className="bg-gray-100 font-bold"><td>TOTAUX SURFACIQUES</td><td className="text-center">{(+resultats.details_charges.G0_surf + +resultats.details_charges.G_prime_surf).toFixed(2)}</td><td className="text-center">{resultats.details_charges.Q_surf}</td></tr>
                   </tbody>
                 </table>
@@ -485,7 +485,7 @@ function RapportTab({
                 <div className="grid grid-cols-2 gap-x-10">
                   <table className="mt-0"><tbody>
                     <tr><td>Charge permanente (g)</td><td>{resultats.details_charges.g_lin} kN/ml</td></tr>
-                    <tr><td>Charge d'exploitation (q)</td><td>{resultats.details_charges.q_lin} kN/ml</td></tr>
+                    <tr><td>Charge d&apos;exploitation (q)</td><td>{resultats.details_charges.q_lin} kN/ml</td></tr>
                   </tbody></table>
                   <table className="mt-0"><tbody>
                     <tr><td>Combinaison ELU (pEd)</td><td>{resultats.details_charges.p_elu_lin} kN/ml</td></tr>
@@ -527,10 +527,10 @@ function RapportTab({
                 <h4>3.1 Armatures Longitudinales Inférieures (Travée)</h4>
                 <p>Le calcul est conduit en section en Té. Moment réduit µ = {((+resultats.sollicitations.M_ed_travee / 1000) / (+resultats.ferraillage.fcd * geometrie.entraxe * Math.pow(+resultats.ferraillage.d_eff / 100, 2))).toFixed(3)}.</p>
                 <table className="mt-0"><tbody>
-                  <tr><td>Section d'acier théorique (As,th)</td><td><strong>{formatAsCm2(resultats.ferraillage.As_travee)}</strong></td></tr>
-                  <tr><td>Section d'acier minimale (As,min)</td><td>{resultats.ferraillage.As_travee_min} cm²</td></tr>
-                  <tr><td>Section d'acier adoptée (As,prov)</td><td><strong>{resultats.ferraillage.choix_travee.as_fourni.toFixed(2)} cm²</strong> ({resultats.ferraillage.choix_travee.nom})</td></tr>
-                  <tr><td>Taux d'utilisation</td><td>{formatRatioPct(resultats.ferraillage.As_travee / resultats.ferraillage.choix_travee.as_fourni)}</td></tr>
+                  <tr><td>Section d&apos;acier théorique (As,th)</td><td><strong>{formatAsCm2(resultats.ferraillage.As_travee)}</strong></td></tr>
+                  <tr><td>Section d&apos;acier minimale (As,min)</td><td>{resultats.ferraillage.As_travee_min} cm²</td></tr>
+                  <tr><td>Section d&apos;acier adoptée (As,prov)</td><td><strong>{resultats.ferraillage.choix_travee.as_fourni.toFixed(2)} cm²</strong> ({resultats.ferraillage.choix_travee.nom})</td></tr>
+                  <tr><td>Taux d&apos;utilisation</td><td>{formatRatioPct(resultats.ferraillage.As_travee / resultats.ferraillage.choix_travee.as_fourni)}</td></tr>
                 </tbody></table>
                 <h4>3.2 Armatures Transversales (Cisaillement)</h4>
                 <p>Effort tranchant maximal VEd = {resultats.sollicitations.V_ed} kN.</p>
@@ -538,7 +538,7 @@ function RapportTab({
                 <table className="mt-0"><tbody>
                   <tr><td>Capacité béton seul (VRd,c)</td><td>{resultats.verifications.cisaillement?.V_Rdc} kN</td></tr>
                   <tr><td>Capacité des étriers (VRd,s)</td><td className="font-bold text-blue-700">{resultats.ferraillage.etriers.V_Rds} kN</td></tr>
-                  <tr><td>Nécessité d'armatures d'effort tranchant</td><td><strong>{resultats.verifications.cisaillement?.besoin_etriers ? 'OUI' : 'NON'}</strong></td></tr>
+                  <tr><td>Nécessité d&apos;armatures d&apos;effort tranchant</td><td><strong>{resultats.verifications.cisaillement?.besoin_etriers ? 'OUI' : 'NON'}</strong></td></tr>
                   <tr><td>Section répartie requise (Asw/s)</td><td>{resultats.ferraillage.etriers.Asw_s_req} cm²/ml</td></tr>
                   <tr><td>Espacement calculé (s)</td><td><strong>{resultats.ferraillage.etriers.s_cm} cm</strong></td></tr>
                 </tbody></table>
@@ -569,7 +569,7 @@ function RapportTab({
                   </tbody>
                 </table>
                 <h4>4.2 Vérification de la Flèche Nuisible</h4>
-                <p>La vérification est effectuée par comparaison du ratio d'élancement (L/d).</p>
+                <p>La vérification est effectuée par comparaison du ratio d&apos;élancement (L/d).</p>
                 <table className="mt-0"><tbody>
                   <tr><td>Ratio élancement réel (L/d)</td><td>{resultats.verifications.fleche?.L_d_reel}</td></tr>
                   <tr><td>Ratio élancement limite (L/d)</td><td>{resultats.verifications.fleche?.L_d_limite}</td></tr>
@@ -586,9 +586,9 @@ function RapportTab({
                   <tr><td>Effort tranchant (étriers + bielle)</td><td>VEd ≤ VRd</td><td className="text-center">{formatRatioPct(resultats.verifications.effort_tranchant.ratio)}</td><td className={`text-center font-bold ${!resultats.ferraillage.etriers.erreur && resultats.verifications.effort_tranchant.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.ferraillage.etriers.erreur ? 'ÉCRASEMENT BIELLE' : resultats.verifications.effort_tranchant.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
                   <tr><td>Flèche (élancement L/d)</td><td>L/d ≤ (L/d)lim</td><td className="text-center">{resultats.verifications.fleche?.L_d_reel} / {resultats.verifications.fleche?.L_d_limite}</td><td className={`text-center font-bold ${resultats.verifications.fleche?.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.verifications.fleche?.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
                   <tr><td>Contraintes ELS (béton + acier)</td><td>σc ≤ 0.6·fck ; σs ≤ 0.8·fyk</td><td className="text-center">{resultats.verifications.els?.sigma_c}/{resultats.verifications.els?.limite_c} — {resultats.verifications.els?.sigma_s}/{resultats.verifications.els?.limite_s} MPa</td><td className={`text-center font-bold ${resultats.verifications.els?.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.verifications.els?.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
-                  <tr><td>Pourcentage d'armature maximal</td><td>As ≤ As,max = 0.04·Ac (§9.2.1.1(3))</td><td className="text-center">{resultats.ferraillage.choix_travee.as_fourni.toFixed(2)} / {resultats.ferraillage.choix_appui.as_fourni.toFixed(2)} ≤ {resultats.verifications.pourcentage_armature.As_max_cm2} cm²</td><td className={`text-center font-bold ${resultats.verifications.pourcentage_armature.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.verifications.pourcentage_armature.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
+                  <tr><td>Pourcentage d&apos;armature maximal</td><td>As ≤ As,max = 0.04·Ac (§9.2.1.1(3))</td><td className="text-center">{resultats.ferraillage.choix_travee.as_fourni.toFixed(2)} / {resultats.ferraillage.choix_appui.as_fourni.toFixed(2)} ≤ {resultats.verifications.pourcentage_armature.As_max_cm2} cm²</td><td className={`text-center font-bold ${resultats.verifications.pourcentage_armature.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.verifications.pourcentage_armature.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
                   <tr><td>Espacement maximal des étriers</td><td>s ≤ min(0.75d ; 30 cm) (§9.2.2(6))</td><td className="text-center">{resultats.ferraillage.etriers.s_cm} ≤ {resultats.verifications.espacement_etriers.s_max_cm} cm</td><td className={`text-center font-bold ${resultats.verifications.espacement_etriers.conforme ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.verifications.espacement_etriers.conforme ? 'CONFORME' : 'NON CONFORME'}</td></tr>
-                  <tr><td>Longueur d'ancrage (travée)</td><td>lbd calculé (§8.4)</td><td className="text-center">{resultats.verifications.ancrage.lbd_mm} mm</td><td className="text-center font-bold text-emerald-700">APPLIQUÉ</td></tr>
+                  <tr><td>Longueur d&apos;ancrage (travée)</td><td>lbd calculé (§8.4)</td><td className="text-center">{resultats.verifications.ancrage.lbd_mm} mm</td><td className="text-center font-bold text-emerald-700">APPLIQUÉ</td></tr>
                   <tr className={resultats.est_valide ? 'bg-emerald-50 font-bold' : 'bg-red-50 font-bold'}><td colSpan={3}>CONCLUSION GÉNÉRALE</td><td className={`text-center ${resultats.est_valide ? 'text-emerald-700' : 'text-red-700'}`}>{resultats.est_valide ? 'STRUCTURE CONFORME' : 'STRUCTURE NON CONFORME'}</td></tr>
                 </tbody>
               </table>
@@ -646,7 +646,7 @@ function RapportTab({
                     <p>Ce document constitue une aide au calcul. La mise en œuvre doit respecter les plans de pose du fournisseur de poutrelles et les DTU en vigueur.</p>
                   </div>
                   <div className="text-right italic text-xs text-gray-600">
-                    Visa de l'Ingénieur Structure<br />{infosProjet.auteur}<br />{infosProjet.date}
+                    Visa de l&apos;Ingénieur Structure<br />{infosProjet.auteur}<br />{infosProjet.date}
                   </div>
                 </div>
               </div>

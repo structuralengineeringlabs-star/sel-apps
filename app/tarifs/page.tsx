@@ -6,7 +6,7 @@ import { formatPrice } from "@/lib/utils";
 
 export const metadata = {
   title: "Tarifs",
-  description: "Découvrez les tarifs d'abonnement des applications S.E.L.",
+  description: "Tarifs des applications S.E.L. : 9 logiciels de calcul gratuits et sans inscription, abonnements mensuels ou annuels en francs CFA pour les applications professionnelles.",
 };
 
 export default function TarifsPage() {
@@ -249,7 +249,7 @@ export default function TarifsPage() {
         {/* CTA final */}
         <div className="text-center card bg-sel-light max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-sel-dark mb-2">
-            Besoin d'une solution sur mesure ?
+            Besoin d&apos;une solution sur mesure ?
           </h2>
           <p className="text-gray-700 mb-6">
             Pour les entreprises, ONG et administrations : tarifs préférentiels

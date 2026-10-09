@@ -56,7 +56,7 @@ export function Cartouche({ infosProjet, estValide }: CartoucheProps) {
             <div className="text-xs">{infosProjet.redacteur}</div>
           </div>
           <div className="text-right">
-            <div className="text-[8px] text-[#6b8aaa] uppercase font-bold tracking-widest mb-1">Date d'édition</div>
+            <div className="text-[8px] text-[#6b8aaa] uppercase font-bold tracking-widest mb-1">Date d&apos;édition</div>
             <div className="text-xs">{infosProjet.date}</div>
           </div>
         </div>

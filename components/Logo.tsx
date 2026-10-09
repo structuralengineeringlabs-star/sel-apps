@@ -42,7 +42,7 @@ export default function Logo({
 
   // Couleurs selon la variante
   const titleColor = variant === "dark" ? "text-gray-900" : "text-white";
-  const subtitleColor = variant === "dark" ? "text-gray-500" : "text-white/60";
+  const subtitleColor = variant === "dark" ? "text-gray-500" : "text-white/75";
   const ampersandColor = "text-sel";
 
   // Couleur du SVG selon la variante

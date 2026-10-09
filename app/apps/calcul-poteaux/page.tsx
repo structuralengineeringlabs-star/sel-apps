@@ -12,11 +12,12 @@ export default function CalculPoteauxPage() {
       className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200"
       style={{ height: "calc(100vh - 180px)", minHeight: 700 }}
     >
+      <h1 className="sr-only">Calcul des Poteaux — Eurocodes</h1>
       <iframe
         src="/tools/poteaux/index.html"
         title="Calcul des Poteaux — Eurocodes"
         className="w-full h-full border-0"
-        allow="clipboard-write"
+        allow="clipboard-write; fullscreen"
       />
     </div>
   );

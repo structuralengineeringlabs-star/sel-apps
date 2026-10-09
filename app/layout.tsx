@@ -3,11 +3,13 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SITE_URL } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "S.E.L. Applications — Calcul de structures, hydraulique et gestion",
     template: "%s | S.E.L. Applications",
@@ -24,6 +26,7 @@ export const metadata: Metadata = {
     description: "19 applications de calcul pour ingénieurs civils",
     locale: "fr_FR",
     type: "website",
+    siteName: "S.E.L. Applications",
   },
 };
 

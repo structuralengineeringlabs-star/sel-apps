@@ -4,7 +4,7 @@ import { guides } from "@/data/guides";
 
 export const metadata = {
   title: "Documentation",
-  description: "Guides, tutoriels et FAQ des applications S.E.L.",
+  description: "Guides d'utilisation en PDF, références normatives et aide des applications de calcul S.E.L. : poutres, escaliers, poteaux, dalles et planchers aux Eurocodes.",
 };
 
 export default function DocumentationPage() {
@@ -160,7 +160,7 @@ export default function DocumentationPage() {
 
         <div className="mt-16 text-center card bg-sel-light">
           <h2 className="text-xl font-bold text-sel-dark mb-2">
-            Besoin d'aide supplémentaire ?
+            Besoin d&apos;aide supplémentaire ?
           </h2>
           <p className="text-gray-700 mb-6">
             Notre équipe support est disponible pour vous accompagner.

@@ -9,7 +9,7 @@ type Props = {
 
 export default function ApplicationCard({ application }: Props) {
   const category = categories.find((c) => c.slug === application.categorySlug);
-  const IconComponent = (Icons as any)[application.icon] || Icons.Box;
+  const IconComponent = (Icons as unknown as Record<string, Icons.LucideIcon>)[application.icon] || Icons.Box;
 
   // Déterminer la destination du clic
   const targetUrl =
@@ -76,7 +76,7 @@ export default function ApplicationCard({ application }: Props) {
       {/* Catégorie — masquée pour les cartes Expertise */}
       {!application.isExpertise && (
         <div className="pt-4 border-t border-gray-100">
-          <div className="text-xs text-gray-400 uppercase tracking-wide">
+          <div className="text-xs text-gray-500 uppercase tracking-wide">
             {category?.icon} {category?.name}
           </div>
         </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X, Search } from "lucide-react";
 import Logo from "./Logo";
+import { CONTACT, lienWhatsApp } from "@/lib/contact";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,12 +41,14 @@ export default function Header() {
           {/* Actions */}
           <div className="flex items-center space-x-3">
             {/* Recherche */}
-            <button
+            <Link
+              href="/applications#recherche"
               className="p-2 text-gray-500 hover:text-sel transition-colors"
-              aria-label="Rechercher"
+              aria-label="Rechercher une application"
+              title="Rechercher une application"
             >
               <Search className="w-5 h-5" />
-            </button>
+            </Link>
 
             {/* Bouton démo desktop */}
             <Link
@@ -100,18 +103,18 @@ export default function Header() {
             <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="text-xs text-gray-500 mb-2">Contact rapide</div>
               <a
-                href="mailto:contact@sel-apps.cm"
+                href={`mailto:${CONTACT.email}`}
                 className="block text-sm text-sel hover:underline"
               >
-                contact@sel-apps.cm
+                {CONTACT.email}
               </a>
               <a
-                href="https://wa.me/2376XXXXXXXX"
+                href={lienWhatsApp()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block text-sm text-sel hover:underline mt-1"
               >
-                WhatsApp : +237 6XX XX XX XX
+                WhatsApp : {CONTACT.whatsapp}
               </a>
             </div>
           </nav>

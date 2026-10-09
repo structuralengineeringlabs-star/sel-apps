@@ -12,6 +12,7 @@ export default function CourbeGranulometriquePage() {
       className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200"
       style={{ height: "calc(100vh - 180px)", minHeight: 700 }}
     >
+      <h1 className="sr-only">GranuLab Pro — Courbe granulométrique</h1>
       <iframe
         src="/tools/courbe-granulometrique.html"
         title="GranuLab Pro — Courbe granulométrique"
