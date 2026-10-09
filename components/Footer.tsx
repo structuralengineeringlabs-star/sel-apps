@@ -129,21 +129,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li className="pt-2 border-t border-white/10 mt-3">
-                <Link href="/mentions-legales" className="hover:text-white transition-colors">
-                  Mentions légales
-                </Link>
-              </li>
-              <li>
-                <Link href="/cgv" className="hover:text-white transition-colors">
-                  CGV
-                </Link>
-              </li>
-              <li>
-                <Link href="/confidentialite" className="hover:text-white transition-colors">
-                  Politique de confidentialité
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -192,6 +177,16 @@ export default function Footer() {
               </li>
             </ul>
 
+            <a
+              href={lienWhatsApp("Bonjour, je souhaite être informé des nouveautés des applications S.E.L.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-sel-dark text-sm font-semibold hover:bg-gray-100 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" aria-hidden="true" />
+              Être prévenu des nouveautés
+            </a>
+
             <div className="mt-6 pt-4 border-t border-white/10">
               <div className="text-xs text-white/75 mb-2">Horaires</div>
               <div className="text-xs text-white/80">
@@ -199,31 +194,6 @@ export default function Footer() {
                 <br />
                 Sam : 9h – 13h
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter */}
-        <div className="border-t border-white/20 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wide mb-2 text-white">
-                Restez informé
-              </h2>
-              <p className="text-sm text-white/70">
-                Nouvelles applications et mises à jour : demandez à être prévenu.
-              </p>
-            </div>
-            <div className="md:text-right">
-              <a
-                href={lienWhatsApp("Bonjour, je souhaite être informé des nouveautés des applications S.E.L.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-sel-dark font-semibold hover:bg-gray-100 transition-colors"
-              >
-                <MessageCircle className="w-4 h-4" aria-hidden="true" />
-                Être prévenu sur WhatsApp
-              </a>
             </div>
           </div>
         </div>
