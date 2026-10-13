@@ -19,7 +19,7 @@ déploiement automatique à chaque push sur `main`).
 | Page | Mise en œuvre |
 |---|---|
 | `/apps/calculette-aciers` | Composant React (`components/apps/CalculetteAciers.tsx`) |
-| `/apps/plancher-corps-creux` | Composant React (`components/apps/plancher-corps-creux/`) |
+| `/apps/plancher-corps-creux` | Application compilée `public/tools/plancher-corps-creux/` (poutrelle de plancher à corps creux, béton armé) |
 | `/apps/dalle-pleine` | Application compilée (`public/tools/dalle-pleine/`), affichée en iframe |
 | `/apps/calcul-poteaux` | Application compilée `public/tools/poteaux/` (béton armé, acier, bois) |
 | `/apps/calcul-poutres` | Application compilée `public/tools/poutres/` (béton armé, acier, bois) |
