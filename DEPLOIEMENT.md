@@ -36,6 +36,10 @@ Guide PDF des poutres : `npm run guide` dans le projet poutres, puis copier
 `docs/manuel/Guide_utilisateur_Poutres_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
 (version, taille, pages).
 
+Guide PDF du plancher à corps creux : `npm run guide` dans le projet Plancher-corps-creux, puis copier
+`docs/guide/Guide_utilisateur_Plancher_Corps_Creux_EC2.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
+(version, taille, pages).
+
 Guide PDF des escaliers : `npm run guide` dans le projet escaliers, puis copier
 `public/help/Guide_utilisateur_Escalier_Eurocodes.pdf` dans `public/docs/guides/` **en le renommant**
 `Guide_utilisateur_Escaliers_Eurocodes.pdf` (pluriel, nom attendu par `data/guides.ts`) et mettre à jour

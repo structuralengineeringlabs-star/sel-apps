@@ -41,4 +41,18 @@ export const guides: Guide[] = [
     appUrl: "/apps/calcul-poutres",
     topics: ["EC2", "EC3", "EC5", "Sections en T et en I", "Déversement", "DXF", "Note PDF"],
   },
+  {
+    slug: "plancher-corps-creux",
+    appSlug: "plancher-corps-creux",
+    title: "Calculette EC2 Plancher Corps Creux — Guide d'utilisation",
+    description:
+      "Prise en main du parcours en 4 étapes : géométrie et charges, matériaux et armatures, résultats et documents. Poutrelle isostatique ou continue, flèche calculée, option résistance au feu (EN 1992-1-2), note de calcul, plans A3 en SVG et DXF, nomenclature et métré, limites du périmètre.",
+    pdfUrl: "/docs/guides/Guide_utilisateur_Plancher_Corps_Creux_EC2.pdf",
+    sizeLabel: "1,4 Mo",
+    pages: 15,
+    version: "1.1.0",
+    updated: "octobre 2026",
+    appUrl: "/apps/plancher-corps-creux",
+    topics: ["EC2", "Poutrelle", "Flèche calculée", "Feu", "DXF", "Note PDF"],
+  },
 ];
