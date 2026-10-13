@@ -50,7 +50,7 @@ export const guides: Guide[] = [
     pdfUrl: "/docs/guides/Guide_utilisateur_Plancher_Corps_Creux_EC2.pdf",
     sizeLabel: "1,4 Mo",
     pages: 15,
-    version: "1.1.0",
+    version: "1.1.1",
     updated: "octobre 2026",
     appUrl: "/apps/plancher-corps-creux",
     topics: ["EC2", "Poutrelle", "Flèche calculée", "Feu", "DXF", "Note PDF"],
