@@ -6,8 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPrice(price: number) {
-  return `${new Intl.NumberFormat("fr-FR").format(price)} XAF`;
+export function formatPrice(price: number, devise = "XAF") {
+  return `${new Intl.NumberFormat("fr-FR").format(price)} ${devise}`;
 }
 
 // Retourne les prix formatés selon les règles métier

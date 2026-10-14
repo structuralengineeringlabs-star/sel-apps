@@ -32,11 +32,11 @@ export default function TarifsPage() {
       name: "Mensuel",
       price: "Dès 5 000 XAF",
       period: "par mois",
-      description: "Abonnement mensuel flexible, résiliable à tout moment",
+      description: "Abonnement mensuel, sans engagement ni reconduction automatique",
       features: [
         "Accès immédiat",
-        "Résiliable à tout moment",
-        "Mobile Money ou CB",
+        "Sans reconduction automatique",
+        "Mobile Money (MTN, Orange, Wave)",
         "Support par email",
         "Mises à jour incluses",
       ],
@@ -227,15 +227,15 @@ export default function TarifsPage() {
               },
               {
                 q: "Quelle est la différence entre mensuel et annuel ?",
-                a: "L'abonnement mensuel est plus flexible (résiliable à tout moment). L'annuel offre une économie pouvant atteindre 33%.",
+                a: "Le mensuel donne accès pendant 30 jours, l'annuel pendant 365 jours, moins cher que douze mois. Aucun des deux n'est reconduit automatiquement.",
               },
               {
-                q: "Puis-je changer d'offre en cours d'abonnement ?",
-                a: "Oui, vous pouvez passer du mensuel à l'annuel à tout moment.",
+                q: "Puis-je prolonger ou passer à l'annuel ?",
+                a: "Oui : chaque nouveau paiement s'ajoute à la fin de l'abonnement en cours. L'accès étant immédiat, les paiements ne sont pas remboursables ; la démonstration permet d'essayer avant d'acheter.",
               },
               {
                 q: "Quels moyens de paiement acceptez-vous ?",
-                a: "MTN Mobile Money, Orange Money, cartes bancaires (Visa/Mastercard) et virement bancaire.",
+                a: "Mobile Money : MTN et Orange Money au Cameroun (XAF) ; MTN, Orange Money, Wave et Free Money en Côte d'Ivoire et au Sénégal (XOF). Paiement hors ligne possible sur demande.",
               },
             ].map((item) => (
               <div key={item.q} className="card">

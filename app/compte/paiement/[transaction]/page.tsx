@@ -35,7 +35,7 @@ export default async function PaiementPage({ params }: Props) {
       {p.statut === "accepte" ? (
         <div className="card" id="recu">
           <div className="flex justify-between items-start mb-6">
-            <div><h1 className="text-2xl font-bold">Reçu de paiement</h1><p className="text-gray-600">N° {p.numero_recu}</p></div>
+            <div><h1 className="text-2xl font-bold">Reçu de paiement</h1><p className="text-gray-600">N° {p.numero_recu}</p>{p.essai && <p className="mt-1 inline-block rounded bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">PAIEMENT D&apos;ESSAI — SANS VALEUR</p>}</div>
             <div className="text-right text-sm text-gray-600">Structural &amp; Engineering Labs<br />{CONTACT.email}</div>
           </div>
           <table className="w-full text-sm mb-6"><tbody>
@@ -44,7 +44,7 @@ export default async function PaiementPage({ params }: Props) {
             <tr><td className="py-1 text-gray-500">Désignation</td><td>{app?.name} — {LIBELLES[p.formule]}</td></tr>
             <tr><td className="py-1 text-gray-500">Moyen de paiement</td><td>{nomPrestataire(p.prestataire)}{p.methode ? ` (${p.methode})` : ""}</td></tr>
             <tr><td className="py-1 text-gray-500">Référence de transaction</td><td className="font-mono">{p.transaction_id}</td></tr>
-            <tr className="border-t border-gray-200"><td className="py-2 font-bold">Montant TTC</td><td className="font-bold">{formatPrice(p.montant)}</td></tr>
+            <tr className="border-t border-gray-200"><td className="py-2 font-bold">Montant TTC</td><td className="font-bold">{formatPrice(p.montant, p.devise)}</td></tr>
           </tbody></table>
           <div className="flex flex-wrap gap-3 print:hidden"><Link href={`/apps/${p.application}`} className="btn-primary">Ouvrir {app?.name}</Link><BoutonImprimer /></div>
         </div>
@@ -55,7 +55,7 @@ export default async function PaiementPage({ params }: Props) {
             ? "Le paiement a été refusé ou annulé. Aucun montant n'a été débité pour cet abonnement."
             : "La confirmation de l'opérateur peut prendre quelques minutes (Mobile Money). Cette page se met à jour à chaque visite ; un courriel vous sera envoyé dès l'activation."}</p>
           <div className="flex flex-wrap gap-3"><Link href={`/compte/paiement/${p.transaction_id}`} className="btn-primary">Actualiser</Link><Link href={`/applications/${p.application}`} className="btn-secondary">Retour à l&apos;offre</Link></div>
-          <p className="text-xs text-gray-500 mt-4">Référence : <span className="font-mono">{p.transaction_id}</span> — {formatPrice(p.montant)} TTC</p>
+          <p className="text-xs text-gray-500 mt-4">Référence : <span className="font-mono">{p.transaction_id}</span> — {formatPrice(p.montant, p.devise)} TTC</p>
         </div>
       )}
     </div></div>

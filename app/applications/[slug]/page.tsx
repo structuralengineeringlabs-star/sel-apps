@@ -4,6 +4,7 @@ import { CheckCircle, ArrowLeft, Download, Calendar, Clock } from "lucide-react"
 import { getApplicationBySlug, applications } from "@/data/applications";
 import { categories } from "@/data/categories";
 import { formatPrice } from "@/lib/utils";
+import { offre, tarifEssai, PAYS } from "@/lib/offres";
 import * as Icons from "lucide-react";
 
 // Description de 160 caractères au plus, coupée sur un mot
@@ -224,15 +225,38 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 ) : app.paiementEnLigne ? (
                   // App payante, abonnement en ligne (Notch Pay ou CinetPay) ; démonstration libre
                   <>
-                    {(["mensuel", "annuel"] as const).filter(f => (f === "mensuel" ? hasMonthly : hasAnnual)).map(f => (
-                      <form key={f} action="/api/paiement/initier" method="post">
-                        <input type="hidden" name="application" value={app.slug} />
-                        <input type="hidden" name="formule" value={f} />
-                        <button type="submit" className={f === "annuel" ? "btn-primary w-full" : "btn-secondary w-full"}>
-                          {f === "mensuel" ? `S'abonner 1 mois — ${formatPrice(app.priceMonthly!)}` : `S'abonner 1 an — ${formatPrice(app.priceAnnual!)}`}
-                        </button>
-                      </form>
-                    ))}
+                    {tarifEssai() !== null && (
+                      <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                        Tarif d&apos;essai temporaire : {formatPrice(tarifEssai()!)} quelle que soit la formule.
+                      </p>
+                    )}
+                    <form id="souscrire" action="/api/paiement/initier" method="post" className="space-y-3 text-sm">
+                      <input type="hidden" name="application" value={app.slug} />
+                      <fieldset className="space-y-2">
+                        <legend className="font-semibold text-gray-700 mb-1">Formule</legend>
+                        {(["annuel", "mensuel"] as const).filter(f => offre(app.slug, f)).map(f => (
+                          <label key={f} className="flex items-center gap-2 rounded-md border border-gray-200 px-3 py-2 cursor-pointer has-[:checked]:border-sel has-[:checked]:bg-sel/5">
+                            <input type="radio" name="formule" value={f} defaultChecked={f === "annuel"} required />
+                            <span className="flex-1">{f === "annuel" ? "1 an (365 jours)" : "1 mois (30 jours)"}</span>
+                            <strong>{formatPrice(offre(app.slug, f)!.montant, "F CFA")}</strong>
+                          </label>
+                        ))}
+                      </fieldset>
+                      <label className="block">
+                        <span className="font-semibold text-gray-700">Pays de paiement</span>
+                        <select name="pays" defaultValue="CM" className="mt-1 w-full h-10 rounded-md border border-gray-300 px-2">
+                          {(Object.keys(PAYS) as (keyof typeof PAYS)[]).map(k => (
+                            <option key={k} value={k}>{PAYS[k].nom} — {PAYS[k].devise}</option>
+                          ))}
+                        </select>
+                        <span className="mt-1 block text-xs text-gray-500">Cameroun : MTN, Orange Money · Côte d&apos;Ivoire : MTN, Orange Money, Wave · Sénégal : Wave, Orange Money, Free Money</span>
+                      </label>
+                      <label className="flex items-start gap-2 text-xs text-gray-600">
+                        <input type="checkbox" name="cgv" value="oui" required className="mt-0.5" />
+                        <span>J&apos;accepte les <Link href="/cgv" className="underline">conditions générales de vente</Link>. L&apos;accès étant ouvert dès le paiement, <strong>aucun remboursement</strong> n&apos;est possible ; la démonstration permet d&apos;essayer avant d&apos;acheter.</span>
+                      </label>
+                      <button type="submit" className="btn-primary w-full">Payer et accéder à l&apos;application</button>
+                    </form>
                     {app.appUrl && (
                       <Link href={app.appUrl} className="btn-secondary w-full">
                         Essayer la démonstration
@@ -265,7 +289,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                   {app.isFree
                     ? "✅ Utilisation libre, sans inscription"
                     : app.paiementEnLigne
-                      ? "✅ Paiement sécurisé par Mobile Money (MTN, Orange), prix TTC, accès immédiat, sans reconduction automatique"
+                      ? "✅ Paiement sécurisé par Mobile Money (Cameroun, Côte d'Ivoire, Sénégal), prix TTC, accès immédiat, sans reconduction automatique, sans remboursement"
                       : "✅ Accès ouvert sur demande"}
                 </p>
                 <p>✅ Support en français</p>

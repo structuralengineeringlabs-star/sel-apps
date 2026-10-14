@@ -30,7 +30,7 @@ export function xTokenValide(champs: Record<string, string | undefined>, recu: s
   return !!recu && egaliteSure(jetonHmac(champs, secret), recu.trim().toLowerCase());
 }
 
-export interface DemandeInit { transactionId: string; montant: number; description: string; notifyUrl: string; returnUrl: string; client: { email: string; nom: string | null } }
+export interface DemandeInit { transactionId: string; montant: number; devise?: "XAF" | "XOF"; pays?: string; description: string; notifyUrl: string; returnUrl: string; client: { email: string; nom: string | null } }
 export async function initialiser(d: DemandeInit, f: typeof fetch = fetch): Promise<{ paymentUrl: string }> {
   const { apikey, site_id } = configuration();
   if (!Number.isInteger(d.montant) || d.montant % 5 !== 0) throw new Error("Montant invalide (entier multiple de 5 exigé par CinetPay).");
@@ -38,9 +38,9 @@ export async function initialiser(d: DemandeInit, f: typeof fetch = fetch): Prom
   const r = await f(URL_INIT(), {
     method: "POST", headers: ENTETES,
     body: JSON.stringify({
-      apikey, site_id, transaction_id: d.transactionId, amount: d.montant, currency: "XAF", description: d.description,
+      apikey, site_id, transaction_id: d.transactionId, amount: d.montant, currency: d.devise ?? "XAF", description: d.description,
       notify_url: d.notifyUrl, return_url: d.returnUrl, channels: "ALL", lang: "fr",
-      customer_email: d.client.email, ...(prenom ? { customer_name: reste.join(" ") || prenom, customer_surname: prenom } : {}), customer_country: "CM",
+      customer_email: d.client.email, ...(prenom ? { customer_name: reste.join(" ") || prenom, customer_surname: prenom } : {}), customer_country: d.pays ?? "CM",
     }),
   });
   const j = await r.json().catch(() => ({})) as { code?: string; message?: string; description?: string; data?: { payment_url?: string } };

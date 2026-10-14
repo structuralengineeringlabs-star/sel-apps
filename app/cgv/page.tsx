@@ -43,9 +43,9 @@ export default function CGVPage() {
               Le paiement s&apos;effectue en ligne par :
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-1 mt-2">
-              <li>Mobile Money (MTN MoMo, Orange Money)</li>
-              <li>Carte bancaire (Visa, Mastercard)</li>
-              <li>Virement bancaire (sur demande)</li>
+              <li>Cameroun (XAF) : MTN Mobile Money, Orange Money</li>
+              <li>Côte d&apos;Ivoire et Sénégal (XOF) : Mobile Money (MTN, Orange Money, Wave, Free Money selon le pays)</li>
+              <li>Paiement hors ligne sur demande (activation par S.E.L. après réception)</li>
             </ul>
             <p className="text-gray-700 mt-2">
               Les paiements en ligne sont traités par un prestataire agréé (Notch Pay ou CinetPay) ; S.E.L. ne reçoit ni ne conserve
@@ -71,12 +71,14 @@ export default function CGVPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              5. Droit de rétractation
+              5. Absence de remboursement
             </h2>
             <p className="text-gray-700">
-              Conformément à la réglementation en vigueur, le client dispose
-              d&apos;un délai de 14 jours pour demander un remboursement, à condition
-              que la licence n&apos;ait pas été utilisée.
+              L&apos;accès à l&apos;application est fourni immédiatement après le paiement. En validant sa commande,
+              le client demande cette exécution immédiate et accepte qu&apos;<strong>aucun remboursement</strong> ne soit
+              possible, ni total ni partiel, y compris en cas de non-utilisation. Une version de démonstration gratuite
+              permet d&apos;évaluer l&apos;application avant tout achat. Les prix sont exprimés en francs CFA (XAF ou XOF,
+              de même valeur), toutes taxes comprises.
             </p>
           </section>
 

@@ -94,6 +94,8 @@ et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd
 | `NOTCHPAY_PUBLIC_KEY` | paiement Notch Pay (Business suite → Settings → API Keys : clé publique `pk_test_…` en Preview, clé réelle en Production) ; sa présence fait de Notch Pay le prestataire actif |
 | `NOTCHPAY_HASH` | clé « Hash » du point de notification Notch Pay (signature `x-notch-signature`) |
 | `PAIEMENT_PRESTATAIRE` (facultatif) | `notchpay` ou `cinetpay` pour forcer le choix |
+| `ADMIN_EMAILS` | adresses autorisées sur `/admin`, séparées par des virgules |
+| `TARIF_ESSAI` (temporaire) | prix unique en F CFA pour un test réel ; à supprimer ensuite |
 | `CINETPAY_API_KEY`, `CINETPAY_SITE_ID`, `CINETPAY_SECRET_KEY` | paiement CinetPay (tableau de bord CinetPay → Intégrations), si utilisé |
 | `CRON_SECRET` | protège `/api/cron/rappels` (rappels J-7 et J-1, tous les jours à 7 h UTC, `vercel.json`) |
 | `CINETPAY_URL_BASE`, `NOTCHPAY_URL_BASE` (facultatifs) | autre adresse d'API, pour les essais |
@@ -114,6 +116,8 @@ Aucune clé ne doit figurer dans le dépôt.
    (elle est aussi transmise à chaque paiement) ; URL de retour : `https://sel-apps.com/api/paiement/retour`.
 3. Faire un paiement réel de faible montant sur `preview.sel-apps.com`, vérifier le reçu (`/compte`),
    l'accès à l'édition complète et la ligne de la table `paiements`.
+
+Exploitation courante : `docs/EXPLOITATION.md`. Audit de lancement : `docs/AUDIT_LANCEMENT.md`.
 
 Contrôles locaux : `npm test` (paiement, signatures, sessions, accès aux fichiers protégés, sur PGlite).
 

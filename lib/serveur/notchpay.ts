@@ -18,6 +18,9 @@ export function configurationNotch() {
   return { cle, hash: process.env.NOTCHPAY_HASH ?? null };
 }
 
+/** Clé de test (paiements simulés) : les paiements correspondants sont marqués « essai ». */
+export const cleDeTest = () => /test/i.test(process.env.NOTCHPAY_PUBLIC_KEY ?? "");
+
 export function signatureNotch(corps: string, hash: string): string {
   return createHmac("sha256", hash).update(corps).digest("hex");
 }
@@ -32,7 +35,7 @@ export async function initialiserNotch(d: DemandeInit, f: typeof fetch = fetch):
   const r = await f(`${API()}/payments`, {
     method: "POST", headers: ENTETES(cle),
     body: JSON.stringify({
-      amount: d.montant, currency: "XAF", email: d.client.email, reference: d.transactionId, callback: d.returnUrl, description: d.description,
+      amount: d.montant, currency: d.devise ?? "XAF", ...(d.pays ? { locked_country: d.pays } : {}), email: d.client.email, reference: d.transactionId, callback: d.returnUrl, description: d.description,
       customer: { email: d.client.email, ...(d.client.nom ? { name: d.client.nom } : {}) },
     }),
   });

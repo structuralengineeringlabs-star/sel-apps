@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Connexion", robots: { index: false }
 const ERREURS: Record<string, string> = {
   invalide: "Adresse e-mail invalide.",
   trop_de_demandes: "Trop de demandes pour cette adresse : réessayez dans quelques minutes.",
-  envoi: "Le courriel n'a pas pu être envoyé. Réessayez ou utilisez la connexion Google.",
+  envoi: "Le courriel n'a pas pu être envoyé. Réessayez dans quelques minutes.",
   lien: "Ce lien de connexion est expiré ou a déjà servi. Demandez-en un nouveau.",
   google: "La connexion Google a échoué. Réessayez ou recevez un lien par e-mail.",
 };
@@ -15,15 +15,18 @@ type Props = { searchParams: Promise<{ retour?: string; erreur?: string }> };
 export default async function ConnexionPage({ searchParams }: Props) {
   const { retour = "/compte", erreur } = await searchParams;
   const r = retour.startsWith("/") && !retour.startsWith("//") ? retour : "/compte";
+  const google = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET); // bouton masqué tant que Google n'est pas configuré
   return (
     <div className="py-16">
       <div className="max-w-md mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Connexion</h1>
-        <p className="text-gray-600 mb-6">Un compte permet de souscrire un abonnement et d&apos;accéder aux applications payantes. Pas de mot de passe : connexion par Google ou par un lien envoyé par e-mail.</p>
+        <p className="text-gray-600 mb-6">Un compte permet de souscrire un abonnement et d&apos;accéder aux applications payantes. Pas de mot de passe : connexion par un lien envoyé par e-mail{google ? " ou par Google" : ""}.</p>
         {erreur && ERREURS[erreur] && <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{ERREURS[erreur]}</p>}
         <div className="card space-y-5">
-          <a href={`/api/auth/google?retour=${encodeURIComponent(r)}`} className="btn-secondary w-full">Continuer avec Google</a>
-          <div className="flex items-center gap-3 text-xs text-gray-600"><span className="h-px flex-1 bg-gray-200" />ou<span className="h-px flex-1 bg-gray-200" /></div>
+          {google && <>
+            <a href={`/api/auth/google?retour=${encodeURIComponent(r)}`} className="btn-secondary w-full">Continuer avec Google</a>
+            <div className="flex items-center gap-3 text-xs text-gray-600"><span className="h-px flex-1 bg-gray-200" />ou<span className="h-px flex-1 bg-gray-200" /></div>
+          </>}
           <form action="/api/auth/email" method="post" className="space-y-3">
             <input type="hidden" name="retour" value={r} />
             <label className="block text-sm font-semibold text-gray-700" htmlFor="email">Adresse e-mail</label>

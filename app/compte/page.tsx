@@ -5,6 +5,7 @@ import { utilisateurCourant } from "@/lib/serveur/session";
 import { abonnementsDe, paiementsDe } from "@/lib/serveur/abonnements";
 import { applications } from "@/data/applications";
 import { formatPrice } from "@/lib/utils";
+import { estAdmin } from "@/lib/serveur/admin";
 
 export const metadata: Metadata = { title: "Mon compte", robots: { index: false } };
 const date = (d: Date) => new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Douala" });
@@ -21,8 +22,9 @@ export default async function ComptePage({ searchParams }: Props) {
     <div className="py-12"><div className="max-w-4xl mx-auto px-4 space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div><h1 className="text-3xl font-bold text-gray-900">Mon compte</h1><p className="text-gray-600">{u.email}</p></div>
-        <form action="/api/auth/deconnexion" method="post"><button className="btn-secondary">Se déconnecter</button></form>
+        <span className="flex gap-2">{estAdmin(u.email) && <Link href="/admin" className="btn-secondary">Administration</Link>}<form action="/api/auth/deconnexion" method="post"><button className="btn-secondary">Se déconnecter</button></form></span>
       </div>
+      {erreur === "trop" && <p role="alert" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">Plusieurs commandes viennent d&apos;être lancées : patientez dix minutes avant d&apos;en créer une nouvelle. Une commande déjà payée apparaît ci-dessous.</p>}
       {erreur === "paiement" && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">Le paiement n&apos;a pas pu être lancé. Réessayez dans quelques instants ou contactez-nous.</p>}
       <section className="card">
         <h2 className="text-xl font-bold mb-4">Abonnements</h2>
@@ -41,7 +43,7 @@ export default async function ComptePage({ searchParams }: Props) {
         {paiements.length === 0 ? <p className="text-gray-600">Aucun paiement.</p> : (
           <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-left text-gray-500"><th className="py-2">Date</th><th>Application</th><th>Formule</th><th>Montant TTC</th><th>État</th><th /></tr></thead>
             <tbody>{paiements.map(p => <tr key={p.transaction_id} className="border-t border-gray-100">
-              <td className="py-2">{date(p.cree_le)}</td><td>{nomApp(p.application)}</td><td>{p.formule}</td><td>{formatPrice(p.montant)}</td><td>{STATUTS[p.statut] ?? p.statut}</td>
+              <td className="py-2">{date(p.cree_le)}</td><td>{nomApp(p.application)}</td><td>{p.formule}</td><td>{formatPrice(p.montant, p.devise)}{p.essai ? " (essai)" : ""}</td><td>{STATUTS[p.statut] ?? p.statut}</td>
               <td><Link href={`/compte/paiement/${p.transaction_id}`} className="underline">{p.statut === "accepte" ? "Reçu" : "Détail"}</Link></td>
             </tr>)}</tbody></table></div>
         )}

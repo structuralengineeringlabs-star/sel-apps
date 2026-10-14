@@ -71,3 +71,7 @@ create table if not exists rappels (
 alter table paiements add column if not exists prestataire text not null default 'cinetpay';
 alter table paiements add column if not exists ref_prestataire text;
 create index if not exists paiements_ref_prestataire on paiements (ref_prestataire);
+
+-- v3 : paiements d'essai (clés de test des prestataires), purgeables depuis l'administration
+alter table paiements add column if not exists essai boolean not null default false;
+update paiements set essai = true where not essai and (methode like 'pm.test%' or ref_prestataire like '%test%');
