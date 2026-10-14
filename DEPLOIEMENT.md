@@ -16,6 +16,7 @@ Les applications Vite sont construites avec la base de leur dossier, puis copié
 | Château d'eau (cuve BA, acier, PEHD) | `npx vite build --base /tools/chateau-eau/ --outDir dist-sel` | `public/tools/chateau-eau/` |
 | Plancher à corps creux (béton armé) | `npx vite build --base /tools/plancher-corps-creux/ --outDir dist-sel` | `public/tools/plancher-corps-creux/` |
 | Corbeaux (béton armé) | `npx vite build --base /tools/corbeaux/ --outDir dist-sel` | `public/tools/corbeaux/` |
+| Réservoirs (béton armé) | `npx vite build --base /tools/reservoirs/ --outDir dist-sel` | `public/tools/reservoirs/` |
 
 Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
 `assets/*` changent à chaque construction), mettre à jour si besoin la fiche dans `data/applications.ts`, puis :
@@ -67,3 +68,4 @@ la nouvelle.
 | Château d'eau | `structuralengineeringlabs-star/Chateau-Eau` (privé) |
 | Plancher à corps creux | `structuralengineeringlabs-star/Plancher-corps-creux` (privé) |
 | Corbeaux | `structuralengineeringlabs-star/Calcul-Corbeaux` (privé) |
+| Réservoirs | `structuralengineeringlabs-star/Reservoirs` |
