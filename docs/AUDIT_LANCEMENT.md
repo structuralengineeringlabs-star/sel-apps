@@ -40,7 +40,7 @@ administration, export, activation manuelle, purge protégée, déconnexion). Te
 |---|---|
 | `CRON_SECRET` (valeur aléatoire) en Production et Preview | ✅ |
 | Neon : activer la création d'une branche de base par déploiement de prévisualisation (P4) | 🔑 |
-| Webhook Notch Pay (test puis réel) et `NOTCHPAY_HASH` | 🔑 |
+| Webhook Notch Pay de test et `NOTCHPAY_HASH` (Preview) | ✅ ; webhook réel à créer au lancement 🔑 |
 | Connexion Google (facultative) | 🔑 |
 | Compte Notch Pay validé : clé réelle `NOTCHPAY_PUBLIC_KEY` en Production | 🔑 |
 | Fusion sur `main` (accord), purge des essais depuis `/admin`, paiement réel de 100 F CFA, puis suppression de `TARIF_ESSAI` et redéploiement | ⏳ |
