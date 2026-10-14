@@ -1,8 +1,8 @@
 // Coordonnées de S.E.L. : seul endroit à modifier quand elles changent.
 
 export const CONTACT = {
-  /** Adresse affichée (le domaine sel-apps.cm reste à mettre en service). */
-  email: "contact@sel-apps.cm",
+  /** Adresse affichée (boîte Zoho Mail du domaine sel-apps.com). */
+  email: "contact@sel-apps.com",
   telephone: "+237 651 13 56 05",
   telephoneHref: "tel:+237651135605",
   whatsapp: "+237 696 20 65 86",

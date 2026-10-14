@@ -1,5 +1,6 @@
 /** Envoi de courriels transactionnels par l'API HTTP de Resend (RESEND_API_KEY, EMAIL_EXPEDITEUR). */
 import "server-only";
+import { CONTACT } from "@/lib/contact";
 
 export interface Courriel { a: string; sujet: string; texte: string; html: string }
 
@@ -9,7 +10,7 @@ export async function envoyerCourriel(c: Courriel, f: typeof fetch = fetch): Pro
   const r = await f("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${cle}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: de, to: [c.a], subject: c.sujet, text: c.texte, html: c.html }),
+    body: JSON.stringify({ from: de, reply_to: CONTACT.email, to: [c.a], subject: c.sujet, text: c.texte, html: c.html }),
   });
   if (!r.ok) throw new Error(`Envoi du courriel refusé (${r.status}).`);
 }

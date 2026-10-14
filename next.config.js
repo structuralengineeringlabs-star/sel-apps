@@ -8,6 +8,18 @@ const nextConfig = {
     "/outils/**": ["./prive/outils/**/*"],
   },
 
+  // Ancienne adresse : redirection permanente, page par page, vers le domaine définitif
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "sel-apps-six.vercel.app" }],
+        destination: "https://sel-apps.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
@@ -19,6 +31,7 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         ],
       },
       {

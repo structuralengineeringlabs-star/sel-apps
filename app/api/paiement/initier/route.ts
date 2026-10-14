@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { utilisateurCourant } from "@/lib/serveur/session";
 import { creerPaiement } from "@/lib/serveur/abonnements";
 import { initialiser } from "@/lib/serveur/cinetpay";
-import { baseUrl, origineSure } from "@/lib/serveur/securite";
+import { baseUrl, origineSure, urlNotification } from "@/lib/serveur/securite";
 import { estFormule, offre } from "@/lib/offres";
 
 /** Commande d'un abonnement : crée la transaction en base puis redirige vers le guichet CinetPay. */
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const { paymentUrl } = await initialiser({
       transactionId: p.transactionId, montant: p.montant,
       description: `Abonnement ${formule} ${p.nom}`.replace(/[#/$_&]/g, " "),
-      notifyUrl: `${base}/api/paiement/notification`, returnUrl: `${base}/api/paiement/retour?transaction=${p.transactionId}`,
+      notifyUrl: urlNotification(base), returnUrl: `${base}/api/paiement/retour?transaction=${p.transactionId}`,
       client: { email: u.email, nom: u.nom },
     });
     return NextResponse.redirect(paymentUrl, 303);

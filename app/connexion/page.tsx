@@ -23,7 +23,7 @@ export default async function ConnexionPage({ searchParams }: Props) {
         {erreur && ERREURS[erreur] && <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{ERREURS[erreur]}</p>}
         <div className="card space-y-5">
           <a href={`/api/auth/google?retour=${encodeURIComponent(r)}`} className="btn-secondary w-full">Continuer avec Google</a>
-          <div className="flex items-center gap-3 text-xs text-gray-400"><span className="h-px flex-1 bg-gray-200" />ou<span className="h-px flex-1 bg-gray-200" /></div>
+          <div className="flex items-center gap-3 text-xs text-gray-600"><span className="h-px flex-1 bg-gray-200" />ou<span className="h-px flex-1 bg-gray-200" /></div>
           <form action="/api/auth/email" method="post" className="space-y-3">
             <input type="hidden" name="retour" value={r} />
             <label className="block text-sm font-semibold text-gray-700" htmlFor="email">Adresse e-mail</label>

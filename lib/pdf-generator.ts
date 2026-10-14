@@ -191,7 +191,7 @@ export function generatePdf(config: PdfConfig) {
     );
 
     doc.text(
-      "Document généré par S.E.L. Applications  ·  https://sel-apps-six.vercel.app",
+      "Document généré par S.E.L. Applications  ·  https://sel-apps.com",
       pageWidth / 2,
       pageHeight - 13,
       { align: "center" }

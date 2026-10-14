@@ -3,6 +3,26 @@
 Le projet Vercel `sel-apps` est relié à ce dépôt : chaque push sur `main` déclenche un déploiement de production ;
 une autre branche produit un déploiement de prévisualisation (URL propre, production inchangée).
 
+## Domaine
+
+| Adresse | Rôle |
+|---|---|
+| `https://sel-apps.com` | production (branche `main`) — adresse de référence (`lib/site.ts`) |
+| `www.sel-apps.com` | redirection permanente (308) vers `sel-apps.com` (réglage du domaine dans Vercel) |
+| `preview.sel-apps.com` | recette stable de la branche `reservoirs-v1` (protégée par la connexion Vercel) |
+| `sel-apps-six.vercel.app` | ancienne adresse : redirection permanente page par page (`next.config.js`) |
+
+Domaine acheté chez Vercel (renouvellement automatique, DNS Vercel). Enregistrements DNS à tenir à jour :
+
+| Nom | Type | Valeur | Rôle |
+|---|---|---|---|
+| `@` | MX | `mx.zoho.com` (10), `mx2.zoho.com` (20), `mx3.zoho.com` (50) — `zoho.eu` si le compte Zoho est européen | réception `contact@` |
+| `@` | TXT | `v=spf1 include:zoho.com ~all` | expéditeurs autorisés du domaine |
+| `@` | TXT | code `zoho-verification=…` fourni par Zoho | propriété du domaine chez Zoho |
+| `zmail._domainkey` | TXT | clé DKIM fournie par Zoho | signature des messages de `contact@` |
+| `send`, `resend._domainkey` | MX / TXT | valeurs fournies par Resend (domaine `sel-apps.com`) | envoi des e-mails automatiques |
+| `_dmarc` | TXT | `v=DMARC1; p=none; rua=mailto:contact@sel-apps.com; adkim=r; aspf=r` | politique d'authentification (passer à `p=quarantine` une fois Zoho et Resend vérifiés) |
+
 ## Mettre à jour une application compilée (`public/tools/…`)
 
 Les applications Vite sont construites avec la base de leur dossier, puis copiées telles quelles :
@@ -69,29 +89,32 @@ et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd
 | Variable | Rôle |
 |---|---|
 | `DATABASE_URL` (ou `POSTGRES_URL`) | base Postgres (intégration Neon de Vercel) |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | connexion Google ; URI de redirection autorisée : `https://<domaine>/api/auth/google/rappel` |
-| `RESEND_API_KEY`, `EMAIL_EXPEDITEUR` | liens de connexion, confirmations et rappels (domaine expéditeur vérifié chez Resend) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | connexion Google ; URI de redirection autorisées : `https://sel-apps.com/api/auth/google/rappel` et `https://preview.sel-apps.com/api/auth/google/rappel` |
+| `RESEND_API_KEY`, `EMAIL_EXPEDITEUR` | liens de connexion, confirmations et rappels ; expéditeur `S.E.L. Applications <no-reply@sel-apps.com>`, réponses vers `contact@sel-apps.com` |
 | `CINETPAY_API_KEY`, `CINETPAY_SITE_ID`, `CINETPAY_SECRET_KEY` | paiement (tableau de bord CinetPay → Intégrations) |
 | `CRON_SECRET` | protège `/api/cron/rappels` (rappels J-7 et J-1, tous les jours à 7 h UTC, `vercel.json`) |
 | `CINETPAY_URL_BASE` (facultatif) | autre adresse de l'API, pour les essais |
+| `NEXT_PUBLIC_SITE_URL` (facultatif) | remplace l'adresse de référence `https://sel-apps.com` |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` (créée par Vercel) | Settings → Deployment Protection → *Protection Bypass for Automation* : laisse passer la notification CinetPay sur `preview.sel-apps.com` |
 
 Aucune clé ne doit figurer dans le dépôt.
 
 ### Mise en service
 
 1. Créer la base, puis `DATABASE_URL=… npm run db:migrer` (script idempotent, `db/schema.sql`).
-2. Dans CinetPay, URL de notification : `https://<domaine>/api/paiement/notification` (elle est aussi transmise à
-   chaque paiement) ; URL de retour : `https://<domaine>/api/paiement/retour`.
-3. Faire un paiement réel de faible montant sur un déploiement de prévisualisation, vérifier le reçu (`/compte`),
+2. Dans CinetPay, site `https://sel-apps.com`, URL de notification : `https://sel-apps.com/api/paiement/notification`
+   (elle est aussi transmise à chaque paiement) ; URL de retour : `https://sel-apps.com/api/paiement/retour`.
+3. Faire un paiement réel de faible montant sur `preview.sel-apps.com`, vérifier le reçu (`/compte`),
    l'accès à l'édition complète et la ligne de la table `paiements`.
 
 Contrôles locaux : `npm test` (paiement, signatures, sessions, accès aux fichiers protégés, sur PGlite).
 
 ## Données des utilisateurs
 
-Les applications enregistrent les projets dans le navigateur, par adresse de site : un changement de domaine les
-rend invisibles. Pour les transférer, « Enregistrer » (fichier `.json`) sur l'ancienne adresse puis « Ouvrir… » sur
-la nouvelle.
+Les applications enregistrent les projets dans le navigateur, par adresse de site : depuis le passage à
+`sel-apps.com` (bascule immédiate), les projets créés sur `sel-apps-six.vercel.app` ne sont plus visibles. Comme
+l'ancienne adresse est redirigée, ils ne sont plus récupérables par l'interface ; d'où l'importance d'« Enregistrer »
+(fichier `.json`) les projets importants, puis de les rouvrir par « Ouvrir… » sur `sel-apps.com`.
 
 ## Sources
 

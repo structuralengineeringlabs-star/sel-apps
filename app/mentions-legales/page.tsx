@@ -1,3 +1,9 @@
+import { CONTACT } from "@/lib/contact";
+import { SITE_URL } from "@/lib/site";
+
+/** Champ à renseigner par l'éditeur (immatriculation, identité du directeur de la publication). */
+const A_COMPLETER = <span className="text-amber-700">[à compléter]</span>;
+
 export const metadata = {
   title: "Mentions légales",
   description: "Mentions légales du site S.E.L. Applications : éditeur, hébergement, propriété intellectuelle, responsabilité et droit applicable (Cameroun).",
@@ -19,11 +25,19 @@ export default function LegalPage() {
             <p className="text-gray-700">
               <strong>S.E.L. — Structural & Engineering Labs</strong>
               <br />
-              Yaoundé, Cameroun
+              Forme juridique et raison sociale : {A_COMPLETER}
               <br />
-              Email : contact@sel-apps.cm
+              RCCM : {A_COMPLETER} — NIU : {A_COMPLETER}
               <br />
-              Téléphone : +237 651 13 56 05 — WhatsApp : +237 696 20 65 86
+              Siège : {A_COMPLETER}, Yaoundé, Cameroun
+              <br />
+              Directeur de la publication : {A_COMPLETER}
+              <br />
+              Email : <a href={`mailto:${CONTACT.email}`} className="text-sel underline">{CONTACT.email}</a>
+              <br />
+              Téléphone : {CONTACT.telephone} — WhatsApp : {CONTACT.whatsapp}
+              <br />
+              Site : {SITE_URL.replace("https://", "")}
             </p>
           </section>
 
@@ -82,7 +96,7 @@ export default function LegalPage() {
             </h2>
             <p className="text-gray-700">
               Pour toute question relative aux présentes mentions légales,
-              contactez-nous à : contact@sel-apps.cm
+              contactez-nous à : <a href={`mailto:${CONTACT.email}`} className="text-sel underline">{CONTACT.email}</a>
             </p>
           </section>
         </div>
