@@ -104,6 +104,11 @@ export default async function AdminPage({ searchParams }: Props) {
           <button className="btn-secondary">Purger les données d&apos;essai</button>
         </form>
       </section>
+      <section className="card">
+        <h2 className="text-xl font-bold mb-1">Commandes abandonnées</h2>
+        <p className="text-sm text-gray-600 mb-4">Supprime les commandes jamais payées (en attente ou refusées) de plus d&apos;une heure, quel que soit le prestataire. Elles n&apos;ont ouvert aucun accès ni émis de reçu.</p>
+        <form action="/api/admin/purger" method="post"><input type="hidden" name="quoi" value="abandons" /><button className="btn-secondary">Supprimer les commandes abandonnées</button></form>
+      </section>
       <p className="text-xs text-gray-500"><Link href="/compte" className="underline">Mon compte</Link></p>
     </div></div>
   );

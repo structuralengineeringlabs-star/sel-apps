@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { baseDeTest } from "./base";
-import { creerPaiement, synchroniserPaiement, abonnementActif, activerManuellement, purgerEssais, paiementsAdmin, TropDeCommandes, LIMITE_COMMANDES } from "@/lib/serveur/abonnements";
+import { creerPaiement, synchroniserPaiement, abonnementActif, activerManuellement, purgerEssais, purgerAbandons, paiementsAdmin, TropDeCommandes, LIMITE_COMMANDES } from "@/lib/serveur/abonnements";
 import { utilisateurPourEmail } from "@/lib/serveur/session";
 import { estAdmin, ligneCsv } from "@/lib/serveur/admin";
 import { offre, tarifEssai, estPays, PAYS } from "@/lib/offres";
@@ -85,5 +85,17 @@ describe("paiements : devise, limite, activation manuelle, purge", () => {
     expect(await abonnementActif(r, "reservoirs")).not.toBeNull();
     const pr2 = await creerPaiement(r, "reservoirs", "annuel");
     expect((await synchroniserPaiement(pr2.transactionId, ok(500000))).numeroRecu).toMatch(/-000003$/);
+  });
+
+  it("commandes abandonnées : supprime les non payées de plus d'une heure, jamais les payées ni les récentes", async () => {
+    const u = await utilisateurPourEmail("panier@exemple.cm", null);
+    const vieille = await creerPaiement(u, "reservoirs", "mensuel", "cinetpay");
+    const recente = await creerPaiement(u, "reservoirs", "mensuel", "cinetpay");
+    const payee = await creerPaiement(u, "reservoirs", "mensuel", "cinetpay");
+    await synchroniserPaiement(payee.transactionId, ok(50000));
+    await pg.query("update paiements set cree_le = now() - interval '2 hours' where transaction_id in ($1, $2)", [vieille.transactionId, payee.transactionId]);
+    expect(await purgerAbandons()).toBe(1);
+    const restants = (await paiementsAdmin(null)).map(p => p.transaction_id).sort();
+    expect(restants).toEqual([recente.transactionId, payee.transactionId].sort());
   });
 });

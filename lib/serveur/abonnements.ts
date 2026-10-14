@@ -132,6 +132,14 @@ export async function purgerEssais(): Promise<{ paiements: number; abonnements: 
   });
 }
 
+/**
+ * Supprime les commandes jamais payées (en attente ou refusées) de plus d'une heure : paniers abandonnés, essais
+ * interrompus. Elles n'ont ouvert aucun accès ni émis de reçu ; les paiements acceptés ne sont jamais touchés.
+ */
+export async function purgerAbandons(): Promise<number> {
+  return (await db().requete("delete from paiements where statut <> 'accepte' and numero_recu is null and cree_le < now() - interval '1 hour' returning id")).length;
+}
+
 /** Date de fin d'un abonnement actif, ou null. */
 export async function abonnementActif(utilisateurId: number, application: string): Promise<Date | null> {
   const [r] = await db().requete<{ fin: Date }>("select fin from abonnements where utilisateur_id = $1 and application = $2 and fin > now()", [utilisateurId, application]);
