@@ -47,6 +47,14 @@ export default function CGVPage() {
               <li>Carte bancaire (Visa, Mastercard)</li>
               <li>Virement bancaire (sur demande)</li>
             </ul>
+            <p className="text-gray-700 mt-2">
+              Les paiements en ligne sont traités par CinetPay ; S.E.L. ne reçoit ni ne conserve
+              aucune donnée de carte ou de compte Mobile Money. Un abonnement mensuel donne accès à
+              l&apos;application pendant 30 jours, un abonnement annuel pendant 365 jours, à compter
+              du paiement ou de la fin de l&apos;abonnement en cours. Il n&apos;y a pas de reconduction
+              automatique : chaque période fait l&apos;objet d&apos;un nouveau paiement. Un reçu est
+              disponible dans l&apos;espace « Mon compte ».
+            </p>
           </section>
 
           <section>
@@ -55,8 +63,9 @@ export default function CGVPage() {
             </h2>
             <p className="text-gray-700">
               Les applications sont livrées sous forme de licence d&apos;utilisation
-              numérique. L&apos;accès est immédiat après confirmation du paiement.
-              Une clé de licence est envoyée par email.
+              numérique. L&apos;accès est immédiat après confirmation du paiement par
+              l&apos;opérateur ; il est rattaché au compte utilisé pour le paiement (connexion par
+              Google ou par lien envoyé par e-mail) et une confirmation est envoyée par e-mail.
             </p>
           </section>
 

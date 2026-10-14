@@ -3,6 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  // Éditions complètes des applications payantes (hors de public/), servies par app/outils/[application]/[[...chemin]]
+  outputFileTracingIncludes: {
+    "/outils/**": ["./prive/outils/**/*"],
+  },
+
   async headers() {
     return [
       {

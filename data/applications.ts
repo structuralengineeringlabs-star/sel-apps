@@ -12,6 +12,8 @@ export type Application = {
   isPopular?: boolean;
   isExpertise?: boolean;
   appUrl?: string;
+  /** Abonnement payable en ligne (CinetPay) ; sans abonnement, appUrl ouvre l'édition de démonstration. */
+  paiementEnLigne?: boolean;
   icon: string;
   tags: string[];
 };
@@ -131,10 +133,13 @@ export const applications: Application[] = [
     shortDescription: "Pré-dimensionne les réservoirs en béton armé, cylindriques ou rectangulaires, enterrés, posés ou surélevés, aux Eurocodes.",
     longDescription: "Pré-dimensionne les réservoirs en béton armé selon l'Eurocode 2 (EN 1992-1-1) et l'EN 1992-3 : formes cylindrique ou rectangulaire, implantations enterrée, semi-enterrée, posée au sol ou surélevée. Actions du liquide (EN 1991-4), poussée des terres K0/Ka avec nappe et surcharge, sous-pression ; parois calculées par éléments finis (coque cylindrique, voiles plaques liés aux angles), liaison voile-radier encastrée, articulée ou glissante, moment de continuité avec le radier reporté en pied de voile. Étanchéité par classe 0 à 3 (wk1 selon hD/h, zone comprimée minimale), déformations gênées au jeune âge (annexe M), gradient thermique, radier, fond surélevé et couverture (flexion, effort tranchant, flèche), soulèvement, portance, glissement ; séisme (EN 1998-4 : masses impulsive et convective, ballottement, poussée dynamique) et vent. Choix des barres dans une série de diamètres, verdict CONFORME / NON CONFORME / NON VÉRIFIÉ, projets à plusieurs ouvrages, note de calcul, 2 plans A3 (SVG, DXF, PDF), nomenclature et métrés ; efforts transmis à la tour pour un réservoir surélevé. Non couverts : voiles de refend, ouvertures, poteaux de couverture, joints ; résultats de pré-dimensionnement à valider par un ingénieur structure.",
     categorySlug: "ponts-dalots-reservoirs",
-    isFree: true,
+    priceMonthly: 50000,
+    priceAnnual: 500000,
+    isFree: false,
     isNew: true,
     isPopular: true,
     appUrl: "/apps/reservoirs",
+    paiementEnLigne: true,
     icon: "Droplet",
     tags: ["Réservoir", "Château d'eau", "Étanchéité", "EC2", "EN 1992-3", "DXF"],
   },

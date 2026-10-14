@@ -221,6 +221,24 @@ export default async function ApplicationDetailPage({ params }: Props) {
                       Application bientôt disponible
                     </button>
                   )
+                ) : app.paiementEnLigne ? (
+                  // App payante, abonnement en ligne (CinetPay) ; démonstration libre
+                  <>
+                    {(["mensuel", "annuel"] as const).filter(f => (f === "mensuel" ? hasMonthly : hasAnnual)).map(f => (
+                      <form key={f} action="/api/paiement/initier" method="post">
+                        <input type="hidden" name="application" value={app.slug} />
+                        <input type="hidden" name="formule" value={f} />
+                        <button type="submit" className={f === "annuel" ? "btn-primary w-full" : "btn-secondary w-full"}>
+                          {f === "mensuel" ? `S'abonner 1 mois — ${formatPrice(app.priceMonthly!)}` : `S'abonner 1 an — ${formatPrice(app.priceAnnual!)}`}
+                        </button>
+                      </form>
+                    ))}
+                    {app.appUrl && (
+                      <Link href={app.appUrl} className="btn-secondary w-full">
+                        Essayer la démonstration
+                      </Link>
+                    )}
+                  </>
                 ) : (
                   // App payante
                   <>
@@ -246,7 +264,9 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 <p>
                   {app.isFree
                     ? "✅ Utilisation libre, sans inscription"
-                    : "✅ Accès ouvert sur demande"}
+                    : app.paiementEnLigne
+                      ? "✅ Paiement Mobile Money ou carte (CinetPay), prix TTC, accès immédiat, sans reconduction automatique"
+                      : "✅ Accès ouvert sur demande"}
                 </p>
                 <p>✅ Support en français</p>
                 <p>✅ Mises à jour incluses</p>

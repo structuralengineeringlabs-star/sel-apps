@@ -15,6 +15,7 @@ export default function Header() {
     { label: "Tarifs", href: "/tarifs" },
     { label: "Documentation", href: "/documentation" },
     { label: "Contact", href: "/contact" },
+    { label: "Mon compte", href: "/compte" },
   ];
 
   return (
