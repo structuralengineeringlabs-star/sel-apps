@@ -113,12 +113,14 @@ export const applications: Application[] = [
     id: 7,
     slug: "corbeaux",
     name: "Calcul des corbeaux",
-    shortDescription: "Calcule les corbeaux (consoles courtes) en béton armé selon l'EC2.",
-    longDescription: "Calcule les corbeaux (consoles courtes) dans les bâtiments et ouvrages d'art en béton armé selon l'Eurocode 2 (EN 1992-1-1) : modèle bielles-tirants, répartition des contraintes de compression (σc) et de traction dans les aciers (σs), calcul de la charge appliquée (P) et de la réaction (R), dimensionnement du ferraillage en fonction de la géométrie (a, h) et de l'effort tranchant (VEd).",
+    shortDescription: "Dimensionne les corbeaux (consoles courtes) en béton armé selon l'EC2 : modèle bielles-tirants, ancrages, ELS.",
+    longDescription: "Dimensionne et vérifie les corbeaux en béton armé selon l'Eurocode 2 (EN 1992-1-1, annexe J.3 et §6.5) : corbeau simple ou double (symétrique, chargement éventuellement dissymétrique), charge verticale et effort horizontal, poids propre. Modèle bielles-tirants : zone comprimée à la face d'appui, bras de levier, inclinaison de la bielle, nœuds sous la plaque et à la face, tirant. Cadres horizontaux ou verticaux (J.3(2), J.3(3)), ancrages dans le corbeau (barre soudée ou boucles) et dans le poteau, effort tranchant, contraintes et fissuration à l'ELS. Éditeur de géométrie coté, projets à plusieurs corbeaux, note de calcul structurée, plan A3 SVG et DXF, nomenclature, métré et guide d'utilisation PDF.",
     categorySlug: "batiments",
     isFree: true,
+    isNew: true,
+    appUrl: "/apps/corbeaux",
     icon: "CornerDownRight",
-    tags: ["Corbeau", "Console", "Bielles-tirants", "EC2"],
+    tags: ["Corbeau", "Console courte", "Bielles-tirants", "EC2", "DXF"],
   },
 
   // === PONTS, DALOTS & RÉSERVOIRS ===

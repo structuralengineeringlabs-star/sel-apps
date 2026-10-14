@@ -14,6 +14,20 @@ export type Guide = {
 
 export const guides: Guide[] = [
   {
+    slug: "corbeaux",
+    appSlug: "corbeaux",
+    title: "Corbeaux aux Eurocodes — Guide d'utilisation",
+    description:
+      "Prise en main complète : géométrie et charges, éditeur coté, corbeau simple ou double, matériaux et choix de l'ancrage (barre soudée ou boucles), lecture du modèle bielles-tirants, du ferraillage, des ELS et des vérifications, note de calcul, plan A3 et DXF, nomenclature. Illustré de captures d'écran.",
+    pdfUrl: "/docs/guides/Guide_utilisateur_Corbeaux_Eurocodes.pdf",
+    sizeLabel: "1,2 Mo",
+    pages: 15,
+    version: "1.0.0",
+    updated: "octobre 2026",
+    appUrl: "/apps/corbeaux",
+    topics: ["EC2 annexe J.3", "Bielles-tirants", "Corbeau double", "Ancrages", "DXF", "Note PDF"],
+  },
+  {
     slug: "escaliers",
     appSlug: "escaliers",
     title: "Dimensionnement des escaliers — Guide d'utilisation",

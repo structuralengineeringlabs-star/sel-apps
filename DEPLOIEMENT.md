@@ -15,6 +15,7 @@ Les applications Vite sont construites avec la base de leur dossier, puis copié
 | Escaliers (béton armé, acier, bois) | `npx vite build --base /tools/escaliers/ --outDir dist-sel` | `public/tools/escaliers/` |
 | Château d'eau (cuve BA, acier, PEHD) | `npx vite build --base /tools/chateau-eau/ --outDir dist-sel` | `public/tools/chateau-eau/` |
 | Plancher à corps creux (béton armé) | `npx vite build --base /tools/plancher-corps-creux/ --outDir dist-sel` | `public/tools/plancher-corps-creux/` |
+| Corbeaux (béton armé) | `npx vite build --base /tools/corbeaux/ --outDir dist-sel` | `public/tools/corbeaux/` |
 
 Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
 `assets/*` changent à chaque construction), mettre à jour si besoin la fiche dans `data/applications.ts`, puis :
@@ -34,6 +35,10 @@ Ne déposer aucun fichier de construction à la racine du dépôt : seul `public
 
 Guide PDF des poutres : `npm run guide` dans le projet poutres, puis copier
 `docs/manuel/Guide_utilisateur_Poutres_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
+(version, taille, pages).
+
+Guide PDF des corbeaux : `npm run guide` dans le projet Calcul-Corbeaux, puis copier
+`docs/manuel/Guide_utilisateur_Corbeaux_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
 (version, taille, pages).
 
 Guide PDF du plancher à corps creux : `npm run guide` dans le projet Plancher-corps-creux, puis copier
@@ -61,3 +66,4 @@ la nouvelle.
 | Poutres | `structuralengineeringlabs-star/Calculs-Poutres` (privé) |
 | Château d'eau | `structuralengineeringlabs-star/Chateau-Eau` (privé) |
 | Plancher à corps creux | `structuralengineeringlabs-star/Plancher-corps-creux` (privé) |
+| Corbeaux | `structuralengineeringlabs-star/Calcul-Corbeaux` (privé) |
