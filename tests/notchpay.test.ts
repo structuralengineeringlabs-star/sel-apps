@@ -26,7 +26,8 @@ describe("Notch Pay : API", () => {
   });
   it("lecture : complete → ACCEPTED ; failed/canceled/expired → REFUSED ; pending → attente", async () => {
     const lire = (status: string) => verifierNotch("trx.abc", async () => json({ transaction: { status, amount: 50000, currency: "XAF", payment_method: "cm.mtn" } }, 202));
-    expect(await lire("complete")).toMatchObject({ statut: "ACCEPTED", montant: 50000, devise: "XAF", methode: "cm.mtn" });
+    expect(await lire("complete")).toMatchObject({ statut: "ACCEPTED", montant: 50000, devise: "XAF", methode: "MTN Mobile Money" });
+    expect((await verifierNotch("trx.abc", async () => json({ transaction: { status: "complete", amount: 1, currency: "XAF", payment_method: "pm.test_zbY" } }))).methode).toBeNull();
     for (const s of ["failed", "canceled", "expired"]) expect((await lire(s)).statut).toBe("REFUSED");
     expect((await lire("pending")).statut).toBe("PENDING");
   });

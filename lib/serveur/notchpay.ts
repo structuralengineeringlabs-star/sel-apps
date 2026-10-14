@@ -41,16 +41,23 @@ export async function initialiserNotch(d: DemandeInit, f: typeof fetch = fetch):
   return { paymentUrl: j.authorization_url, reference: j.transaction.reference };
 }
 
+/** Canal lisible (« cm.mtn » → « MTN Mobile Money ») ; les identifiants internes (« pm.… ») ne sont pas affichés. */
+const CANAUX: Record<string, string> = { mtn: "MTN Mobile Money", orange: "Orange Money", wave: "Wave", airtel: "Airtel Money", mpesa: "M-Pesa", card: "carte bancaire", mobile: "Mobile Money" };
+export function libelleCanal(c: string | null | undefined): string | null {
+  if (!c || /^pm[._]/i.test(c)) return null;
+  const op = c.toLowerCase().split(".").pop() ?? "";
+  return CANAUX[op] ?? c;
+}
+
 const ECHEC = new Set(["failed", "canceled", "cancelled", "expired", "rejected", "abandoned", "refunded"]);
 /** Lit la transaction chez Notch Pay et la ramène au format commun (ACCEPTED, REFUSED ou statut d'attente). */
 export async function verifierNotch(reference: string, f: typeof fetch = fetch): Promise<Verification> {
   const { cle } = configurationNotch();
   const r = await f(`${API()}/payments/${encodeURIComponent(reference)}`, { headers: ENTETES(cle) });
-  const j = await r.json().catch(() => ({})) as { transaction?: { status?: string; amount?: number | string; currency?: string; payment_method?: string | { channel?: string; name?: string } | null } };
+  const j = await r.json().catch(() => ({})) as { transaction?: { status?: string; amount?: number | string; currency?: string; channel?: string; payment_method?: string | { channel?: string; name?: string } | null } };
   const t = j.transaction;
   const s = String(t?.status ?? "").toLowerCase();
-  const pm = t?.payment_method;
-  const methode = typeof pm === "string" ? pm : pm?.channel ?? pm?.name ?? null;
+  const methode = libelleCanal(t?.channel ?? (typeof t?.payment_method === "object" ? t?.payment_method?.channel ?? t?.payment_method?.name : t?.payment_method));
   return {
     code: String(r.status), statut: s === "complete" ? "ACCEPTED" : ECHEC.has(s) ? "REFUSED" : (s || "INCONNU").toUpperCase(),
     montant: Number(t?.amount ?? NaN), devise: String(t?.currency ?? "").toUpperCase(), methode, brut: j,
