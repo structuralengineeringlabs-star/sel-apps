@@ -9,7 +9,7 @@ Statut : ✅ fait et vérifié · 🔑 action du titulaire des comptes · ⏳ à
 
 | N° | Constat | Suite |
 |---|---|---|
-| C1 | `CRON_SECRET` absent : rappels J-7 / J-1 jamais envoyés | 🔑 variable à créer (valeur aléatoire, Production et Preview) |
+| C1 | `CRON_SECRET` absent : rappels J-7 / J-1 jamais envoyés | 🔑 variable à créer (valeur aléatoire, Production et Preview) ; en attendant, erreur explicite dans les journaux |
 | C2 | Bouton Google affiché sans configuration | ✅ masqué tant que `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` manquent |
 | C3 | Paiement d'essai dans la base de production | ✅ marqué « essai » ; ⏳ purge depuis `/admin` avant le lancement |
 | C4 | Réservoirs absent de `/tarifs` | Infirmé : la table est tirée du catalogue. Mais la page promettait carte bancaire, virement, résiliation et changement de formule : ✅ textes corrigés |
@@ -32,7 +32,7 @@ Statut : ✅ fait et vérifié · 🔑 action du titulaire des comptes · ⏳ à
 
 Recette locale de bout en bout : 37 contrôles sur 37 (démonstration bridée, accès protégé, CGV obligatoires,
 paiement, notification falsifiée refusée, notification répétée sans double prolongation, reçu, édition complète,
-administration, export, activation manuelle, purge protégée, déconnexion). Tests automatiques : 34 sur 34.
+administration, export, activation manuelle, purge protégée, déconnexion). Tests automatiques : 38 sur 38 (dont la route de notification Notch Pay : signature absente, fausse, valide).
 
 ## Reste à faire
 
