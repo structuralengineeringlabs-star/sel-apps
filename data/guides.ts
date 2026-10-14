@@ -22,7 +22,7 @@ export const guides: Guide[] = [
     pdfUrl: "/docs/guides/Guide_utilisateur_Corbeaux_Eurocodes.pdf",
     sizeLabel: "1,2 Mo",
     pages: 16,
-    version: "1.3.0",
+    version: "1.3.1",
     updated: "octobre 2026",
     appUrl: "/apps/corbeaux",
     topics: ["EC2 annexe J.3", "Bielles-tirants", "Corbeau double", "Ancrages", "DXF", "Note PDF"],
