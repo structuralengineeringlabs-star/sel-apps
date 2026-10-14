@@ -3,6 +3,7 @@ import { baseDeTest } from "./base";
 import { creerPaiement, synchroniserPaiement, abonnementActif, activerManuellement, purgerEssais, purgerAbandons, paiementsAdmin, TropDeCommandes, LIMITE_COMMANDES } from "@/lib/serveur/abonnements";
 import { utilisateurPourEmail } from "@/lib/serveur/session";
 import { estAdmin, ligneCsv } from "@/lib/serveur/admin";
+import { sslStrict } from "@/lib/serveur/db";
 import { offre, tarifEssai, estPays, PAYS } from "@/lib/offres";
 import type { Verification } from "@/lib/serveur/cinetpay";
 import type { PGlite } from "@electric-sql/pglite";
@@ -22,6 +23,14 @@ describe("offres : pays, devises, tarif d'essai", () => {
     process.env.TARIF_ESSAI = "abc"; expect(tarifEssai()).toBeNull();
     delete process.env.TARIF_ESSAI;
     expect(offre("reservoirs", "annuel")).toMatchObject({ montant: 500000, essai: false });
+  });
+});
+
+describe("base de données", () => {
+  it("sslmode=require → verify-full (même sécurité, sans avertissement) ; autres paramètres conservés", () => {
+    expect(sslStrict("postgres://u:p@h/db?sslmode=require&channel_binding=require")).toBe("postgres://u:p@h/db?sslmode=verify-full&channel_binding=require");
+    expect(sslStrict("postgres://u:p@h/db?a=1&sslmode=prefer")).toBe("postgres://u:p@h/db?a=1&sslmode=verify-full");
+    expect(sslStrict("postgres://u:p@h/db")).toBe("postgres://u:p@h/db");
   });
 });
 

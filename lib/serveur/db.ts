@@ -17,8 +17,11 @@ let remplacant: Executeur | null = null;
 function urlBase(): string {
   const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
   if (!url) throw new Error("DATABASE_URL absente : connecter la base Postgres au projet Vercel.");
-  return url;
+  return sslStrict(url);
 }
+
+/** Vérification complète du certificat demandée explicitement (comportement actuel de pg, sans l'avertissement associé). */
+export const sslStrict = (url: string) => url.replace(/([?&]sslmode=)(prefer|require|verify-ca)\b/, "$1verify-full");
 
 const surClient = (c: PoolClient): Executeur => ({
   requete: async <T extends Ligne>(t: string, v?: unknown[]) => (await c.query(t, v)).rows as T[],

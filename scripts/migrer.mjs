@@ -12,7 +12,7 @@ if (!url) {
   if (process.argv.includes("--facultatif")) { console.log("Pas de base configurée : migration ignorée."); process.exit(0); }
   console.error("DATABASE_URL absente."); process.exit(1);
 }
-const client = new pg.Client({ connectionString: url });
+const client = new pg.Client({ connectionString: url.replace(/([?&]sslmode=)(prefer|require|verify-ca)\b/, "$1verify-full") });
 await client.connect();
 await client.query(readFileSync(new URL("../db/schema.sql", import.meta.url), "utf8"));
 const { rows } = await client.query("select table_name from information_schema.tables where table_schema = 'public' order by 1");
