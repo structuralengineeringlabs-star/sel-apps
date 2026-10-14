@@ -24,7 +24,7 @@ Statut : ✅ fait et vérifié · ⏳ fait, à vérifier après la fusion sur `m
 | `contact@sel-apps.com` partout (en-tête, pied de page, contact, reçu, mentions, confidentialité) | ✅ |
 | Pied de page des PDF générés | ✅ |
 | E-mails automatiques : réponse vers `contact@sel-apps.com` (`reply_to`) | ✅ |
-| Notification CinetPay sur `preview.sel-apps.com` malgré la protection Vercel (secret de contournement) | ✅ (🔑 activer le secret) |
+| Notification CinetPay sur `preview.sel-apps.com` malgré la protection Vercel (secret de contournement) | ✅ (secret actif) |
 | En-tête HSTS explicite | ✅ |
 | Test de non-régression : aucune ancienne adresse dans le code (`tests/domaine.test.ts`) | ✅ |
 
@@ -33,8 +33,11 @@ Statut : ✅ fait et vérifié · ⏳ fait, à vérifier après la fusion sur `m
 | Enregistrement | Statut |
 |---|---|
 | `_dmarc` en observation (`p=none`, rapports vers `contact@`) | ✅ créé |
-| Vérification Zoho (TXT), MX Zoho, SPF, DKIM Zoho | 🔑 valeurs à fournir par Zoho (centre de données .com ou .eu) |
-| Domaine d'envoi Resend (`send`, `resend._domainkey`) | 🔑 valeurs à fournir par Resend |
+| Vérification Zoho (TXT), MX `mx/mx2/mx3.zoho.com`, SPF `include:zoho.com` | ✅ créés |
+| DKIM Zoho (`zmail._domainkey`) | 🔑 valeur à fournir par Zoho |
+| Domaine d'envoi Resend (`send`, `rsend`, `resend._domainkey`, eu-west-1, sans suivi des clics ni des ouvertures) | ✅ vérifié par Resend |
+| `EMAIL_EXPEDITEUR`, `RESEND_API_KEY` (production et prévisualisation) | ✅ |
+| Base Neon reliée ; schéma appliqué automatiquement (`vercel-build`) | ✅ |
 | Test de délivrabilité (mail-tester ≥ 9/10, SPF/DKIM/DMARC « pass » chez Gmail) | 🔑 après les deux lignes précédentes |
 
 ## Lot 4 — Connexion et paiement
