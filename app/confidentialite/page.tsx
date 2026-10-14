@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 text-gray-700 space-y-1 mt-2">
               <li><strong>Compte</strong> : adresse e-mail ; nom et identifiant Google si vous vous connectez avec Google.</li>
               <li><strong>Abonnements et paiements</strong> : application, formule, montant, date, référence de transaction et moyen de
-                paiement (Mobile Money ou carte). Les numéros de carte et codes Mobile Money sont saisis chez CinetPay : S.E.L. n&apos;y a
+                paiement (Mobile Money ou carte). Les numéros de carte et codes Mobile Money sont saisis chez le prestataire de paiement : S.E.L. n&apos;y a
                 jamais accès.</li>
               <li><strong>Connexion</strong> : sessions (empreinte du jeton, dates) et liens de connexion à usage unique.</li>
               <li><strong>Messages</strong> que vous nous adressez par e-mail ou WhatsApp.</li>
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 text-gray-700 space-y-1 mt-2">
               <li>Vercel Inc. (hébergement du site, États-Unis) ;</li>
               <li>Neon Inc. (base de données des comptes et paiements) ;</li>
-              <li>CinetPay (paiement, Côte d&apos;Ivoire) ;</li>
+              <li>Notch Pay (paiement, Cameroun) et CinetPay (paiement, Côte d&apos;Ivoire) ;</li>
               <li>Google (connexion avec un compte Google, si vous la choisissez) ;</li>
               <li>Resend (envoi des e-mails automatiques) et Zoho (messagerie de contact).</li>
             </ul>

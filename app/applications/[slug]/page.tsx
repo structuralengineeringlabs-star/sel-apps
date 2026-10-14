@@ -222,7 +222,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                     </button>
                   )
                 ) : app.paiementEnLigne ? (
-                  // App payante, abonnement en ligne (CinetPay) ; démonstration libre
+                  // App payante, abonnement en ligne (Notch Pay ou CinetPay) ; démonstration libre
                   <>
                     {(["mensuel", "annuel"] as const).filter(f => (f === "mensuel" ? hasMonthly : hasAnnual)).map(f => (
                       <form key={f} action="/api/paiement/initier" method="post">
@@ -265,7 +265,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                   {app.isFree
                     ? "✅ Utilisation libre, sans inscription"
                     : app.paiementEnLigne
-                      ? "✅ Paiement Mobile Money ou carte (CinetPay), prix TTC, accès immédiat, sans reconduction automatique"
+                      ? "✅ Paiement sécurisé par Mobile Money (MTN, Orange), prix TTC, accès immédiat, sans reconduction automatique"
                       : "✅ Accès ouvert sur demande"}
                 </p>
                 <p>✅ Support en français</p>

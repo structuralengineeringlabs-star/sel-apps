@@ -48,7 +48,7 @@ export default function CGVPage() {
               <li>Virement bancaire (sur demande)</li>
             </ul>
             <p className="text-gray-700 mt-2">
-              Les paiements en ligne sont traités par CinetPay ; S.E.L. ne reçoit ni ne conserve
+              Les paiements en ligne sont traités par un prestataire agréé (Notch Pay ou CinetPay) ; S.E.L. ne reçoit ni ne conserve
               aucune donnée de carte ou de compte Mobile Money. Un abonnement mensuel donne accès à
               l&apos;application pendant 30 jours, un abonnement annuel pendant 365 jours, à compter
               du paiement ou de la fin de l&apos;abonnement en cours. Il n&apos;y a pas de reconduction

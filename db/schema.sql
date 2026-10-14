@@ -66,3 +66,8 @@ create table if not exists rappels (
   envoye_le       timestamptz not null default now(),
   primary key (utilisateur_id, application, fin, type)
 );
+
+-- Prestataire de paiement (v2 : Notch Pay en plus de CinetPay) et référence de la transaction chez le prestataire
+alter table paiements add column if not exists prestataire text not null default 'cinetpay';
+alter table paiements add column if not exists ref_prestataire text;
+create index if not exists paiements_ref_prestataire on paiements (ref_prestataire);

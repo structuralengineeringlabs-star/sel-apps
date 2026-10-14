@@ -74,7 +74,7 @@ Guide PDF des escaliers : `npm run guide` dans le projet escaliers, puis copier
 
 En cas de problème : Vercel → projet `sel-apps` → Deployments → déploiement précédent → « Promote to Production ».
 
-## Applications payantes (abonnement CinetPay)
+## Applications payantes (abonnement Notch Pay ou CinetPay)
 
 Une application est vendue en ligne quand sa fiche de `data/applications.ts` porte `paiementEnLigne: true`, `isFree: false`
 et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd'hui : **Réservoirs** seulement.
@@ -91,9 +91,12 @@ et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd
 | `DATABASE_URL` (ou `POSTGRES_URL`) | base Postgres (intégration Neon de Vercel) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | connexion Google ; URI de redirection autorisées : `https://sel-apps.com/api/auth/google/rappel` et `https://preview.sel-apps.com/api/auth/google/rappel` |
 | `RESEND_API_KEY`, `EMAIL_EXPEDITEUR` | liens de connexion, confirmations et rappels ; expéditeur `S.E.L. Applications <no-reply@sel-apps.com>`, réponses vers `contact@sel-apps.com` |
-| `CINETPAY_API_KEY`, `CINETPAY_SITE_ID`, `CINETPAY_SECRET_KEY` | paiement (tableau de bord CinetPay → Intégrations) |
+| `NOTCHPAY_PUBLIC_KEY` | paiement Notch Pay (Business suite → Settings → API Keys : clé publique `pk_test_…` en Preview, clé réelle en Production) ; sa présence fait de Notch Pay le prestataire actif |
+| `NOTCHPAY_HASH` | clé « Hash » du point de notification Notch Pay (signature `x-notch-signature`) |
+| `PAIEMENT_PRESTATAIRE` (facultatif) | `notchpay` ou `cinetpay` pour forcer le choix |
+| `CINETPAY_API_KEY`, `CINETPAY_SITE_ID`, `CINETPAY_SECRET_KEY` | paiement CinetPay (tableau de bord CinetPay → Intégrations), si utilisé |
 | `CRON_SECRET` | protège `/api/cron/rappels` (rappels J-7 et J-1, tous les jours à 7 h UTC, `vercel.json`) |
-| `CINETPAY_URL_BASE` (facultatif) | autre adresse de l'API, pour les essais |
+| `CINETPAY_URL_BASE`, `NOTCHPAY_URL_BASE` (facultatifs) | autre adresse d'API, pour les essais |
 | `NEXT_PUBLIC_SITE_URL` (facultatif) | remplace l'adresse de référence `https://sel-apps.com` |
 | `VERCEL_AUTOMATION_BYPASS_SECRET` (créée par Vercel) | Settings → Deployment Protection → *Protection Bypass for Automation* : laisse passer la notification CinetPay sur `preview.sel-apps.com` |
 
@@ -103,7 +106,11 @@ Aucune clé ne doit figurer dans le dépôt.
 
 1. Base Neon reliée au projet (intégration Vercel, mêmes variables en production et en prévisualisation) ; le schéma
    (`db/schema.sql`, idempotent) est appliqué automatiquement avant chaque construction (`vercel-build`).
-2. Dans CinetPay, site `https://sel-apps.com`, URL de notification : `https://sel-apps.com/api/paiement/notification`
+2. Dans Notch Pay (Settings → Webhooks), adresse de notification `https://sel-apps.com/api/paiement/notchpay`
+   (prévisualisation : `https://preview.sel-apps.com/api/paiement/notchpay?x-vercel-protection-bypass=<secret de
+   Deployment Protection>`), événements `payment.*` ; sans notification, le paiement est tout de même confirmé au retour
+   du client (lecture de la transaction par l'API).
+   Dans CinetPay, le cas échéant : site `https://sel-apps.com`, URL de notification : `https://sel-apps.com/api/paiement/notification`
    (elle est aussi transmise à chaque paiement) ; URL de retour : `https://sel-apps.com/api/paiement/retour`.
 3. Faire un paiement réel de faible montant sur `preview.sel-apps.com`, vérifier le reçu (`/compte`),
    l'accès à l'édition complète et la ligne de la table `paiements`.

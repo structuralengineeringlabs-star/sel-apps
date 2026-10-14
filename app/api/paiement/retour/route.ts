@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { baseUrl } from "@/lib/serveur/securite";
 
-/** Retour du client depuis le guichet CinetPay (GET ou POST) : page d'état du paiement. */
+/** Retour du client depuis la page de paiement (Notch Pay ou CinetPay, GET ou POST) : page d'état du paiement. */
 async function retour(req: Request) {
   const t = new URL(req.url).searchParams.get("transaction") ?? "";
   const ok = /^SEL[A-Z0-9]{6,40}$/.test(t);

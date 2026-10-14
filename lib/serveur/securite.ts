@@ -24,7 +24,7 @@ export function origineSure(req: Request): boolean {
 }
 
 /**
- * Adresse de notification CinetPay. Sur un déploiement de prévisualisation protégé par Vercel, le secret de
+ * Adresse de notification CinetPay (Notch Pay : adresse fixe déclarée dans son tableau de bord). Sur un déploiement de prévisualisation protégé par Vercel, le secret de
  * contournement « automatisation » (VERCEL_AUTOMATION_BYPASS_SECRET) est ajouté pour que la notification atteigne le site.
  */
 export function urlNotification(base: string): string {

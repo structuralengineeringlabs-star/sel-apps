@@ -7,6 +7,7 @@ import { utilisateurPourEmail } from "@/lib/serveur/session";
 import { offre } from "@/lib/offres";
 import type { PGlite } from "@electric-sql/pglite";
 
+delete process.env.NOTCHPAY_PUBLIC_KEY; process.env.PAIEMENT_PRESTATAIRE = "cinetpay";
 process.env.CINETPAY_API_KEY = "cle"; process.env.CINETPAY_SITE_ID = "123"; process.env.CINETPAY_SECRET_KEY = "secret";
 
 const champs = { cpm_site_id: "123", cpm_trans_id: "SELX1", cpm_trans_date: "2026-10-14 12:00:00", cpm_amount: "50000", cpm_currency: "XAF", signature: "abc", payment_method: "OM",

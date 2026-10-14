@@ -8,13 +8,14 @@ import { applications } from "@/data/applications";
 import { LIBELLES } from "@/lib/offres";
 import { formatPrice } from "@/lib/utils";
 import { CONTACT } from "@/lib/contact";
+import { nomPrestataire } from "@/lib/serveur/prestataires";
 import BoutonImprimer from "./BoutonImprimer";
 
 export const metadata: Metadata = { title: "Paiement", robots: { index: false } };
 type Props = { params: Promise<{ transaction: string }> };
 const date = (d: Date) => new Date(d).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short", timeZone: "Africa/Douala" });
 
-/** État d'un paiement ; s'il est encore en attente, le statut est vérifié auprès de CinetPay (notification retardée). */
+/** État d'un paiement ; s'il est encore en attente, le statut est vérifié auprès du prestataire (notification retardée). */
 export default async function PaiementPage({ params }: Props) {
   const { transaction } = await params;
   const u = await utilisateurCourant();
@@ -41,7 +42,7 @@ export default async function PaiementPage({ params }: Props) {
             <tr><td className="py-1 text-gray-500">Client</td><td>{u.nom ? `${u.nom} — ` : ""}{u.email}</td></tr>
             <tr><td className="py-1 text-gray-500">Date du paiement</td><td>{p.paye_le ? date(p.paye_le) : "—"}</td></tr>
             <tr><td className="py-1 text-gray-500">Désignation</td><td>{app?.name} — {LIBELLES[p.formule]}</td></tr>
-            <tr><td className="py-1 text-gray-500">Moyen de paiement</td><td>CinetPay{p.methode ? ` (${p.methode})` : ""}</td></tr>
+            <tr><td className="py-1 text-gray-500">Moyen de paiement</td><td>{nomPrestataire(p.prestataire)}{p.methode ? ` (${p.methode})` : ""}</td></tr>
             <tr><td className="py-1 text-gray-500">Référence de transaction</td><td className="font-mono">{p.transaction_id}</td></tr>
             <tr className="border-t border-gray-200"><td className="py-2 font-bold">Montant TTC</td><td className="font-bold">{formatPrice(p.montant)}</td></tr>
           </tbody></table>
