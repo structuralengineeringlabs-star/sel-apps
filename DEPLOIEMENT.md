@@ -101,7 +101,8 @@ Aucune clé ne doit figurer dans le dépôt.
 
 ### Mise en service
 
-1. Créer la base, puis `DATABASE_URL=… npm run db:migrer` (script idempotent, `db/schema.sql`).
+1. Base Neon reliée au projet (intégration Vercel, mêmes variables en production et en prévisualisation) ; le schéma
+   (`db/schema.sql`, idempotent) est appliqué automatiquement avant chaque construction (`vercel-build`).
 2. Dans CinetPay, site `https://sel-apps.com`, URL de notification : `https://sel-apps.com/api/paiement/notification`
    (elle est aussi transmise à chaque paiement) ; URL de retour : `https://sel-apps.com/api/paiement/retour`.
 3. Faire un paiement réel de faible montant sur `preview.sel-apps.com`, vérifier le reçu (`/compte`),
