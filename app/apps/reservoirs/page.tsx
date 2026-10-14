@@ -16,6 +16,12 @@ export default async function ReservoirsPage() {
   const src = fin ? "/outils/reservoirs/index.html" : "/tools/reservoirs/index.html";
   return (
     <div className="space-y-3">
+      {fin && (
+        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
+          <strong>Édition complète</strong> — abonnement actif jusqu&apos;au {fin.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}.{" "}
+          <Link href="/compte" className="underline">Mon compte</Link>
+        </div>
+      )}
       {!fin && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-sel/30 bg-white px-4 py-3 text-sm">
           <span>Vous utilisez la <strong>démonstration</strong>. {u ? "Abonnez-vous pour débloquer toutes les dimensions, la note de calcul et les plans." : "Déjà abonné ? Connectez-vous pour ouvrir l'édition complète."}</span>
