@@ -16,7 +16,7 @@ export async function envoyerConfirmation(r: ResultatSynchro, envoyer = envoyerC
   const app = nomApp(r.application), url = `${SITE_URL}/apps/${r.application}`;
   await envoyer({ a: u.email, sujet: `Abonnement activé : ${app}`,
     texte: `Votre paiement est confirmé (reçu ${r.numeroRecu}). Accès à ${app} jusqu'au ${date(r.fin)} : ${url}`,
-    html: gabarit(`Abonnement activé : ${app}`, `Votre paiement est confirmé (reçu ${r.numeroRecu}). Votre accès est ouvert jusqu'au ${date(r.fin)}.`, { texte: "Ouvrir l'application", url }, "Le reçu est disponible dans votre compte.") });
+    html: gabarit(`Abonnement activé : ${app}`, `Votre paiement est confirmé (reçu ${r.numeroRecu}). Votre accès est ouvert jusqu'au ${date(r.fin)}.`, { texte: "Ouvrir l'application", url }, `Le reçu est disponible dans votre compte. Sur un autre appareil, connectez-vous avec cette adresse (${u.email}) : ${SITE_URL}/connexion`) });
 }
 
 /** Envoie les rappels dus (une seule fois par échéance et par type). Renvoie le nombre de courriels envoyés. */

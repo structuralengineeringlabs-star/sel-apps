@@ -4,8 +4,11 @@ import { CheckCircle, ArrowLeft, Download, Calendar, Clock } from "lucide-react"
 import { getApplicationBySlug, applications } from "@/data/applications";
 import { categories } from "@/data/categories";
 import { formatPrice } from "@/lib/utils";
-import { offre, tarifEssai, PAYS } from "@/lib/offres";
+import { offre, tarifEssai } from "@/lib/offres";
 import * as Icons from "lucide-react";
+import { Suspense } from "react";
+import PortailAbonnement from "@/components/PortailAbonnement";
+import { nomPrestataire, prestataireActif } from "@/lib/serveur/prestataires";
 
 // Description de 160 caractères au plus, coupée sur un mot
 function resumer(long: string, court: string): string {
@@ -230,33 +233,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                         Tarif d&apos;essai temporaire : {formatPrice(tarifEssai()!)} quelle que soit la formule.
                       </p>
                     )}
-                    <form id="souscrire" action="/api/paiement/initier" method="post" className="space-y-3 text-sm">
-                      <input type="hidden" name="application" value={app.slug} />
-                      <fieldset className="space-y-2">
-                        <legend className="font-semibold text-gray-700 mb-1">Formule</legend>
-                        {(["annuel", "mensuel"] as const).filter(f => offre(app.slug, f)).map(f => (
-                          <label key={f} className="flex items-center gap-2 rounded-md border border-gray-200 px-3 py-2 cursor-pointer has-[:checked]:border-sel has-[:checked]:bg-sel/5">
-                            <input type="radio" name="formule" value={f} defaultChecked={f === "annuel"} required />
-                            <span className="flex-1">{f === "annuel" ? "1 an (365 jours)" : "1 mois (30 jours)"}</span>
-                            <strong>{formatPrice(offre(app.slug, f)!.montant, "F CFA")}</strong>
-                          </label>
-                        ))}
-                      </fieldset>
-                      <label className="block">
-                        <span className="font-semibold text-gray-700">Pays de paiement</span>
-                        <select name="pays" defaultValue="CM" className="mt-1 w-full h-10 rounded-md border border-gray-300 px-2">
-                          {(Object.keys(PAYS) as (keyof typeof PAYS)[]).map(k => (
-                            <option key={k} value={k}>{PAYS[k].nom} — {PAYS[k].devise}</option>
-                          ))}
-                        </select>
-                        <span className="mt-1 block text-xs text-gray-500">Cameroun : MTN, Orange Money · Côte d&apos;Ivoire : MTN, Orange Money, Wave · Sénégal : Wave, Orange Money, Free Money</span>
-                      </label>
-                      <label className="flex items-start gap-2 text-xs text-gray-600">
-                        <input type="checkbox" name="cgv" value="oui" required className="mt-0.5" />
-                        <span>J&apos;accepte les <Link href="/cgv" className="underline">conditions générales de vente</Link>. L&apos;accès étant ouvert dès le paiement, <strong>aucun remboursement</strong> n&apos;est possible ; la démonstration permet d&apos;essayer avant d&apos;acheter.</span>
-                      </label>
-                      <button type="submit" className="btn-primary w-full">Payer et accéder à l&apos;application</button>
-                    </form>
+                    <a href="#souscrire" className="btn-primary w-full">S&apos;abonner</a>
                     {app.appUrl && (
                       <Link href={app.appUrl} className="btn-secondary w-full">
                         Essayer la démonstration
@@ -298,6 +275,20 @@ export default async function ApplicationDetailPage({ params }: Props) {
             </div>
           </aside>
         </div>
+
+        {app.paiementEnLigne && !app.isFree && (
+          <section id="souscrire" className="mt-14 scroll-mt-24">
+            <Suspense fallback={<div className="h-96 rounded-2xl bg-[#0a101c]" />}>
+              <PortailAbonnement
+                slug={app.slug} nom={app.name} appUrl={app.appUrl}
+                prix={{ mensuel: offre(app.slug, "mensuel")?.montant, annuel: offre(app.slug, "annuel")?.montant }}
+                essai={tarifEssai() !== null} prestataire={nomPrestataire(prestataireActif())}
+                google={!!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)}
+                avantages={app.avantages ?? []} demo={app.demo ?? []}
+              />
+            </Suspense>
+          </section>
+        )}
       </div>
     </article>
   );

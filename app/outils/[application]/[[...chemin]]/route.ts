@@ -4,9 +4,10 @@ import { utilisateurCourant } from "@/lib/serveur/session";
 import { abonnementActif } from "@/lib/serveur/abonnements";
 import { resoudre, typeDe } from "@/lib/serveur/fichiers-proteges";
 import { applications } from "@/data/applications";
+import { estAdmin } from "@/lib/serveur/admin";
 
 /**
- * Édition complète d'une application payante : servie uniquement à un abonné en cours de validité.
+ * Édition complète d'une application payante : servie uniquement à un abonné en cours de validité (ou à un administrateur).
  * Sinon, redirection vers la page de l'application (édition de démonstration et offres).
  */
 export async function GET(req: Request, ctx: { params: Promise<{ application: string; chemin?: string[] }> }) {
@@ -15,7 +16,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ application: st
   if (!app) return new NextResponse("Introuvable", { status: 404 });
   const u = await utilisateurCourant();
   const fin = u ? await abonnementActif(u.id, application) : null;
-  if (!fin) return NextResponse.redirect(new URL(`/apps/${application}`, req.url), 302);
+  // Administrateurs : aperçu de l'édition complète sans abonnement (contrôle côté serveur)
+  if (!fin && !estAdmin(u?.email)) return NextResponse.redirect(new URL(`/apps/${application}`, req.url), 302);
   const fichier = resoudre(application, chemin);
   if (!fichier) return new NextResponse("Introuvable", { status: 404 });
   try {

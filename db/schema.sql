@@ -75,3 +75,13 @@ create index if not exists paiements_ref_prestataire on paiements (ref_prestatai
 -- v3 : paiements d'essai (clés de test des prestataires), purgeables depuis l'administration
 alter table paiements add column if not exists essai boolean not null default false;
 update paiements set essai = true where not essai and (methode like 'pm.test%' or ref_prestataire like '%test%');
+
+-- v4 : achat sans connexion préalable et code de connexion à 6 chiffres
+-- Compte créé au moment d'un achat : adresse non vérifiée jusqu'à la première connexion (lien, code ou Google).
+alter table utilisateurs add column if not exists email_verifie boolean not null default true;
+-- Session ouverte au retour de paiement d'un achat sans compte ; révoquée quand l'adresse est vérifiée.
+alter table sessions add column if not exists invite boolean not null default false;
+-- Empreinte du jeton remis au navigateur qui a lancé l'achat (usage unique, effacée au retour).
+alter table paiements add column if not exists achat_hash text;
+alter table liens_connexion add column if not exists code_hash text;
+alter table liens_connexion add column if not exists essais integer not null default 0;

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { consommerLien } from "@/lib/serveur/lien-connexion";
-import { ouvrirSession, utilisateurPourEmail } from "@/lib/serveur/session";
+import { marquerVerifie, ouvrirSession, utilisateurPourEmail } from "@/lib/serveur/session";
 import { baseUrl, cheminSur, origineSure } from "@/lib/serveur/securite";
 
 /**
@@ -13,7 +13,9 @@ export async function POST(req: Request) {
   const jeton = String((await req.formData()).get("jeton") ?? "");
   const lien = jeton ? await consommerLien(jeton) : null;
   if (!lien) return NextResponse.redirect(new URL("/connexion?erreur=lien", base), 303);
-  await ouvrirSession(await utilisateurPourEmail(lien.email));
+  const id = await utilisateurPourEmail(lien.email);
+  await marquerVerifie(id);
+  await ouvrirSession(id);
   return NextResponse.redirect(new URL(cheminSur(lien.retour), base), 303);
 }
 /** Ancien format de lien (GET) : redirige vers la page de confirmation sans consommer le jeton. */

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const retourQ = `retour=${encodeURIComponent(retour)}`;
   try {
     const r = await demanderLien(email, retour, base);
-    if (r === "envoye") return NextResponse.redirect(new URL(`/connexion/verifier?email=${encodeURIComponent(email.trim().toLowerCase())}`, base), 303);
+    if (r === "envoye") return NextResponse.redirect(new URL(`/connexion/verifier?email=${encodeURIComponent(email.trim().toLowerCase())}&${retourQ}`, base), 303);
     return NextResponse.redirect(new URL(`/connexion?erreur=${r}&${retourQ}`, base), 303);
   } catch (e) {
     console.error("[auth] lien de connexion non envoyé", e);

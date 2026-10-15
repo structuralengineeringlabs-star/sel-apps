@@ -20,7 +20,8 @@ export default async function ConnexionPage({ searchParams }: Props) {
     <div className="py-16">
       <div className="max-w-md mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Connexion</h1>
-        <p className="text-gray-600 mb-6">Un compte permet de souscrire un abonnement et d&apos;accéder aux applications payantes. Pas de mot de passe : connexion par un lien envoyé par e-mail{google ? " ou par Google" : ""}.</p>
+        <p className="text-gray-600 mb-6">Un compte permet de souscrire un abonnement et d&apos;accéder aux applications payantes. Pas de mot de passe : connexion par un code envoyé par e-mail{google ? " ou par Google" : ""}.</p>
+        {r.startsWith("/compte/paiement/") && !erreur && <p className="mb-4 rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-900">Votre commande est enregistrée sur le compte de cette adresse e-mail. Connectez-vous pour suivre le paiement et ouvrir l&apos;application.</p>}
         {erreur && ERREURS[erreur] && <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{ERREURS[erreur]}</p>}
         <div className="card space-y-5">
           {google && <>
@@ -31,7 +32,7 @@ export default async function ConnexionPage({ searchParams }: Props) {
             <input type="hidden" name="retour" value={r} />
             <label className="block text-sm font-semibold text-gray-700" htmlFor="email">Adresse e-mail</label>
             <input id="email" name="email" type="email" required autoComplete="email" className="w-full h-11 rounded-md border border-gray-300 px-3" placeholder="vous@exemple.cm" />
-            <button type="submit" className="btn-primary w-full">Recevoir un lien de connexion</button>
+            <button type="submit" className="btn-primary w-full">Recevoir un code de connexion</button>
           </form>
         </div>
         <p className="mt-4 text-xs text-gray-500">En vous connectant, vous acceptez les <Link href="/cgv" className="underline">conditions générales de vente</Link> et la <Link href="/confidentialite" className="underline">politique de confidentialité</Link>.</p>

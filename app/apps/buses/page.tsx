@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { utilisateurCourant } from "@/lib/serveur/session";
 import { abonnementActif } from "@/lib/serveur/abonnements";
+import { estAdmin } from "@/lib/serveur/admin";
 
 export const metadata: Metadata = {
   title: "Buses enterrées — fascicule 70 et Eurocodes",
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
 export default async function BusesPage() {
   const u = await utilisateurCourant().catch(() => null);
   const fin = u ? await abonnementActif(u.id, "buses").catch(() => null) : null;
-  const src = fin ? "/outils/buses/index.html" : "/tools/buses/index.html";
+  const apercu = !fin && estAdmin(u?.email); // administrateur sans abonnement : aperçu de l'édition complète
+  const src = fin || apercu ? "/outils/buses/index.html" : "/tools/buses/index.html";
   return (
     <div className="space-y-3">
       {fin && (
@@ -22,12 +24,17 @@ export default async function BusesPage() {
           <Link href="/compte" className="underline">Mon compte</Link>
         </div>
       )}
-      {!fin && (
+      {apercu && (
+        <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <strong>Aperçu administrateur</strong> — édition complète affichée sans abonnement. Les clients sans abonnement voient la démonstration.
+        </div>
+      )}
+      {!fin && !apercu && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-sel/30 bg-white px-4 py-3 text-sm">
           <span>Vous utilisez la <strong>démonstration</strong>. {u ? "Abonnez-vous pour débloquer le diamètre, la hauteur de couverture, la note de calcul, les plans et le DXF." : "Déjà abonné ? Connectez-vous pour ouvrir l'édition complète."}</span>
           <span className="flex gap-2">
             {!u && <Link href="/connexion?retour=/apps/buses" className="btn-secondary">Se connecter</Link>}
-            <Link href="/applications/buses" className="btn-primary">S&apos;abonner</Link>
+            <Link href="/applications/buses#souscrire" className="btn-primary">S&apos;abonner</Link>
           </span>
         </div>
       )}

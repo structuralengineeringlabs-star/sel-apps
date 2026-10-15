@@ -90,6 +90,20 @@ et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd
   la session et de l'abonnement (jamais depuis `public/`) ;
 - `/apps/<app>` affiche l'une ou l'autre selon l'abonnement ; l'abonnement dure 30 ou 365 jours, sans reconduction.
 
+### Parcours d'achat (portail d'abonnement)
+
+La fiche `/applications/<app>` porte le portail d'abonnement (onglets Offres et tarifs, Paiement, Mon abonnement et
+reçus, Administration réservée aux adresses `ADMIN_EMAILS`). Le paiement ne demande **pas de connexion préalable** :
+
+- adresse e-mail nouvelle → compte créé (adresse non vérifiée), le navigateur qui paie reçoit un jeton d'achat
+  (cookie `sel_achat`, 3 h, usage unique) et il est connecté au retour du prestataire ;
+- adresse déjà inscrite → la commande est rattachée au compte sans ouvrir de session : le titulaire se connecte par
+  le code à 6 chiffres reçu par e-mail (ou Google) ;
+- la première connexion par code, lien ou Google vérifie l'adresse et révoque les sessions « invité » ;
+- la purge des commandes abandonnées supprime aussi les comptes d'achat jamais payés.
+
+Les administrateurs voient l'édition complète sans abonnement (aperçu contrôlé par le serveur).
+
 ### Variables d'environnement (Vercel → Settings → Environment Variables)
 
 | Variable | Rôle |

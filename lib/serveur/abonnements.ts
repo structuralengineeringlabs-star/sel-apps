@@ -19,7 +19,7 @@ export class TropDeCommandes extends Error { constructor() { super("Trop de comm
 const nouvelId = (prefixe = "SEL") => `${prefixe}${Date.now().toString(36).toUpperCase()}${randomBytes(4).toString("hex").toUpperCase()}`;
 
 export async function creerPaiement(utilisateurId: number, application: string, formule: Formule,
-  prestataire: Prestataire = prestataireActif(), devise: Devise = "XAF") {
+  prestataire: Prestataire = prestataireActif(), devise: Devise = "XAF", achatHash: string | null = null) {
   const o = offre(application, formule);
   if (!o) throw new Error("Offre inconnue.");
   const [{ n }] = await db().requete<{ n: number }>(
@@ -27,9 +27,20 @@ export async function creerPaiement(utilisateurId: number, application: string, 
   if (n >= LIMITE_COMMANDES) throw new TropDeCommandes();
   const transactionId = nouvelId();
   const essai = prestataire === "notchpay" && cleDeTest();
-  await db().requete("insert into paiements (transaction_id, utilisateur_id, application, formule, montant, devise, prestataire, essai) values ($1, $2, $3, $4, $5, $6, $7, $8)",
-    [transactionId, utilisateurId, application, formule, o.montant, devise, prestataire, essai]);
+  await db().requete("insert into paiements (transaction_id, utilisateur_id, application, formule, montant, devise, prestataire, essai, achat_hash) values ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+    [transactionId, utilisateurId, application, formule, o.montant, devise, prestataire, essai, achatHash]);
   return { transactionId, montant: o.montant, devise, nom: o.nom, jours: o.jours, prestataire };
+}
+
+/**
+ * Retour d'un achat sans compte : si le jeton du navigateur correspond à la commande (usage unique) et que le compte
+ * n'a pas encore été vérifié par son titulaire, renvoie l'utilisateur pour lequel ouvrir une session « invité ».
+ */
+export async function consommerAchat(transactionId: string, achatHash: string): Promise<number | null> {
+  const [r] = await db().requete<{ utilisateur_id: string }>(
+    `update paiements p set achat_hash = null where p.transaction_id = $1 and p.achat_hash = $2
+     and exists (select 1 from utilisateurs u where u.id = p.utilisateur_id and not u.email_verifie) returning p.utilisateur_id`, [transactionId, achatHash]);
+  return r ? Number(r.utilisateur_id) : null;
 }
 
 /** Référence de la transaction chez le prestataire (Notch Pay), connue après l'initialisation. */
@@ -137,7 +148,11 @@ export async function purgerEssais(): Promise<{ paiements: number; abonnements: 
  * interrompus. Elles n'ont ouvert aucun accès ni émis de reçu ; les paiements acceptés ne sont jamais touchés.
  */
 export async function purgerAbandons(): Promise<number> {
-  return (await db().requete("delete from paiements where statut <> 'accepte' and numero_recu is null and cree_le < now() - interval '1 hour' returning id")).length;
+  const n = (await db().requete("delete from paiements where statut <> 'accepte' and numero_recu is null and cree_le < now() - interval '1 hour' returning id")).length;
+  // Comptes créés par un achat jamais payé ni confirmé (adresse non vérifiée, plus aucune commande)
+  await db().requete(`delete from utilisateurs u where not u.email_verifie and u.cree_le < now() - interval '1 hour'
+    and not exists (select 1 from paiements p where p.utilisateur_id = u.id)`);
+  return n;
 }
 
 /** Date de fin d'un abonnement actif, ou null. */

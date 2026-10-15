@@ -14,6 +14,9 @@ export type Application = {
   appUrl?: string;
   /** Abonnement payable en ligne (CinetPay) ; sans abonnement, appUrl ouvre l'édition de démonstration. */
   paiementEnLigne?: boolean;
+  /** Portail d'abonnement : ce que débloque l'abonnement, et ce que permet la démonstration gratuite. */
+  avantages?: string[];
+  demo?: string[];
   icon: string;
   tags: string[];
 };
@@ -140,6 +143,8 @@ export const applications: Application[] = [
     isPopular: true,
     appUrl: "/apps/reservoirs",
     paiementEnLigne: true,
+    avantages: ["Toutes les dimensions et implantations modifiables", "Note de calcul paginée (impression et PDF)", "Plans d'exécution A3 : PDF, SVG, DXF en mise en page et en grandeur réelle", "Nomenclature façonnée (NF EN ISO 3766) et métrés", "Projets à plusieurs ouvrages, mises à jour incluses"],
+    demo: ["Toutes les vérifications EC2, EN 1992-3 et EC7", "Dimensions en plan et hauteur figées", "Sans note de calcul ni plans"],
     icon: "Droplet",
     tags: ["Réservoir", "Château d'eau", "Étanchéité", "EC2", "EN 1992-3", "DXF"],
   },
@@ -156,6 +161,8 @@ export const applications: Application[] = [
     isNew: true,
     appUrl: "/apps/buses",
     paiementEnLigne: true,
+    avantages: ["Diamètre et hauteur de couverture modifiables", "Note de calcul paginée : fascicule 70, EC2, EC7, hydraulique", "Plans d'exécution A3 : PDF, SVG et DXF", "Nomenclature des armatures, métré et exports CSV", "Projets à plusieurs ouvrages, mises à jour incluses"],
+    demo: ["Toutes les vérifications : fascicule 70, EC2, EC7, hydraulique", "DN 1000 et couverture de 1,50 m figés", "Sans note de calcul, plans ni exports"],
     icon: "Cylinder",
     tags: ["Buse", "Fascicule 70", "EC2", "EC7", "LM1", "Hydraulique", "DXF"],
   },
