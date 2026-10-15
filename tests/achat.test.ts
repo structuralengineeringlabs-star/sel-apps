@@ -54,12 +54,11 @@ describe("achat sans connexion préalable", () => {
     expect(cookieDe(rt2, COOKIE_SESSION)).toBeNull();
   });
 
-  it("zone UEMOA : commande en XOF, sans pays imposé au prestataire ; ancien champ pays encore accepté", async () => {
+  it("zone UEMOA : commande en XOF (CinetPay : pays par défaut de la zone) ; ancien champ pays encore accepté", async () => {
     let corps: Record<string, unknown> = {};
     vi.spyOn(globalThis, "fetch").mockImplementation(async (_u, init) => { corps = JSON.parse(String(init?.body)); return new Response(JSON.stringify({ code: "201", data: { payment_url: "https://checkout.cinetpay/x" } })); });
     await commande({ email: "ouest@exemple.cm", zone: "UEMOA" });
-    expect(corps).toMatchObject({ currency: "XOF" });
-    expect(corps).not.toHaveProperty("customer_country");
+    expect(corps).toMatchObject({ currency: "XOF", customer_country: "CI" });
     await commande({ email: "ancien@exemple.cm", zone: "", pays: "SN" });
     const devises = (await pg.query<{ devise: string }>("select devise from paiements order by id")).rows.map(r => r.devise);
     expect(devises).toEqual(["XOF", "XOF"]);

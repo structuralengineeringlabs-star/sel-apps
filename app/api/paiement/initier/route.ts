@@ -42,7 +42,9 @@ export async function POST(req: Request) {
   try {
     const p = await creerPaiement(client.id, application, formule, undefined, ZONES[zone].devise, jetonAchat ? empreinte(jetonAchat) : null);
     const demande = {
-      transactionId: p.transactionId, montant: p.montant, devise: p.devise, // pays laissé au choix du client chez le prestataire
+      transactionId: p.transactionId, montant: p.montant, devise: p.devise,
+      // Notch Pay : pays laissé au choix du client (le préciser le verrouille) ; CinetPay : pays par défaut de la zone (modifiable sur sa page)
+      pays: p.prestataire === "cinetpay" ? (zone === "CEMAC" ? "CM" : "CI") : undefined,
       description: `Abonnement ${formule} ${p.nom}`.replace(/[#/$_&]/g, " "),
       notifyUrl: urlNotification(base), returnUrl: `${base}${CHEMIN_RETOUR}?transaction=${p.transactionId}`,
       client: { email: client.email, nom: client.nom },
