@@ -40,7 +40,7 @@ export async function initialiser(d: DemandeInit, f: typeof fetch = fetch): Prom
     body: JSON.stringify({
       apikey, site_id, transaction_id: d.transactionId, amount: d.montant, currency: d.devise ?? "XAF", description: d.description,
       notify_url: d.notifyUrl, return_url: d.returnUrl, channels: "ALL", lang: "fr",
-      customer_email: d.client.email, ...(prenom ? { customer_name: reste.join(" ") || prenom, customer_surname: prenom } : {}), customer_country: d.pays ?? "CM",
+      customer_email: d.client.email, ...(prenom ? { customer_name: reste.join(" ") || prenom, customer_surname: prenom } : {}), ...(d.pays ? { customer_country: d.pays } : {}),
     }),
   });
   const j = await r.json().catch(() => ({})) as { code?: string; message?: string; description?: string; data?: { payment_url?: string } };

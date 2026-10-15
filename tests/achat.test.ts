@@ -17,7 +17,7 @@ delete process.env.TARIF_ESSAI;
 const SITE = "https://sel-apps.com";
 function commande(champs: Record<string, string>, cookie?: string) {
   const f = new FormData();
-  for (const [k, v] of Object.entries({ application: "reservoirs", formule: "annuel", pays: "CM", cgv: "oui", ...champs })) f.set(k, v);
+  for (const [k, v] of Object.entries({ application: "reservoirs", formule: "annuel", zone: "CEMAC", cgv: "oui", ...champs })) f.set(k, v);
   return initier(new Request(`${SITE}/api/paiement/initier`, { method: "POST", body: f, headers: { origin: SITE, host: "sel-apps.com", ...(cookie ? { cookie } : {}) } }));
 }
 const cookieDe = (r: Response, nom: string) => {
@@ -54,6 +54,17 @@ describe("achat sans connexion préalable", () => {
     expect(cookieDe(rt2, COOKIE_SESSION)).toBeNull();
   });
 
+  it("zone UEMOA : commande en XOF, sans pays imposé au prestataire ; ancien champ pays encore accepté", async () => {
+    let corps: Record<string, unknown> = {};
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (_u, init) => { corps = JSON.parse(String(init?.body)); return new Response(JSON.stringify({ code: "201", data: { payment_url: "https://checkout.cinetpay/x" } })); });
+    await commande({ email: "ouest@exemple.cm", zone: "UEMOA" });
+    expect(corps).toMatchObject({ currency: "XOF" });
+    expect(corps).not.toHaveProperty("customer_country");
+    await commande({ email: "ancien@exemple.cm", zone: "", pays: "SN" });
+    const devises = (await pg.query<{ devise: string }>("select devise from paiements order by id")).rows.map(r => r.devise);
+    expect(devises).toEqual(["XOF", "XOF"]);
+  });
+
   it("adresse déjà inscrite : commande rattachée au compte, aucun jeton ni session (pas de prise de compte)", async () => {
     const id = await utilisateurPourEmail("client@exemple.cm");
     const r = await commande({ email: "client@exemple.cm" });
@@ -76,8 +87,8 @@ describe("achat sans connexion préalable", () => {
   });
 
   it("adresse invalide ou CGV non acceptées : retour au portail avec les choix conservés", async () => {
-    const r = await commande({ email: "pas-une-adresse", formule: "mensuel", pays: "SN" });
-    expect(r.headers.get("location")).toBe(`${SITE}/applications/reservoirs?erreur=email&formule=mensuel&pays=SN#souscrire`);
+    const r = await commande({ email: "pas-une-adresse", formule: "mensuel", zone: "UEMOA" });
+    expect(r.headers.get("location")).toBe(`${SITE}/applications/reservoirs?erreur=email&formule=mensuel&zone=UEMOA#souscrire`);
     const c = await commande({ email: "a@b.cm", cgv: "" });
     expect(c.headers.get("location")).toContain("erreur=cgv");
     expect((await pg.query("select 1 from paiements")).rows).toHaveLength(0);

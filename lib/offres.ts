@@ -15,6 +15,17 @@ export type Pays = keyof typeof PAYS;
 export type Devise = (typeof PAYS)[Pays]["devise"];
 export const estPays = (v: unknown): v is Pays => typeof v === "string" && Object.hasOwn(PAYS, v);
 
+/** Zones monétaires proposées au paiement : le pays exact est choisi chez le prestataire (pas de verrouillage). */
+export const ZONES = {
+  CEMAC: { devise: "XAF", libelle: "Franc CFA d'Afrique centrale", moyens: "MTN Mobile Money, Orange Money" },
+  UEMOA: { devise: "XOF", libelle: "Franc CFA d'Afrique de l'Ouest", moyens: "Orange Money, MTN, Moov, Wave, Free Money" },
+} as const;
+export type Zone = keyof typeof ZONES;
+export const estZone = (v: unknown): v is Zone => typeof v === "string" && Object.hasOwn(ZONES, v);
+/** Zone d'un ancien formulaire (pays) ou du nouveau (zone). */
+export const zoneDe = (zone: unknown, pays: unknown): Zone | null =>
+  estZone(zone) ? zone : estPays(pays) ? (PAYS[pays].devise === "XAF" ? "CEMAC" : "UEMOA") : zone == null && pays == null ? "CEMAC" : null;
+
 /** Tarif d'essai (TARIF_ESSAI, en francs CFA) : remplace temporairement tous les prix, le temps d'un test réel. */
 export function tarifEssai(): number | null {
   const v = Number(process.env.TARIF_ESSAI);
