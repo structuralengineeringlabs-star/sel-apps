@@ -27,6 +27,8 @@ déploiement automatique à chaque push sur `main`).
 | `/apps/corbeaux` | Application compilée `public/tools/corbeaux/` (béton armé, annexe J.3) |
 | `/apps/chateau-eau` | Application compilée `public/tools/chateau-eau/` (château d'eau : cuve béton armé, acier ou PEHD) |
 | `/apps/courbe-granulometrique` | Page autonome `public/tools/courbe-granulometrique.html` |
+| `/apps/reservoirs` | Payante : démonstration `public/tools/reservoirs/`, édition complète `prive/outils/reservoirs/` servie par `/outils/reservoirs/` aux abonnés |
+| `/apps/buses` | Payante : démonstration `public/tools/buses/`, édition complète `prive/outils/buses/` servie par `/outils/buses/` aux abonnés (fascicule 70, EC2, EC7, hydraulique) |
 
 Les autres fiches du catalogue (`data/applications.ts`) sans `appUrl` sont annoncées sans application en ligne.
 

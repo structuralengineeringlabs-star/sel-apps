@@ -14,6 +14,20 @@ export type Guide = {
 
 export const guides: Guide[] = [
   {
+    slug: "buses",
+    appSlug: "buses",
+    title: "Buses enterrées, fascicule 70 et Eurocodes — Guide d'utilisation",
+    description:
+      "Prise en main du parcours en 5 étapes : tuyau, pose et sol, charges Bc ou LM1, capacité hydraulique, armatures et tête de buse, lecture des vérifications (fascicule 70, EC2, EC7, hydraulique), note de calcul, plans A3 et DXF, nomenclature, métré, éditions démonstration et complète. Illustré de captures d'écran.",
+    pdfUrl: "/docs/guides/Guide_utilisateur_Buses_Fascicule70.pdf",
+    sizeLabel: "2,4 Mo",
+    pages: 21,
+    version: "3.1.0",
+    updated: "octobre 2026",
+    appUrl: "/apps/buses",
+    topics: ["Fascicule 70", "LM1", "EC2", "EC7", "Manning-Strickler", "DXF"],
+  },
+  {
     slug: "corbeaux",
     appSlug: "corbeaux",
     title: "Corbeaux aux Eurocodes — Guide d'utilisation",

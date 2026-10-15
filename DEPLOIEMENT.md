@@ -38,6 +38,8 @@ Les applications Vite sont construites avec la base de leur dossier, puis copié
 | Corbeaux (béton armé) | `npx vite build --base /tools/corbeaux/ --outDir dist-sel` | `public/tools/corbeaux/` |
 | Réservoirs — démonstration (voir « Applications payantes ») | `npm run site:demo` → `dist-sel-demo/` | `public/tools/reservoirs/` |
 | Réservoirs — édition complète (abonnés) | `npm run site:complet` → `dist-sel-complet/` | `prive/outils/reservoirs/` |
+| Buses — démonstration | `npm run site:demo` (projet Calcul-Buses) → `dist-sel-demo/` | `public/tools/buses/` |
+| Buses — édition complète (abonnés) | `npm run site:complet` → `dist-sel-complet/` | `prive/outils/buses/` |
 
 Remplacer **tout** le dossier cible par le contenu de `dist-sel/` (supprimer d'abord l'ancien : les noms des fichiers
 `assets/*` changent à chaque construction), mettre à jour si besoin la fiche dans `data/applications.ts`, puis :
@@ -59,6 +61,10 @@ Guide PDF des poutres : `npm run guide` dans le projet poutres, puis copier
 `docs/manuel/Guide_utilisateur_Poutres_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
 (version, taille, pages).
 
+Guide PDF des buses : `npm run manuel && npm run guide` dans le projet Calcul-Buses, puis copier
+`docs/manuel/Guide_utilisateur_Buses_Fascicule70.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
+(version, taille, pages).
+
 Guide PDF des corbeaux : `npm run guide` dans le projet Calcul-Corbeaux, puis copier
 `docs/manuel/Guide_utilisateur_Corbeaux_Eurocodes.pdf` dans `public/docs/guides/` et mettre à jour `data/guides.ts`
 (version, taille, pages).
@@ -77,7 +83,7 @@ En cas de problème : Vercel → projet `sel-apps` → Deployments → déploiem
 ## Applications payantes (abonnement Notch Pay ou CinetPay)
 
 Une application est vendue en ligne quand sa fiche de `data/applications.ts` porte `paiementEnLigne: true`, `isFree: false`
-et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd'hui : **Réservoirs** seulement.
+et ses prix TTC (`priceMonthly`, `priceAnnual`, en XAF, multiples de 5). Aujourd'hui : **Réservoirs** et **Buses**.
 
 - `public/tools/<app>/` reçoit l'édition de **démonstration** (publique) ;
 - `prive/outils/<app>/` reçoit l'édition **complète** ; elle n'est servie que par `/outils/<app>/…` après contrôle de

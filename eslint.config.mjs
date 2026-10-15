@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Applications compilées hébergées telles quelles
     "public/**",
+    "prive/**",
   ]),
 ]);
 
